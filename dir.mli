@@ -1,9 +1,5 @@
 type t
 
-module Turn = sig
-  type t
-end
-
 val left   : t -> t
 val right  : t -> t
 val mirror : t -> t

@@ -1,5 +1,5 @@
 module type T = sig
-  type t
+  include Map.OrderedType
 
   val turn   : t -> Turn.t -> t
   val left   : t -> t

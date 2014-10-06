@@ -1,8 +1,8 @@
-module Make(Dir : Idir.T)(Value : Iemptible.T) = sig
-  include Iemptible.T 
-
+module Make (Key : ORDERED.T) (Value : EMPTIBLE.T) = sig
+  include EMPTIBLE.T 
+	
   val make_with : Value.t -> t
   val value_of  : t -> Value.t
-  val go_to     : Dir.t -> ~from:t -> t
-  val join      : t -> t -> Dir.t -> t
+  val go_from   : t -> ~by:Key.t -> t
+  val join      : t -> ~with':t -> ~by:Key.t -> t
 end

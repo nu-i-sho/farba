@@ -1,45 +1,31 @@
-module Make(Dir : Idir.T)(Value : Iemptible.T) = struct
+module Make (Key : ORDERED.T) (Value : EMPTIBLE.T) = struct
   
-  module LinksMap = Map.Make(Dir)
+  module Links = Map.Make(Key)
 	
-  type t = { links : t LinksMap.t;
+  type t = { links : t Links.t;
 	     value : Value.t
 	   }
 
   let empty = 
-    { links = LinksMap.empty;
+    { links = Links.empty;
       value = Value.empty
     }
 
   let make_with value = 
-    { links = LinksMap.empty;
+    { links = Links.empty;
       value
     }
 
   let value_of link = 
     link.value
 
-  let go_to direction ~from:link =    
-    if   LinksMap.mem  direction link.links
-    then LinksMap.find direction link.links
+  let go_from link ~by:key =
+    if   link.links |> Links.mem  key 
+    then link.links |> Links.find key 
     else empty
 
-  let join link and_link ~by:direction = 
-    
-    let rec new_link =
-      { link with links = LinksMap.add 
-	  direction
-	  new_and_link
-	  link.links
-      }
-
-    and new_and_link =
-      { and_link with links = LinksMap.add
-	 (direction |> Dir.mirror)
-	  new_link
-	  and_link.links
-      } 
-    in
-    new_link
+  let join link ~with':link' ~by:key = 
+    { link with links = Links.add key link' link.links 
+    }
 
 end

@@ -24,8 +24,8 @@ module Make (Key : ORDERED.T) (Value : EMPTIBLE.T) = struct
     then link.links |> Links.find key 
     else empty
 
-  let join link ~with':link' ~by:key = 
-    { link with links = Links.add key link' link.links 
+  let link linker ~to':linkable' ~by:key = 
+    { linker with links = Links.add key linkable' linker.links
     }
 
 end

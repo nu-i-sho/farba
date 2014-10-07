@@ -5,27 +5,27 @@ type t = | Up
 	 | Leftdown
 	 | Leftup
 	 
-let left = function
-  | Up        -> Leftup
-  | Leftup    -> Leftdown
-  | Leftdown  -> Down
-  | Down      -> Rightdown
-  | Rightdown -> Rightup
-  | Rightup   -> Up
+let left = 
 
-let right = function
-  | Up        -> Rightup
-  | Rightup   -> Rightdown
-  | Rightdown -> Down
-  | Down      -> Leftdown
-  | Leftdown  -> Leftup
-  | Leftup    -> Up
+let right = 
 
 let turn = 
   let open Turn in 
   function
-  | Left  -> left
-  | Right -> right
+  | Left  -> function
+      | Up        -> Leftup
+      | Leftup    -> Leftdown
+      | Leftdown  -> Down
+      | Down      -> Rightdown
+      | Rightdown -> Rightup
+      | Rightup   -> Up
+  | Right -> function
+      | Up        -> Rightup
+      | Rightup   -> Rightdown
+      | Rightdown -> Down
+      | Down      -> Leftdown
+      | Leftdown  -> Leftup
+      | Leftup    -> Up
 
 let mirror =
   | Up        -> Down

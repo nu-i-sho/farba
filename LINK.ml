@@ -1,11 +1,12 @@
 module type T = sig
-  module Make (Key : ORDERED.T) (Value : EMPTIBLE.T) = sig
-    
-    include EMPTIBLE.T 
-	
-    val make_with : Value.t -> t
-    val value_of  : t -> Value.t
-    val go_from   : t -> ~by:Key.t -> t
-    val link      : t -> ~to':t -> ~by:Key.t -> t
-  end
+  include READONLY_LINK.T
+
+  val link : t -> ~to':t -> ~by:key_t -> t
 end
+
+module type MAKE_T = functor 
+    (Key : ORDERED.T) 
+      (Value : EMPTIBLE.T) 
+
+  -> T with type key_t = Key.t and value_t = Value.t
+    

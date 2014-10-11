@@ -1,5 +1,4 @@
 module type T = sig
-  include ORDERED_AND_OPPOSABLE.T
-
-  val turn : t -> Turn.t -> t
+  include ORDERABLE_AND_OPPOSABLE.T
+  val turn : t -> ~to':Hand.t -> t
 end

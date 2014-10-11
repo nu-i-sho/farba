@@ -11,5 +11,3 @@ let compare a b =
 let opposite = function
   | Left  -> Right
   | Right -> Left
-
-let turn = opposite

@@ -4,4 +4,5 @@ module type T = sig
 
   val value_of  : t -> 'a
   val go_from   : t -> ~by:key_t -> t
+  val is_impasse : 'a t -> by:key_t -> bool
 end

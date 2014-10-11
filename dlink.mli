@@ -1,1 +1,1 @@
-module Make : DLINK.MAKE_T
+include DLINK.T

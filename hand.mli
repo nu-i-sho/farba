@@ -1,1 +1,1 @@
-include DIRECTION.T
+include ORDERABLE_AND_OPPOSABLE.T

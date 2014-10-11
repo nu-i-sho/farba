@@ -1,4 +1,5 @@
 module type T = sig
-  include ORDERED.T
-  include OPPOSABLE.T 
+  type t
+  include ORDERABLE.T with type t := t
+  include OPPOSABLE.T with type t := t 
 end

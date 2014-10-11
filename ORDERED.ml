@@ -1,4 +1,4 @@
 module type T = sig
-  type t
-  val compare : t -> t -> int
+  type 'a t
+  val compare : 'a t -> 'a t -> int
 end

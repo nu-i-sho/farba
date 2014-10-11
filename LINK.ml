@@ -1,12 +1,8 @@
 module type T = sig
   include READONLY_LINK.T
-
-  val link : t -> ~to':t -> ~by:key_t -> t
+  val link : 'a t -> ~to':('a t) -> ~by:key_t -> 'a t
 end
 
 module type MAKE_T = functor 
-    (Key : ORDERED.T) 
-      (Value : EMPTIBLE.T) 
-
-  -> T with type key_t = Key.t and value_t = Value.t
-    
+    (Key : ORDERED.T) -> 
+      T with type key_t = Key.t

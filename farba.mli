@@ -1,8 +1,8 @@
-module Make(Dir : Idir.T) = sig
+module Make (Direction : DIRECTION.T) = sig
   type t
 
-  val place     : t -> Place.t
-  val direction : t -> Dir.t
-  val fill      : t -> Fill.t 
-  val go        : t -> Command.t -> t
+  val place_of     : t -> Place.t
+  val direction_of : t -> Direction.t
+  val fill_of      : t -> Fill.t 
+  val do_with      : t -> command:Command.t -> t
 end

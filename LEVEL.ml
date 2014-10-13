@@ -1,3 +1,3 @@
 module type T = sig
-  val value : string
+  val value : string list
 end

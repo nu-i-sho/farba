@@ -6,6 +6,6 @@ include Direction.Make(struct
 	   | Leftdown
 	   | Leftup
 
-  let all_ordered_to_right = 
-    [Down; Leftdown; Leftup; Up; Rightup; Rightdown]
+  let all_from_default_ordered_to_right = 
+    [Up; Rightup; Rightdown; Down; Leftdown; Leftup]
 end)

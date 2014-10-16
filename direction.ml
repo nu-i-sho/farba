@@ -3,21 +3,20 @@ module Make (Seed : DIRECTION_SEED) = struct
 
   type t = Seed.t
 
-  let start =
+  let default =
     RoundelayLink.close 
       (Dlink.load_from 
-	 Seed.all_ordered_to_right) 
+	 Seed.all_from_default_ordered_to_right) 
 
   let opposite_index = 
-    let start_value = Dlink.value_of start in
     let rec count current acc =
-      if current = start_value && acc <> 0
+      if current = Dlink.value_of default && acc <> 0
       then acc
       else count 
 	  (Dlink.go_from current ~by:Righ) 
 	  (acc + 1) 
     in
-    (count start 0) / 2
+    (count default 0) / 2
 
   let opposite direction =
     let rec opposite' current i  =
@@ -27,7 +26,7 @@ module Make (Seed : DIRECTION_SEED) = struct
 	  (Dlink.go_from current ~by:Right)
 	  (i + 1)	    
     in
-    opposite' start 0 
+    opposite' default 0 
 
   let compare x y =
     let index_of direction =
@@ -38,7 +37,7 @@ module Make (Seed : DIRECTION_SEED) = struct
 	    (Dlink.go_from current ~by:Right)
 	    (acc + 1) 
       in 
-      index_of' start 0 in
+      index_of' default 0 in
     Pervasives.compare
       (index_of x)
       (index_of y)
@@ -50,6 +49,6 @@ module Make (Seed : DIRECTION_SEED) = struct
       else find (Dlink.go_from current ~by:Right)
     in
     Dlink.go_from
-      (find ~current:start)
+      (find ~current:default)
       ~by:hand
 end

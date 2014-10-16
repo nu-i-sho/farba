@@ -4,6 +4,6 @@ type t = | Cell of Cell.t
 let empty = Empty
 
 type source_t = char
-let parse_from = function 
+let parse = function 
   | '.' -> empty
   | oth -> Cell (Cell.parse_from oth)

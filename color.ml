@@ -5,8 +5,8 @@ type t = | Red
 	 | Blue
 	 | Violet
 
-type source_t  = char
-let parse_from = function 
+type source_t = char
+let parse = function 
   | '0' -> Red
   | '1' -> Orange
   | '2' -> Yellow

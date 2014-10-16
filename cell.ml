@@ -5,6 +5,6 @@ type t = | Filled of Color.t
 let empty = Empty
 
 type source_t = char
-let parse_from = function 
+let parse = function 
   | '_' -> empty
   | oth -> Expect (Color.parse_from oth)

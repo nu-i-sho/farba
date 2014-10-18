@@ -18,25 +18,25 @@ module Make = functor
 
       let open Hand in
 
-      let combine left up current = 
-	Link.join (Link.join current 
-		     ~with':up 
-		        ~by:Up)
-	  ~with':left 
-	     ~by:Left
+      let combine left up current =
+	let open Link in
+	match left, up with
+	| None  , None   -> current
+	| None  , Some u -> join current ~with':u ~by:Up
+	| Some l, None   -> join current ~with':l ~by:Left
+	| Some l, Some u -> join (join current 
+				    ~with':u ~by:Up)
+	                      ~with':l ~by:Left
       in
       let rec process ~left ~up ~pos
 	  ~current_coords: (x, y)   
 	  ?(farba_coords = (0, 0)) =
 
-	let process' simbol 
-	    ?(farba_finded = false) = 
+	let parse = Link.make @@ Place.parse in  
+	let process' current
+	    ?(farba_finded = false) =
 
-	  let current = 
-	    simbol |> Place.parse
-	           |> Link.make
-		   |> combine left up
-	  in
+	  let current = combine left up current in
 	  let next_up = 
 	    Link.go_from 
 	      (Link.go_from current 
@@ -55,13 +55,14 @@ module Make = functor
 	      level.[pos + 1], 
 	      level.[pos + 2] with
 
-	| '.', chr, '.' -> process' chr
-	| '<', chr, '>' -> process' chr
-	| '[', chr, ']' -> process' chr ~farba_finded:true
+	| '-', '-', '-' -> 
+	| '.', chr, '.' -> process' (parse chr)
+	| '<', chr, '>' -> process' (parse chr)
+	| '[', chr, ']' -> process' (parse chr) ~farba_finded:true
 
 	| '\n',_,_      -> 
-	    process      ~left:?
-         	           ~up:?
+	    process      ~left:(Place.Empty)
+         	           ~up:(Place.Empty)
 	                  ~pos:(pos + 1) 
 	       ~current_coords:(y + 1,0)
 

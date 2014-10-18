@@ -25,38 +25,55 @@ module Make = functor
 	  ~with':left 
 	     ~by:Left
       in
-      let rec process ~left ~up ~pos 
-	  ?(farba = None) =
+      let rec process ~left ~up ~pos
+	  ~current_coords: (x, y)   
+	  ?(farba_coords = (0, 0)) =
 
-	let process' ~simbol:c 
+	let process' simbol 
 	    ?(farba_finded = false) = 
 
-	  let current = c |> Place.parse
-	                  |> Link.make
-			  |> combine left up 
-	  and next_up = 
+	  let current = 
+	    simbol |> Place.parse
+	           |> Link.make
+		   |> combine left up
+	  in
+	  let next_up = 
 	    Link.go_from 
 	      (Link.go_from current 
 		 ~by:Up) 
 	      ~by:Right 
 	  in
-	  let x_farba = if farba_finded then 
-	    (Some (Farba.make_with ~board_link:current))
-	  else farba 
-	  in
-	  process ~left:(current) 
-	            ~up:(next_up) 
-	           ~pos:(pos + 3)
-	         ~farba:(x_farba)
+	  process     ~left:(current) 
+	                ~up:(next_up)
+	               ~pos:(pos + 3)
+            ~current_coords:(y,x + 1)
+	      ~farba_coords:(if farba_finded 
+                             then current_coords
+	                     else farba_coords)
 	in
-	match level.[i], 
-	      level.[i + 1], 
-	      level.[i + 2] with
+	match level.[pos    ], 
+	      level.[pos + 1], 
+	      level.[pos + 2] with
 
-	|  '.', chr, '.' -> process' ~simbol:chr
-	|  '<', chr, '>' -> process' ~simbol:chr
-	|  '[', chr, ']' -> process' ~simbol:chr ~farba_finded:true
-	| '\n', ___, ___ -> process  ~pos:(i + 1)
-	|  'e', 'n', 'd' -> let Some result = farba in 
-	                    result
+	| '.', chr, '.' -> process' chr
+	| '<', chr, '>' -> process' chr
+	| '[', chr, ']' -> process' chr ~farba_finded:true
+
+	| '\n',_,_      -> 
+	    process      ~left:?
+         	           ~up:?
+	                  ~pos:(pos + 1) 
+	       ~current_coords:(y + 1,0)
+
+	| 'e', 'n', 'd' -> 
+	    let rec go_from link ~by:direction ~pos =
+	      if i = 0 then link 
+	      else go_from ~current:(Link.go_from link ~by:direction)
+      		               ~pos:(pos - 1)
+	    in
+	    Farba.make_with ~board_link:
+	      (go_from (go_from 
+	      
+
+	    
   end

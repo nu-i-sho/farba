@@ -14,7 +14,7 @@ module Make : LINK.MAKE_T = functor
 	value
       }
 
-    let go_from link ~by:key = 
+    let get_from link ~by:key = 
       link.links |> LinksMap.find key 
 
     let link linker ~to':linkable ~by:key = 
@@ -23,4 +23,17 @@ module Make : LINK.MAKE_T = functor
 
     let is_impasse link ~by:key =
       link.links |> LinksMap.mem key	
+
+    let rec go_from link ~by:key ~steps_count:i =
+      if i = 0 then link else 
+        go_from (get_from link ~by:key) 
+	  ~steps_count:(i - 1) 
+	  ~by:key
+
+    let rec go_to_end_from link ~by:key =
+      if is_impasse link ~by:key then link 
+      else 
+	go_to_end_from 
+	  (get_from link ~by:key) 
+	  ~by:key
   end

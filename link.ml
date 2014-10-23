@@ -1,5 +1,5 @@
 module Make : LINK.MAKE_T = functor 
-  (Key : ORDERED.T) = struct
+  (Key : ORDERED.T) -> struct
   
     module Links = Map.Make (Key)
 	

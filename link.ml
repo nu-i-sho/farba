@@ -14,6 +14,9 @@ module Make : LINK.MAKE_T = functor
 	value
       }
 
+    let value_of link = 
+      link.value
+
     let get_from link ~by:key = 
       link.links |> Links.find key 
 

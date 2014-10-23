@@ -6,7 +6,7 @@ end
 
 module type SEED_T = sig
   type t
-  val all_from_default_ordered_to_right : t List.t
+  val all_from_default_ordered_to_right : t list
 end
 
 module type MAKE_T = functor

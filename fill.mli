@@ -1,1 +1,1 @@
-include EMPTIBLE_AND_CHAR_PARSABLE.T
+include EMPTIBLE.T

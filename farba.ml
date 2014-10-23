@@ -6,10 +6,11 @@ module Make = functor
                diretion   : Direction.t;
                fill       : Fill.t
              }
-    let make_with ~board_link  = { place_link = board_link;
-				   direction  = Direction.default;
-				   fill       = Fill.Transparent
-				 }
+
+    let make board_link  = { place_link = board_link;
+			     direction  = Direction.default;
+			     fill       = Fill.Transparent
+			   }
 
     let place_of farba         = BoardLink.value_of farba.place_link
     let direction_of farba     = farba.direction
@@ -30,3 +31,5 @@ module Make = functor
 		                  direction = opposite direction
                      }
 end
+
+

@@ -1,6 +1,6 @@
 module type T = sig
   include MAKEABLE_READONLY_LINK.T
-  val link : 'a t -> ~to':('a t) -> ~by:key_t -> 'a t
+  val link : 'a t -> to':('a t) -> by:key_t -> 'a t
 end
 
 module type MAKE_T = functor 

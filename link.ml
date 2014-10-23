@@ -1,7 +1,7 @@
 module Make : LINK.MAKE_T = functor 
   (Key : ORDERED.T) = struct
   
-    module Links = Map.Make(Key)
+    module Links = Map.Make (Key)
 	
     type 'a t = { links : t Links.t;
 		  value : 'a
@@ -36,4 +36,11 @@ module Make : LINK.MAKE_T = functor
 	go_to_end_from 
 	  (get_from link ~by:key) 
 	  ~by:key
+
+    let len_to_end_of link ~by:key =
+      let rec calc link ~counter:i =
+	if is_impasse link ~by:key then i else
+	  calc (get_from link ~by:key)
+	    ~counter:(i + 1) in
+      calculate link ~counter:0
   end

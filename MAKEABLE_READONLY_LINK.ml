@@ -1,4 +1,4 @@
 module type T = sig
   include READONLY_LINK.T
-  val make_with : 'a -> 'a t    
+  val make : 'a -> 'a t    
 end

@@ -15,14 +15,14 @@ module Make : LINK.MAKE_T = functor
       }
 
     let get_from link ~by:key = 
-      link.links |> LinksMap.find key 
+      link.links |> Links.find key 
 
     let link linker ~to':linkable ~by:key = 
-      { linker with links = LinksMap.add key linkable linker.links
+      { linker with links = Links.add key linkable linker.links
       }	
 
     let is_impasse link ~by:key =
-      link.links |> LinksMap.mem key	
+      link.links |> Links.mem key	
 
     let rec go_from link ~by:key ~steps_count:i =
       if i = 0 then link else 

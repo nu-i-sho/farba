@@ -9,7 +9,7 @@ module Make : LINK.MAKE_T = functor
 
     type key_t = Key.t
 	
-    let make_with value = 
+    let make value = 
       { links = Links.empty;
 	value
       }

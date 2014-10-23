@@ -3,7 +3,7 @@ module Make : LINK.MAKE_T = functor
   
     module Links = Map.Make (Key)
 	
-    type 'a t = { links : t Links.t;
+    type 'a t = { links : 'a t Links.t;
 		  value : 'a
 		}
 

@@ -31,8 +31,7 @@ module Make : LINK.MAKE_T = functor
 	  ~by:key
 
     let rec go_to_end_from link ~by:key =
-      if is_impasse link ~by:key then link 
-      else 
+      if is_impasse link ~by:key then link else 
 	go_to_end_from 
 	  (get_from link ~by:key) 
 	  ~by:key
@@ -42,5 +41,5 @@ module Make : LINK.MAKE_T = functor
 	if is_impasse link ~by:key then i else
 	  calc (get_from link ~by:key)
 	    ~counter:(i + 1) in
-      calculate link ~counter:0
+      calc link ~counter:0
   end

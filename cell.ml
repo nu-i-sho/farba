@@ -7,4 +7,4 @@ let empty = Empty
 type source_t = char
 let parse = function 
   | '_' -> empty
-  | oth -> Expect (Color.parse_from oth)
+  | oth -> Expect (Color.parse oth)

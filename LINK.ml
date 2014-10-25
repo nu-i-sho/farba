@@ -3,15 +3,19 @@ module type T = sig
   val link : 'a t -> to':('a t) -> by:key_t -> 'a t
 end
 
+module type EXT_T = sig
+  type 'b linksMap_t
+  type 'a t = { links : 'a t linksMap_t;
+		value : 'a
+	      }
+
+  include T with type 'a t := 'a t
+end
+
 module type MAKE_EXT_T = functor
     (Key : ORDERABLE.T) -> functor
-      (Links : Map.S with type key = Key.t) -> sig
-	type 'a t = { links : 'a t Links.t;
-		      value : 'a
-		    }
-
-	include T with type 'a t := 'a t and type key_t = Key.t
-      end
+      (Links : Map.S with type key = Key.t) -> 
+	T with type key_t = Key.t and type 'b linksMap_t = 'b Links.t
 
 module type MAKE_T = functor 
     (Key : ORDERABLE.T) -> 

@@ -15,7 +15,8 @@ end
 module type MAKE_EXT_T = functor
     (Key : ORDERABLE.T) -> functor
       (Links : Map.S with type key = Key.t) -> 
-	T with type key_t = Key.t and type 'b linksMap_t = 'b Links.t
+	EXT_T with type key_t = Key.t 
+               and type 'b linksMap_t = 'b Links.t
 
 module type MAKE_T = functor 
     (Key : ORDERABLE.T) -> 

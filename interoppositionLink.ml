@@ -4,7 +4,7 @@ module Make : INTEROPPOSITION_LINK.MAKE_T = functor
     include Link.MakeForExtend (Key) (Links)
 
     let join a ~with':b ~by:key = 
-      let rec a' = { a with links = a.links |> Links.add key b' }
-          and b' = { b with links = b.links |> Links.add (Key.opposite key) a' }
-      in a'
+      let rec a' = lazy { a with links = a.links |> Links.add key (Lazy.force b') }
+          and b' = lazy { b with links = b.links |> Links.add (Key.opposite key) (Lazy.force a') }
+      in Lazy.force a'
   end

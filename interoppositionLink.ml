@@ -1,10 +1,10 @@
 module Make : INTEROPPOSITION_LINK.MAKE_T = functor
   (Key : ORDERABLE_AND_OPPOSABLE.T) -> struct
-    module Links = Map.Make (Key)
-    include Link.MakeForExtend (Key) (Links)
+    include Link.MakeForExtend (Key)
 
     let join a ~with':b ~by:key = 
-      let rec a' = lazy { a with links = a.links |> Links.add key (Lazy.force b') }
-          and b' = lazy { b with links = b.links |> Links.add (Key.opposite key) (Lazy.force a') }
-      in Lazy.force a'
+      let rec a' = { a with links = (key, b') :: a.links }
+          and b' = { b with links = ((Key.opposite key), a') :: b.links } 
+      in 
+      a'
   end

@@ -14,4 +14,4 @@ module type MAKE_T = functor
     (Direction : DIRECTION.T) -> functor
       (BoardLink : READONLY_LINK.T with type key_t = Direction.t) ->
 	T with type direction_t = Direction.t
-	       and board_link_t = BoardLink.t
+	   and type 'a  board_link_t = 'a BoardLink.t

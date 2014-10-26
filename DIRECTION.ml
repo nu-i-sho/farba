@@ -4,11 +4,6 @@ module type T = sig
   val default : t
 end
 
-module type SEED_T = sig
-  type t
-  val all_from_default_ordered_to_right : t list
-end
-
 module type MAKE_T = functor
-    (Seed : SEED_T) -> 
+    (Seed : DIRECTION_SEED.T) -> 
       T with type t = Seed.t

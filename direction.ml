@@ -1,5 +1,5 @@
 module Make : DIRECTION.MAKE_T = functor 
-  (Seed : DIRECTION.SEED_T) -> struct
+  (Seed : DIRECTION_SEED.T) -> struct
 
     open RoundelayLink
     open Hand

@@ -6,47 +6,52 @@ module Make : DIRECTION.MAKE_T = functor
 
     type t = Seed.t
 
-    let default =
+    let start =
       Seed.all_from_default_ordered_to_right
         |> Dlink.load
         |> RoundelayLink.close 
 
-    let opposite_index = 
+    let default =
+      value_of start
+
+    let median = 
       let rec count current acc =
-	if value_of current = 
-	   value_of default && acc <> 0 then acc 
-	else 
-	   count (get_from current ~by:Right) 
-	         (acc + 1) 
+	if value_of current = default 
+	    && acc <> 0 then acc 
+	else count (get_from current ~by:Right) 
+	           (acc + 1) 
       in
-      (count default 0) / 2
+      (count start 0) / 2
 
-    let opposite direction =
-      let rec opposite' current i  =
-	if i = opposite_index then 
-	  value_of current 
-	else opposite' (go_from current ~by:Right)
-	               (i + 1) 
-      in
-      opposite' default 0 
+    let find_link_with_value x =
+      find_link_in start 
+	~with_value:x 
+	~by:Right 
 
+   (* let opposite = value_of 
+        @@ (go_from ~by:Right ~steps_count:median) 
+        @@ find_link_with_value 
+    *)
+
+    let opposite direction = 
+      direction |> find_link_with_value
+                |> go_from ~by:Right ~steps_count:median
+		|> value_of 
+   
     let compare x y =
       let index_of direction =
-	let rec index_of' current acc =
-	  if direction = value_of current then acc else
-	     index_of'(go_from current ~by:Right)
-	              (acc + 1) 
-	in 
-	index_of' default 0 in
-      Pervasives.compare (index_of x)
-	                 (index_of y)
+	find_index_of_link_with 
+	  ~value:direction 
+	  ~in':start 
+	  ~by:Right 
+      in 
+      Pervasives.compare 
+	(index_of x)
+	(index_of y)
 	  
-    let turn direction ~to':hand = 
-      let rec find ~current =
-	if direction = value_of current then current else
-	   find (go_from current ~by:Right) in
-      go_from (find ~current:default)
-              ~by:hand
+    let turn direction ~to':hand_side =
+      value_of (get_from (find_link_with_value direction)
+		         ~by:hand_side)
   end
 
 

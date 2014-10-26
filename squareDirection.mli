@@ -1,1 +1,1 @@
-include DIRECTION.T with type t := SquareDirectionSeed.t
+include DIRECTION.T with type t = SquareDirectionSeed.t

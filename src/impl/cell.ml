@@ -1,10 +1,14 @@
-type t = | Filled of Color.t
-         | Expect of Color.t
-	 | Empty
+module Make : CELL.MAKE_T = functor
+  (Color : FROM_CHAR_MAKEABLE.T) -> struct
 
-let empty = Empty
+    type t = | Filled of Color.t
+             | Expect of Color.t
+	     | Empty
 
-type source_t = char
-let parse = function 
-  | '_' -> empty
-  | oth -> Expect (Color.parse oth)
+    let empty = Empty
+
+    type source_t = char
+    let make = function 
+      | '_' -> empty
+      | oth -> Expect (Color.make oth)
+  end

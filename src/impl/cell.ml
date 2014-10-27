@@ -1,4 +1,4 @@
-module Make : CELL.MAKE_T = functor
+module Make : EMPTIBLE_AND_CHAR_PARSABLE.MAKE_T = functor
   (Color : FROM_CHAR_MAKEABLE.T) -> struct
 
     type t = | Filled of Color.t

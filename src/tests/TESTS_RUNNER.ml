@@ -3,7 +3,7 @@ module type T = sig
   type message_t
   type testSession_t
 
-  val run  : testSession_t list -> output:output_t -> ()
+  val run  : testSession_t list -> output:output_t -> output_t
   val exec : testSession_t list -> message_t list
 end
 

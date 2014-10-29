@@ -3,76 +3,64 @@ module Make : TESTS_RUNNER.MAKE_T = functor
     open TestMessage
 
     type message_t = TestMessage.t
-    type output_t = Output.t
+    type output_t = O.t
     type testSession_t = 
 	(module TESTS_SESSION.T with type child_t = 
 	    (module TESTS_SET.T with type child_t = 
 		(module TEST.T)))
 	     
-    let run session ~output =
-      let rec run' sets output =
-	let rec run'' tests output =
+    let (<<<) = Output.send  
+
+    let out ~context ~event ~name ~message o =
+       o |> Output.send { context; event; name; message;
+			  time = Unix.time ()
+			}
+
+    let run session ~output:o =
+      let rec run' sets o =
+	let rec run'' tests o =
 	  match tests with
-	  | test :: oth_tests -> begin
+	  | test :: oth_tests -> 
 	      let module Test = (val test : TEST.T) in
-	      output |> Output.send { context = Level.Test;
-				        event = Event.Started;
-					 time = Unix.time ();
-					 name = Test.name;
-				      message = ""
-				    }
-	             |> (try let Test.run () in
-		           Output.send { context = Level.Test;
-				           event = Event.Passed;
-					    time = Unix.time ();
-					    name = Test.name;
-				         message = ""
-				       }
-		         with Assert_failure (file, line, char) ->
-			   Output.send { context = Level.Test;
-				           event = Event.Failed;
-					    time = Unix.time ();
-					    name = Test.name;
-				         message = "file: " + file + "; " 
-					         + "line: " + line + "; "
-					         + "char: " + char + "; "
-				       })
-		     |> run'' oth_tests 
-	  end
-	  | [] -> output
+	      let out event message =
+		out ~context:Level.Test
+		       ~name:Test.name
+                    ~message ~event 
+	      in 
+	      let run''' = 
+		try 
+		  let Test.run () in
+		  out Event.Passed ""
+		with Assert_failure (file, line, char) ->
+		  out Event.Failed "file: " + file + "; " 
+			         + "line: " + line + "; "
+				 + "char: " + char + "; "
+	      in
+	      o |> out Event.Started ""
+	        |> run'''
+	  | [] -> o
 	in
 	match sets with 
-	| set :: oth_sets -> begin
+	| set :: oth_sets ->
 	    let module Set = (val set : TESTS_SET.T) in
-	    output |> Output.send { context = Level.Set;
-				      event = Event.Started;
-				       time = Unix.time ();
-				       name = Set.name;
-				    message = ""
-				  } 
-	           |> run'' Set.children
-		   |> Output.send { context = Level.Set;
-				      event = Event.Finished;
-				       time = Unix.time ();
-				       name = Set.name;
-				    message = ""
-				  }
-		   |> run' oth_sets
-	end
-	| [] -> output
+	    let out event =
+	      out ~context:Level.Set
+		     ~name:Set.name
+		  ~message:"" ~event 
+	    in
+	    o |> out Event.Started
+	      |> run'' Set.children
+	      |> out Event.Finished
+	      |> run' oth_sets
+	| [] -> o
       in
-      let module Session = (val session : TESTS_SESSION.T)
-      output |> Output.send { context = Level.Session;
-			        event = Event.Started;
-                                 time = Unix.time ();
-			         name = Set.name;
-			      message = ""
-			    }
-             |> run' Session.children
-	     |> Output.send { context = Level.Session;
-			        event = Event.Finished;
-                                 time = Unix.time ();
-			         name = Set.name;
-			      message = ""
-			    }
+      let module Session = (val session : TESTS_SESSION.T) in
+      let out event =
+	out ~context:Level.Session
+	       ~name:Session.name
+	    ~message:"" ~event 
+      in 
+      o |> out Event.Started  
+        |> run' Session.children
+	|> out Event.Finished 
   end

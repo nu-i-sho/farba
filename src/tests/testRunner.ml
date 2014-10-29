@@ -8,13 +8,11 @@ module Make : TESTS_RUNNER.MAKE_T = functor
 	(module TESTS_SESSION.T with type child_t = 
 	    (module TESTS_SET.T with type child_t = 
 		(module TEST.T)))
-	     
-    let (<<<) = Output.send  
 
-    let out ~context ~event ~name ~message o =
-       o |> Output.send { context; event; name; message;
-			  time = Unix.time ()
-			}
+    let out ~context ~event ~name ~message =
+      Output.send { context; event; name; message;
+		    time = Unix.time ()
+		  }
 
     let run session ~output:o =
       let rec run' sets o =

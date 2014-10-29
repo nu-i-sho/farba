@@ -1,4 +1,4 @@
-module Make : TESTS_RUNNER.MAKE_T = functor
+module rec Make : TESTS_RUNNER.MAKE_T = functor
   (Output : OBSERVER.T with type message_t = TestMessage.t) -> struct
     open TestMessage
 
@@ -62,4 +62,17 @@ module Make : TESTS_RUNNER.MAKE_T = functor
       o |> out Event.Started  
         |> run' Session.children
 	|> out Event.Finished 
+
+    let exec session =
+      let module Accumulator = sig
+	type t = message_t list
+	type message_t = TestMessage.t
+	    
+	let make () = []
+	let send msg observer =
+	  msg :: observer
+      end in
+      let module Runner = TestRunner.Make (Accumulator) in
+      session |> Runner.run
+	~output:(Accumulator.make ())
   end

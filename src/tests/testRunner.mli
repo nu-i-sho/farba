@@ -1,1 +1,1 @@
-include TESTS_RUNNER.T
+module Make : TESTS_RUNNER.MAKE_T

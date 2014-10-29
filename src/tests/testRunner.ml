@@ -1,10 +1,13 @@
-module Make : MAKE_T = functor
+module Make : TESTS_RUNNER.MAKE_T = functor
   (Output : OBSERVER.T with type message_t = TestMessage.t) -> struct
     open TestMessage
 
     type message_t = TestMessage.t
     type output_t = Output.t
-    type testSet_t = (module TEST_SET.T)
+    type testSession_t = 
+	(module TESTS_SESSION.T with type child_t = 
+	    (module TESTS_SET.T with type child_t = 
+		(module TEST.T)))
 	     
     let run session ~output =
       let rec run' sets output =

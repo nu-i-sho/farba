@@ -3,7 +3,7 @@ module Make : TESTS_RUNNER.MAKE_T = functor
     open TestMessage
 
     type message_t = TestMessage.t
-    type output_t = O.t
+    type output_t = Output.t
     type testSession_t = 
 	(module TESTS_SESSION.T with type child_t = 
 	    (module TESTS_SET.T with type child_t = 
@@ -36,6 +36,7 @@ module Make : TESTS_RUNNER.MAKE_T = functor
 	      in
 	      o |> out Event.Started ""
 	        |> run'''
+		|> run'' oth_tests
 	  | [] -> o
 	in
 	match sets with 

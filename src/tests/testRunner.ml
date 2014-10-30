@@ -2,6 +2,7 @@ module rec Make : TESTS_RUNNER.MAKE_T = functor
   (Output : OBSERVER.T with type message_t = TestMessage.t) -> struct
     open TestMessage
 
+    type t = unit
     type message_t = TestMessage.t
     type output_t = Output.t
     type testSession_t = 
@@ -14,7 +15,7 @@ module rec Make : TESTS_RUNNER.MAKE_T = functor
 		    time = Unix.time ()
 		  }
 
-    let run session ~output:o =
+    let run session ~output:o _ =
       let rec run' sets o =
 	let rec run'' tests o =
 	  match tests with
@@ -63,7 +64,7 @@ module rec Make : TESTS_RUNNER.MAKE_T = functor
         |> run' Session.children
 	|> out Event.Finished 
 
-    let exec session =
+    let exec session _ =
       let module Accumulator = sig
 	type t = message_t list
 	type message_t = TestMessage.t
@@ -73,6 +74,5 @@ module rec Make : TESTS_RUNNER.MAKE_T = functor
 	  msg :: observer
       end in
       let module Runner = TestRunner.Make (Accumulator) in
-      session |> Runner.run
-	~output:(Accumulator.make ())
+      () |> Runner.run session ~output:(Accumulator.make ())
   end

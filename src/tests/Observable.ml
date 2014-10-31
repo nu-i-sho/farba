@@ -1,4 +1,4 @@
-module Make : ONSERVABLE.T = struct 
+module Make : OBSERVABLE.T = struct 
   
   module M = Map.Make (struct
     type t = int
@@ -11,7 +11,7 @@ module Make : ONSERVABLE.T = struct
 
   type subscribtion_t = int
 
-  val subscribe observer o = 
+  let subscribe observer o = 
     let max = o.max + 1 in
     let o = { o with map = o.map |> Map.add max observer; max } in
     let unsibscribe () =

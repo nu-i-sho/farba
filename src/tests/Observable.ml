@@ -9,8 +9,6 @@ module Make : OBSERVABLE.T = struct
 		max : int
 	      }
 
-  type subscribtion_t = int
-
   let subscribe observer o = 
     let max = o.max + 1 in
     let o = { o with map = o.map |> Map.add max observer; max } in

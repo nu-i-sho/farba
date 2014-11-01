@@ -1,4 +1,4 @@
 module type T = sig
-  val name : string
-  val run  : () -> ()
+  include NAMED.T
+  val run : unit -> unit
 end

@@ -1,14 +1,22 @@
 module type T = sig
-  type output_t
-  type message_t
-  type testSession_t
+  type t
+  type source_t
 
-  val run  : testSession_t -> output:output_t -> output_t
-  val exec : testSession_t -> message_t list
+  val make : (TestMessage.t -> unit) -> t
+  val run  : source_t -> t -> t
 end
 
-module type MAKE_T = functor
-    (Output : OBSERVER.T with type message_t = TestMessage.t) ->
-      T with type output_t = Output.t 
-         and type message_t = TestMessage.t
-	 and type testSession_t = (module TESTS_SESSION.T)
+module FOR_TEST = struct
+  module type T = T with type 
+	source_t = (module TEST.T)
+end
+
+module FOR_TESTS_SET = struct
+  module type T = T with type 
+	source_t = (module TESTS_SET.T)
+end
+
+module FOR_TESTS_SESSION = struct
+  module type T = T with type 
+	source_t = (module TESTS_SESSION.T)
+end

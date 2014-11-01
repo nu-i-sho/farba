@@ -1,78 +1,103 @@
-module rec Make : TESTS_RUNNER.MAKE_T = functor
-  (Output : OBSERVER.T with type message_t = TestMessage.t) -> struct
-    open TestMessage
+open TestMessage
 
-    type t = unit
-    type message_t = TestMessage.t
-    type output_t = Output.t
-    type testSession_t = 
-	(module TESTS_SESSION.T with type child_t = 
-	    (module TESTS_SET.T with type child_t = 
-		(module TEST.T)))
+let msg ~context ~event ~name ~message =
+  { context; event; name; message;
+    time = Unix.time ()
+  }
 
-    let out ~context ~event ~name ~message =
-      Output.send { context; event; name; message;
-		    time = Unix.time ()
-		  }
+module MsgSender = struct
+  type t = { send : TestMessage.t -> unit 
+	   }
 
-    let run session ~output:o _ =
-      let rec run' sets o =
-	let rec run'' tests o =
-	  match tests with
-	  | test :: oth_tests -> 
-	      let module Test = (val test : TEST.T) in
-	      let out event message =
-		out ~context:Level.Test
-		       ~name:Test.name
-                    ~message ~event 
-	      in 
-	      let run''' = 
-		try 
-		  let Test.run () in
-		  out Event.Passed ""
-		with Assert_failure (file, line, char) ->
-		  out Event.Failed "file: " + file + "; " 
-			         + "line: " + line + "; "
-				 + "char: " + char + "; "
-	      in
-	      o |> out Event.Started ""
-	        |> run'''
-		|> run'' oth_tests
-	  | [] -> o
-	in
-	match sets with 
-	| set :: oth_sets ->
-	    let module Set = (val set : TESTS_SET.T) in
-	    let out event =
-	      out ~context:Level.Set
-		     ~name:Set.name
-		  ~message:"" ~event 
-	    in
-	    o |> out Event.Started
-	      |> run'' Set.children
-	      |> out Event.Finished
-	      |> run' oth_sets
-	| [] -> o
+  let make observer = 
+    { send = observer 
+    }
+
+  let send msg o = 
+    o.send msg
+end
+
+module RunnerForTest = struct
+
+  type t = MsgSender.t
+  type source_t = (module TEST.T)
+  
+  let make = 
+    MsgSender.make
+
+  let run test o = 
+    let module Test = (val test : TEST.T) in
+    let msg event message =
+      msg ~context:Level.Test
+	  ~name:Test.name
+          ~message ~event 
+    in 
+    let () = o |> MsgSender.send (msg Event.Started "") in
+    let finished_msg = try
+      let () = Test.run () in
+      msg Event.Passed ""
+    with Assert_failure (file, line, char) ->
+      msg Event.Failed 
+	 (Printf.sprintf "file: %s; line: %i; char: %i."
+	                  file      line      char) 
       in
-      let module Session = (val session : TESTS_SESSION.T) in
-      let out event =
-	out ~context:Level.Session
-	       ~name:Session.name
-	    ~message:"" ~event 
-      in 
-      o |> out Event.Started  
-        |> run' Session.children
-	|> out Event.Finished 
+    let () = o |> MsgSender.send finished_msg in
+    o
+end
 
-    let exec session _ =
-      let module Accumulator = sig
-	type t = message_t list
-	type message_t = TestMessage.t
-	    
-	let make () = []
-	let send msg observer =
-	  msg :: observer
-      end in
-      let module Runner = TestRunner.Make (Accumulator) in
-      () |> Runner.run session ~output:(Accumulator.make ())
-  end
+module ForTestsSet = struct
+
+  type t = MsgSender.t
+  type source_t = (module TESTS_SET.T)
+
+  let make = 
+    MsgSender.make
+
+  let run tests_set o =
+    let module Set = (val tests_set : TESTS_SET.T) in
+    let rec run = function
+      | test :: oth -> 
+	  let () = o |> RunnerForTest.run test 
+	             |> ignore in 
+	  run oth
+      | [] -> ()
+    in
+    let msg event =
+      msg ~context:Level.Set
+	     ~name:Set.name
+	  ~message:"" ~event
+    in
+    let () = o |> MsgSender.send (msg Event.Started) in
+    let () = run Set.children in
+    let () = o |> MsgSender.send (msg Event.Finished) in
+    o 
+end
+
+module ForTestsSession  = struct
+
+  type t = MsgSender.t
+  type source_t = (module TESTS_SESSION.T)
+
+  let make = 
+    MsgSender.make
+
+  let run session o =
+    let module Session = (val session : TESTS_SESSION.T) in
+    let rec run = function
+      | set :: oth -> 
+	  let () = o |> ForTestsSet.run set
+                     |> ignore in run oth
+      | [] -> ()
+    in
+    let msg event =
+      msg ~context:Level.Session
+	  ~name:Session.name
+	  ~message:"" ~event 
+    in 
+    let () = o |> MsgSender.send (msg Event.Started) in
+    let () = run Session.children in
+    let () = o |> MsgSender.send (msg Event.Finished) in
+    o
+end
+
+include RunnerForTest

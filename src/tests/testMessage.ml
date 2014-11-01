@@ -1,4 +1,4 @@
-module rec Level = struct
+module Level = struct
   type t = | Session
            | Set
 	   | Test
@@ -8,13 +8,12 @@ module Event = struct
   type t = | Started
            | Failed
 	   | Passed
-	   | FInished
+	   | Finished
 end
 
 type t = { context : Level.t;
-             stage : Event.t;
-              time : Unix.tm;
+             event : Event.t;
+              time : float;
 	      name : string;
 	   message : string
 	 }
-end

@@ -1,4 +1,2 @@
-include TESTS_RUNNER.FOR_TEST.T
-module ForTestsSet : TESTS_RUNNER.FOR_TESTS_SET.T
-module ForTestsSession : TESTS_RUNNER.FOR_TESTS_SESSION.T
+include TESTS_RUNNER.T
 

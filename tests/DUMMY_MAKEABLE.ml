@@ -1,6 +1,6 @@
 module type T = sig
   include MAKEABLE.T
-  val set_make : (source_t, t) -> ()
+  val set_make : (source_t * t) -> unit
 end
 
 module type MAKE_T = functor

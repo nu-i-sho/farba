@@ -5,5 +5,5 @@ module type T = sig
 end
 
 module type MAKE_T = functor 
-    (SubMaker : FROM_CHAR_PARSABLE.T) ->
+    (SubMaker : FROM_CHAR_MAKEABLE.T) ->
       T

@@ -1,4 +1,4 @@
-module Make : EMPTIBLE_AND_CHAR_PARSABLE.MAKE_T = functor
+module Make : EMPTIBLE_AND_FROM_CHAR_MAKEABLE.MAKE_T = functor
   (Color : FROM_CHAR_MAKEABLE.T) -> struct
 
     type t = | Filled of Color.t
@@ -9,6 +9,6 @@ module Make : EMPTIBLE_AND_CHAR_PARSABLE.MAKE_T = functor
 
     type source_t = char
     let make = function 
-      | '_' -> empty
+      | '-' -> empty
       | oth -> Expect (Color.make oth)
   end

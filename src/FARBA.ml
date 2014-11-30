@@ -1,5 +1,5 @@
 module type T = sig
-  type t
+  include T.T
   type direction_t
   type 'a board_link_t
 

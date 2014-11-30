@@ -1,4 +1,4 @@
 module type T = sig
-  type t
+  include T.T
   val empty : t
 end

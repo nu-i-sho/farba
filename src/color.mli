@@ -1,1 +1,0 @@
-include FROM_CHAR_MAKEABLE.T 

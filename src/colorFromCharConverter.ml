@@ -1,8 +1,8 @@
-type t = unit
+include UnitMakeable
+
 type source_t = char
 type product_t = Color.t
 
-let make () = ()
 let convert chr () =
   match chr with
   | '1' -> Red

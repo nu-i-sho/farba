@@ -1,5 +1,5 @@
 module type T = sig
-  include module type of FilledExpectEmpty
+  include module type of CellState
   include EMPTIBLE.T with type t := t
 end
 

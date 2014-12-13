@@ -9,4 +9,5 @@ let convert =
            | '4' -> Green
            | '5' -> Blue
            | '6' -> Violet
-	
+	   | chr -> raise Error.InvalidArg chr 
+ 

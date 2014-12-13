@@ -1,1 +1,1 @@
-exception 'a BadValue of 'a  
+exception 'a InvalidArg of 'a  

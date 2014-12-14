@@ -1,2 +1,2 @@
 UnitO.Runner.runstd
-  [(module ColorFromharConverterTests : UnitO.FIXTURE_T)]
+  [(module ColorFromCharConverterTests : UnitO.FIXTURE.T)]

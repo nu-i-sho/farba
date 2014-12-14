@@ -9,37 +9,37 @@ let name =
 let red_test =
   Test.({ name = "expected Red for 1"; 
 	  run  = fun () -> 
-	    assert (C.convert '1') = Red
+	    assert ((C.convert '1') = Red)
 	})
 
 let orange_test =
   Test.({ name = "expected Orange for 2";
 	  run  = fun () -> 
-	    assert (C.convert '2') =  Orange
+	    assert ((C.convert '2') = Orange)
 	})
 
 let yellow_test =
-   Test.({ name = "expected Yellow for 3"; 
-	   run  = fun () -> 
-	     assert (C.convert '3') = Yellow
-	 })
+  Test.({ name = "expected Yellow for 3"; 
+	  run  = fun () -> 
+	    assert ((C.convert '3') = Yellow)
+	})
 
 let green_test =
   Test.({ name = "expected Green for 4"; 
 	  run  = fun () -> 
-	    assert (C.convert '4') = Green
+	    assert ((C.convert '4') = Green)
 	})
 
 let blue_test =
   Test.({ name = "expected Blue for 5"; 
 	  run  = fun () -> 
-	    assert (C.convert '5') = Blue
+	    assert ((C.convert '5') = Blue)
 	})
 
 let violet_test =
   Test.({ name = "expected Violet for 6"; 
 	  run  = fun () -> 
-	    assert (C.convert '6') = Violet
+	    assert ((C.convert '6') = Violet)
 	})
 
 let tests = 

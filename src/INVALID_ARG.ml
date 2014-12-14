@@ -5,4 +5,4 @@ end
 
 module type MAKE_T = 
     functor (Arg : T.T) -> 
-      T.T with type arg_t = Arg.t
+      T with type arg_t = Arg.t

@@ -42,6 +42,20 @@ let violet_test =
 	    assert ((C.convert '6') = Violet)
 	})
 
+let invalid_arg_test = 
+  Test.({ name = "expeted (InvalidArg.Error 7) for 7";
+	  run  = fun () ->
+	    assert (
+	    let module InvArg = 
+	      InvalidArg.Make (Char) in
+	    try 
+	      let _ = C.convert '6' in 
+	      false
+	    with
+	    | InvArg.Error '6' -> true
+	   )
+	})
+
 let tests = 
   [ red_test;
     orange_test;
@@ -49,4 +63,5 @@ let tests =
     green_test;
     blue_test;
     violet_test;
+    invalid_arg_test;
   ]

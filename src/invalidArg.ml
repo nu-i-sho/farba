@@ -1,5 +1,6 @@
 module Make (Arg : T.T) = struct
-  exception Error of Arg.t
+  type arg_t = Arg.t
+  exception Error of arg_t
 end
 
 module OfChar = Make (Char)

@@ -43,16 +43,14 @@ let violet_test =
 	})
 
 let invalid_arg_test = 
-  Test.({ name = "expeted (InvalidArg.Error 7) for 7";
+  Test.({ name = "expeted InvalidArg.Error 7 for 7";
 	  run  = fun () ->
 	    assert (
-	    let module InvArg = 
-	      InvalidArg.Make (Char) in
 	    try 
-	      let _ = C.convert '6' in 
+	      let _ = C.convert '7' in 
 	      false
-	    with
-	    | InvArg.Error '6' -> true
+	    with | InvalidArg.OfChar.Error '7' -> 
+	      true
 	   )
 	})
 

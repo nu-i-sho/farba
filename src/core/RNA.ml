@@ -1,1 +1,1 @@
-type t = (int * (Point.t list)) list
+type t = (int * (Gene.OfSpirit.t list)) list

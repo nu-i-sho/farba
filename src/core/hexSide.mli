@@ -1,5 +1,9 @@
-type t
+type t = | Up
+         | LeftUp
+         | RightUp
+         | Down
+         | LeftDown
+         | RightDown
 
-val left_of  : t -> t
-val right_of : t -> t
 val opposite : t -> t
+val turn : to':HandSide.t -> t -> t

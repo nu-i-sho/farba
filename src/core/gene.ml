@@ -1,5 +1,12 @@
 module OfFlesh = struct
-  type t = | Kind of Kind.t
+  module ForKind = struct 
+    type t = | Cytoplazm
+             | Nacleus
+             | Celluar
+             | Cancer
+  end
+
+  type t = | Kind of ForKind.t
            | State of State.t
 end
 

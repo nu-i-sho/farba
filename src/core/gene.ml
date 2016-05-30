@@ -38,5 +38,6 @@ module OfProgramm = struct
            | Declare of ForDeclare.t
 end
 
-type t = | Code of OfProgramm.t
+type t = | Flesh of OfFlesh.t
          | Spirit of OfSpirit.t
+         | Code of OfProgramm.t

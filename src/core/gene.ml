@@ -1,26 +1,9 @@
 module OfFlesh = struct
 
-  module ForKind = struct 
-    type t = | Cytoplazm
-             | Nacleus
-             | Celluar
-             | Cancer
-  end
-
-  module ForState = struct
-
-    module ForPigmentation = struct
-      type t = | Blue of Crosses.t
-               | Gray of Crosses.t
-    end
-
-    type t = { pigmentation : ForPigmentation.t;
-                  possition : Dots.t;
-             }
-  end
-
-  type t = | Kind of ForKind.t
-           | State of ForState.t
+  type t = | Cytoplazm of Pigment.t
+           | Nacleus of Pigment.t * HexSide.t
+           | Celluar of Pigment.t * HexSide.t
+           | Cancer
 end
 
 module OfSpirit = struct

@@ -1,4 +1,5 @@
 module OfFlesh = struct
+
   module ForKind = struct 
     type t = | Cytoplazm
              | Nacleus
@@ -7,9 +8,15 @@ module OfFlesh = struct
   end
 
   module ForState = struct
-    type t = { pigmentation : Pigmentation.t;
+
+    module ForPigmentation = struct
+      type t = | Blue of Crosses.t
+               | Gray of Crosses.t
+    end
+
+    type t = { pigmentation : ForPigmentation.t;
                   possition : Dots.t;
-         }
+             }
   end
 
   type t = | Kind of ForKind.t

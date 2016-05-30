@@ -1,3 +1,12 @@
+module OfFlesh = struct
+  type t = | Kind of Kind.t
+           | State of State.t
+end
+
+module OfSpirit = struct
+  type t = Dots.t
+end
+
 module OfProgramm = struct
   
   module ForAct = struct
@@ -33,10 +42,6 @@ module OfProgramm = struct
   type t = | Act of ForAct.t
            | Mark of ForMark.t
 
-end
-
-module OfSpirit = struct
-  type t = Dots.t
 end
 
 type t = | Code of OfProgramm.t

@@ -1,5 +1,5 @@
 module OfFlesh = struct
-
+  
   module ForAct = struct
 
     module ForTurn = struct
@@ -19,11 +19,11 @@ module OfFlesh = struct
   module ForMark = struct
 
     module ForCall = struct
-      type t = Point.t
+      type t = Dots.t
     end
 
     module ForDeclare = struct
-      type t = Point.t
+      type t = Dots.t
     end
 
     type t = | Call of ForCall.t
@@ -36,7 +36,7 @@ module OfFlesh = struct
 end
 
 module OfSpirit = struct
-  type t = Point.t
+  type t = Dots.t
 end
 
 type t = | Flesh of OfFlesh.t

@@ -14,17 +14,12 @@ module OfProgramm = struct
   
   module ForAct = struct
 
-    module ForTurn = struct
-      type t = | Left
-               | Right 
-    end
-
     module ForReplicate = struct
       type t = | Direct
                | Inverse
     end
 
-    type t = | Turn of ForTurn.t
+    type t = | Turn of HandSide.t
              | Replicate of ForReplicate.t 
   end
 

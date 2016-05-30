@@ -6,8 +6,14 @@ module OfFlesh = struct
              | Cancer
   end
 
+  module ForState = struct
+    type t = { pigmentation : Pigmentation.t;
+                  possition : Dots.t;
+         }
+  end
+
   type t = | Kind of ForKind.t
-           | State of State.t
+           | State of ForState.t
 end
 
 module OfSpirit = struct

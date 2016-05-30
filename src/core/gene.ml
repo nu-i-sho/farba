@@ -1,4 +1,4 @@
-module OfFlesh = struct
+module OfProgramm = struct
   
   module ForAct = struct
 
@@ -19,11 +19,11 @@ module OfFlesh = struct
   module ForMark = struct
 
     module ForCall = struct
-      type t = Dots.t
+      type t = Crosses.t * Dots.t
     end
 
     module ForDeclare = struct
-      type t = Dots.t
+      type t = Crosses.t * Dots.t
     end
 
     type t = | Call of ForCall.t
@@ -39,5 +39,5 @@ module OfSpirit = struct
   type t = Dots.t
 end
 
-type t = | Flesh of OfFlesh.t
+type t = | Code of OfProgramm.t
          | Spirit of OfSpirit.t

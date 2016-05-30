@@ -23,17 +23,9 @@ module OfProgramm = struct
              | Replicate of ForReplicate.t 
   end
 
-  module ForCall = struct
-    type t = Crosses.t * Dots.t
-  end
-
-  module ForDeclare = struct
-    type t = Crosses.t * Dots.t
-  end
-
   type t = | Act of ForAct.t
-           | Call of ForCall.t
-           | Declare of ForDeclare.t
+           | Call of Dots.t
+           | Declare of Dots.t
 end
 
 type t = | Flesh of OfFlesh.t

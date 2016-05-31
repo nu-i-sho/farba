@@ -6,7 +6,7 @@ module OfFlesh = struct
 end
 
 module OfSpirit = struct
-  type t = Dots.t
+  type t = DotsOfDice.t
 end
 
 module OfProgramm = struct
@@ -14,17 +14,16 @@ module OfProgramm = struct
   module ForAct = struct
     type t = | Turn of HandSide.t
              | Replicate of Relationship.t
-             | Call of Dots.t 
+             | Call of DotsOfDice.t 
   end
 
   module ForMark = struct
-    type t = | Declare of Dots.t
+    type t = | Declare of DotsOfDice.t
              | End
   end
 
   type t = | Act of ForAct.t
            | Mark of ForMark.t
-           
 end
 
 type t = | Flesh of OfFlesh.t

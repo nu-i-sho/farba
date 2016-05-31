@@ -1,4 +1,6 @@
-let read_lines_from path =
+type t = DNA.t option array array
+
+let read_lines path =
   let rec read file = 
     try (input_line file) :: (read file)
     with End_of_file -> 
@@ -8,8 +10,8 @@ let read_lines_from path =
 
   read (open_in path)
 
-let read_from path =
-  let lines  = read_lines_from path in
+let read path =
+  let lines  = read_lines path in
   let height = lines |> List.length in
   let width  = lines |> List.map String.length
                      |> List.fold_left max 0
@@ -18,7 +20,7 @@ let read_from path =
   (* for empty border *) 
   let height = height + 2 in
   let width = width + 2 in
-  let grid = Array.make_matrix width height None 
+  let set = Array.make_matrix width height None 
   in
   
   let process_line y = 
@@ -30,11 +32,11 @@ let read_from path =
                         let cytoplazm = 
 			  gene |> DNA.Builder.make 
                                |> DNA.Builder.result in
-                        grid.(x + 1).(y + 1) <- Some cytoplazm
+                        set.(x + 1).(y + 1) <- Some cytoplazm
     in
 
     String.iteri (process y)
   in
 
   let () = lines |> List.iteri process_line in
-  grid
+  set

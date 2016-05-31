@@ -1,6 +1,6 @@
 module OfFlesh = struct
   type t = | Cytoplazm of Pigment.t
-           | Nacleus of Pigment.t * HexagonSide.t
+           | Nucleus of Pigment.t * HexagonSide.t
            | Celluar of Pigment.t * HexagonSide.t
            | Cancer
 end

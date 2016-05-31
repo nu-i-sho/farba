@@ -9,7 +9,7 @@ module OfSpirit = struct
   type t = DotsOfDice.t
 end
 
-module OfProgramm = struct
+module OfProgram = struct
 
   module ForAct = struct
     type t = | Turn of HandSide.t
@@ -28,4 +28,4 @@ end
 
 type t = | Flesh of OfFlesh.t
          | Spirit of OfSpirit.t
-         | Code of OfProgramm.t
+         | Code of OfProgram.t

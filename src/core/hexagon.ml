@@ -33,3 +33,9 @@ let neighbor_of hexagon ~from:side =
                          | LeftDown  -> (x - 1, y    )
                          | RightDown -> (x + 1, y    )
   }
+
+let set_value value hexagon = 
+  let set = hexagon.set in
+  let (x, y) = hexagon.index in
+  let () = set.(x).(y) <- value in
+  hexagon

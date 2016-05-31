@@ -1,5 +1,5 @@
 cd /root/miray/development/farba/src/core/
 
-ocamlc -o ../farba.run -I bin dotsOfDice.mli dotsOfDice.ml handSide.ml pigment.mli pigment.ml relationship.ml hexagonSide.ml hexagonSide.mli gene.ml RNA.ml DNA.ml hexagon.mli hexagon.ml levelReader.mli levelReader.ml
+ocamlc -o ../farba.run -I bin dotsOfDice.mli dotsOfDice.ml handSide.ml pigment.mli pigment.ml relationship.ml hexagonSide.mli hexagonSide.ml gene.ml RNA.ml DNA.ml set.mli set.ml hexagon.mli hexagon.ml
 
 echo "build complete"

@@ -1,19 +1,24 @@
-type t = { storage : (DNA.t option) array array;
-             index : int * int;
+type t = {   set : Set.t;
+           index : int * int;
          }
 
+let make set = 
+  { set; 
+    index = (0, 0)
+  }
+
 let value_of hexagon =
-  let storage = hexagon.storage in
-  let (x, y)  = hexagon.index 
+  let set = hexagon.set in
+  let (x, y) = hexagon.index 
   in
   
   if x < 0 
   || y < 0 
-  || x >= (Array.length storage)
-  || y >= (Array.length storage.(0)) 
+  || x >= (Array.length set)
+  || y >= (Array.length set.(0)) 
   
   then None 
-  else storage.(x).(y)
+  else set.(x).(y)
 
 let neighbor_of hexagon ~from:side = 
   let open HexagonSide in

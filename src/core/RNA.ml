@@ -1,5 +1,5 @@
 type t = {   kind : Gene.OfSpirit.Kind.t;
-	   energy : Gene.OfSpirit.Energy.t list
+	   energy : Gene.OfSpirit.Breadcrumb.t list
 	 }
 
 let empty = {   kind = Gene.OfSpirit.Kind.ImmovableVirus;
@@ -14,7 +14,7 @@ module Builder = struct
 
     let with_energy energy { acc } =
       { acc = { acc with energy } }
-    
+
     let result { acc } = acc
 
   end
@@ -24,7 +24,7 @@ let energy_of x = x.energy
 
 let active_breadcrumb_of rna =
 
-  let open Gene.OfSpirit.Energy in
+  let open Gene.OfSpirit.Breadcrumb in
   let value_of breadcrumb = breadcrumb.value in
   let energy = energy_of rna in
   let min = 
@@ -49,7 +49,7 @@ let step rna =
   | ImmovableVirus -> rna
   | ReinjectingVirus mode 
   | MultiplyingVirus mode ->
-     let open Gene.OfSpirit.Energy in
+     let open Gene.OfSpirit.Breadcrumb in
      let breadcrumb = active_breadcrumb_of rna in
      let update_index_of x =
        { x with index = x.index

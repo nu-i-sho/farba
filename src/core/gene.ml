@@ -33,7 +33,7 @@ module OfSpirit = struct
 		 | ImmovableVirus
       end
 
-    module Energy = struct
+    module Breadcrumb = struct
 	type t = { value : DotsOfDice.t;
 		   index : int
 		 }
@@ -43,4 +43,4 @@ module OfSpirit = struct
 type t = | FleshKind of OfFlesh.Kind.t
          | FleshCommand of OfFlesh.Command.t
          | SpiritKind of OfSpirit.Kind.t
-	 | SpiritEnergy of OfSpirit.Energy.t
+	 | SpiritEnergy of OfSpirit.Breadcrumb.t

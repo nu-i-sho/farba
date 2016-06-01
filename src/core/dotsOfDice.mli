@@ -1,4 +1,9 @@
-type t
+type t = | OOOOOO
+         | OOOOO
+         | OOOO
+         | OOO
+         | OO
+         | O
 
 val increment : t -> t
 val decrement : t -> t

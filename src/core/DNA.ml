@@ -1,6 +1,6 @@
 type t = {   flesh : Gene.OfFlesh.t;
             spirit : RNA.t;
-           program : Gene.OfProgram.t list;
+           program : Gene.OfProgram.t array;
          }
 
 module Builder = struct
@@ -11,7 +11,7 @@ module Builder = struct
     let accumulator = 
       {   flesh = flesh_gene;
          spirit = [];
-        program = []
+        program = [||]
       } in
     { accumulator 
     }

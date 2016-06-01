@@ -69,11 +69,7 @@ let step rna =
      in
 
      let updated_energy = update (energy_of rna) in
-     let _ = Builder.result 
-	       (Builder.with_energy updated_energy 
-				    (Builder.make kind))
-     in
-     let _ = kind |> Builder.make
-                  |> Builder.with_energy updated_energy
-                  |> Builder.result in 
-     rna
+     kind |> Builder.make
+          |> Builder.with_energy updated_energy
+          |> Builder.result
+

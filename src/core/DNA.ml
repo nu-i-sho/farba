@@ -1,18 +1,19 @@
-type t = {   flesh : Gene.OfFlesh.t;
+type t = {    kind : Gene.OfFlesh.Kind.t;
             spirit : RNA.t;
-           program : Gene.OfProgram.t array;
+           program : Gene.OfFlesh.Command.t array;
          }
 
 module Builder = struct
   type d = { accumulator : t 
            } 
   
-  let make flesh_gene = 
+  let make kind = 
     let accumulator = 
-      {   flesh = flesh_gene;
-         spirit = [];
+      {    kind;
+         spirit = RNA.empty;
         program = [||]
-      } in
+      } 
+    in
     { accumulator 
     }
   
@@ -28,8 +29,6 @@ module Builder = struct
     builder.accumulator
 end
 
-let flesh_of x = x.flesh
+let kind_of x = x.kind
 let spirit_of x = x.spirit
 let program_of x = x.program
-
-

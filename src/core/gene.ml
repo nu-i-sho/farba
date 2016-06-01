@@ -1,31 +1,46 @@
 module OfFlesh = struct
-  type t = | Cytoplazm of Pigment.t
-           | Nucleus of Pigment.t * HexagonSide.t
-           | Celluar of Pigment.t * HexagonSide.t
-           | Cancer
-end
+    module Kind = struct
+	type t = | Cytoplazm of Pigment.t
+                 | Nucleus of Pigment.t * HexagonSide.t
+                 | Celluar of Pigment.t * HexagonSide.t
+                 | Cancer
+                 | Clot 
+      end
+
+    module Command = struct
+
+	module ForAct = struct
+	    type t = | Turn of HandSide.t
+		     | Replicate of Relationship.t
+		     | Call of DotsOfDice.t 
+	  end
+
+	module ForMark = struct
+	    type t = | Declare of DotsOfDice.t
+		     | End
+	  end
+
+	type t = | Act of ForAct.t
+                 | Mark of ForMark.t
+      end
+  end
 
 module OfSpirit = struct
-  type t = DotsOfDice.t
-end
+    
+    module Kind = struct
+	type t = | ReinjectingVirus of RunMode.t
+	         | MultiplyingVirus of RunMode.t
+		 | ImmovableVirus
+      end
 
-module OfProgram = struct
-
-  module ForAct = struct
-    type t = | Turn of HandSide.t
-             | Replicate of Relationship.t
-             | Call of DotsOfDice.t 
+    module Energy = struct
+	type t = { value : DotsOfDice.t;
+		   index : int
+		 }
+      end
   end
 
-  module ForMark = struct
-    type t = | Declare of DotsOfDice.t
-             | End
-  end
-
-  type t = | Act of ForAct.t
-           | Mark of ForMark.t
-end
-
-type t = | Flesh of OfFlesh.t
-         | Spirit of OfSpirit.t
-         | Code of OfProgram.t
+type t = | FleshKind of OfFlesh.Kind.t
+         | FleshCommand of OfFlesh.Command.t
+         | SpiritKind of OfSpirit.Kind.t
+	 | SpiritEnergy of OfSpirit.Energy.t

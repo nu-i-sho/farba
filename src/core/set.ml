@@ -27,7 +27,7 @@ let read path =
     let process y x =
       function | ' ' -> () 
                | chr -> let pigment = Pigment.of_char chr in
-                        let open Gene.OfFlesh in
+                        let open Gene.OfFlesh.Kind in
                         let gene = Cytoplazm pigment in
                         let cytoplazm = 
 			  gene |> DNA.Builder.make 

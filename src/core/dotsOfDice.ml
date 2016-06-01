@@ -44,3 +44,25 @@ let right =
            | OOO -> OOOOOO
            | OO -> OOO
            | O -> OO
+
+let of_int =
+  function | 6 -> OOOOOO
+           | 5 -> OOOOO
+	   | 4 -> OOOO
+	   | 3 -> OOO
+	   | 2 -> OO
+	   | 1 -> O
+
+let to_int = 
+  function | OOOOOO -> 6
+           | OOOOO -> 5
+	   | OOOO -> 4
+	   | OOO -> 3
+	   | OO -> 2
+	   | O -> 1
+
+let min a b = 
+  of_int (min (to_int a) (to_int b))
+
+let max a b =
+  of_int (max (to_int a) (to_int b))

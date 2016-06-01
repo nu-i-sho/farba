@@ -20,7 +20,7 @@ let value_of hexagon =
   then None 
   else set.(x).(y)
 
-let neighbor_of hexagon ~from:side = 
+let neighbor_from side hexagon = 
   let open HexagonSide in
   let (x, y) = hexagon.index 
   in

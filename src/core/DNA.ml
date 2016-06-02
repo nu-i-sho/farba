@@ -65,5 +65,21 @@ let replicate relationship
     | Some (Nucleus   _) -> Clot
     | Some (Celluar   _) -> Clot
   in
+ 
+  let acceptor_dna' = { donor_dna with kind = acceptor_kind' } in
+  let acceptor_dna' = if Clot = acceptor_kind' then
+			{ acceptor_dna' with spirit = None } else
+                          acceptor_dna'
+  in
 
-  { donor_dna with kind = acceptor_kind' }
+  let Some donor_spirit = spirit_of donor_dna in 
+  let donor_spirit_kind = RNA.kind_of donor_spirit in
+  let open Gene.OfSpirit.Kind in
+  let donor_dna' = 
+    match donor_spirit_kind with 
+    | Gene.OfSpirit.Kind.ReinjectingVirus _
+        -> { donor_dna with spirit = None }
+    | _ ->   donor_dna
+  in
+
+  donor_dna', acceptor_dna'

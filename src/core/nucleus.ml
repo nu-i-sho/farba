@@ -5,6 +5,9 @@ type t = { program : Command.t list;
 	      mode : LifeMode.t
 	 }
 
+let pigment_of x = 
+  x.pigment
+
 let turn side nucleus = 
   let gaze = HexagonSide.turn nucleus.gaze ~to:side in
   { nucleus with gaze }

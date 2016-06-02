@@ -1,1 +1,4 @@
-type t = { pigment : Pigment.t }
+type t = Pigment.t
+
+let pigment_of x = x
+

@@ -1,5 +1,5 @@
 type t = {    kind : Gene.OfFlesh.Kind.t;
-            spirit : RNA.t;
+            spirit : RNA.t option;
            program : Gene.OfFlesh.Command.t array;
          }
 
@@ -9,7 +9,7 @@ let program_of dna = dna.program
 
 let cytoplazm pigment = 
   {    kind = Gene.OfFlesh.Kind.Cytoplazm pigment;
-     spirit = RNA.empty; 
+     spirit = None; 
     program = [||];
   }
 

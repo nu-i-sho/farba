@@ -2,9 +2,14 @@ type t = { cytoplazm : Cytoplazm.t;
 	     nucleus : Nucleus.t;
 	 }
 
-let make ~cytoplazm:c ~nucleus:n =
-  { cytoplazm = c;
-      nucleus = n
+let make nucleus =
+  let cytoplazm = 
+    nucleus |> Nucleus.pigment_of
+            |> Pigment.opposie
+  in
+
+  { cytoplazm; 
+    nucleus 
   }
 
 let turn side x =

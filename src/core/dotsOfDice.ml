@@ -5,6 +5,9 @@ type t = | OOOOOO
          | OO
          | O
 
+let compare x y= 
+  compare (to_int x) (to_int y)
+
 let increment =   
   function | OOOOOO -> O
            | OOOOO -> OOOOOO
@@ -29,22 +32,6 @@ let opposite =
            | OO -> OOOOO
            | O -> OOOOOO
 
-let left =
-  function | OOOOOO -> OOO
-           | OOOOO -> OOOOOO
-           | OOOO -> OOOOO
-           | OOO -> OO
-           | OO -> O
-           | O -> OOOO
-
-let right =
-  function | OOOOOO -> OOOOO
-           | OOOOO -> OOOO
-           | OOOO -> O
-           | OOO -> OOOOOO
-           | OO -> OOO
-           | O -> OO
-
 let of_int =
   function | 6 -> OOOOOO
            | 5 -> OOOOO
@@ -61,8 +48,8 @@ let to_int =
 	   | OO -> 2
 	   | O -> 1
 
-let min a b = 
+let min x y = 
   of_int (min (to_int a) (to_int b))
 
-let max a b =
+let max x y =
   of_int (max (to_int a) (to_int b))

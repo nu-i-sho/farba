@@ -9,4 +9,4 @@ val turn       : HandSide.t -> t -> t
 val replicate  : Relationship.t 
               -> donor:t 
               -> acceptor:t option 
-              -> t
+              -> t * t

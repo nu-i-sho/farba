@@ -6,19 +6,6 @@ let empty = {   kind = Gene.OfSpirit.Kind.ImmovableVirus;
 	      energy = []
 	    }
 
-module Builder = struct
-    type d = { acc : t }
-
-    let make kind = 
-      { acc = { empty with kind } }
-
-    let with_energy energy { acc } =
-      { acc = { acc with energy } }
-
-    let result { acc } = acc
-
-  end
-
 let kind_of x = x.kind
 let energy_of x = x.energy
 
@@ -68,8 +55,6 @@ let step rna =
 		| []     -> []
      in
 
-     let updated_energy = update (energy_of rna) in
-     kind |> Builder.make
-          |> Builder.with_energy updated_energy
-          |> Builder.result
-
+     { kind; 
+       energy = update (energy_of rna)
+     }

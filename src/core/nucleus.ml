@@ -8,6 +8,9 @@ type t = { program : Command.t list;
 let pigment_of x = 
   x.pigment
 
+let is_cancer x =
+  Pigment.Red == x.pigment
+
 let turn side nucleus = 
   let gaze =  nucleus.gaze |> HexagonSide.turn side in
   { nucleus with gaze }

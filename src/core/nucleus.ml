@@ -5,8 +5,7 @@ type t = { program : Command.t list;
 	      mode : LifeMode.t
 	 }
 
-let pigment_of x = 
-  x.pigment
+let pigment x = x.pigment
 
 let is_cancer x =
   Pigment.Red == x.pigment

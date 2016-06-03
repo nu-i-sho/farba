@@ -1,3 +1,3 @@
-type t = DNA.t option array array
+type t = Flesh.t option array array
 
 val read : string -> t

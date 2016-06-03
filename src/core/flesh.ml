@@ -35,4 +35,4 @@ let replicate relationship ~donor:d ~acceptor:a =
 	  (Eucaryotic Cancer) 
 	else
 	  (Eucaryotic parent),
-	  (Eucaryotic (Celluar.make o)) 
+	  (Eucaryotic (Celluar (Celluar.make o))) 

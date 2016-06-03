@@ -3,10 +3,11 @@ type t = | Procaryotic of Procaryote.t
        
 let replicate relationship ~donor:d ~acceptor:a = 
   let parent, child = 
-    Eucariotes.replicate relationship d 
+    Eucaryote.replicate relationship d 
   in
   
-  let open Eucaryotes in 
+  let open Procaryote in
+  let open Eucaryote in
   match child with
   | Cancer -> 
      (Eucaryotic Cancer), 
@@ -33,9 +34,5 @@ let replicate relationship ~donor:d ~acceptor:a =
 	  (Eucaryotic parent),
 	  (Eucaryotic Cancer) 
 	else
-	  let child = Celluar.make ~cytoplazm:c 
-				   ~nucleus:o
-	  in
-
 	  (Eucaryotic parent),
-	  (Eucaryotic child) 
+	  (Eucaryotic (Celluar.make o)) 

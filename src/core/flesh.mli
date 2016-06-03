@@ -1,8 +1,8 @@
-type t = | Procaryotic of Procaryote.t
-         | Eucaryotic of Eucaryote.t
+type t = | Cytoplazm of HelsPigment.t
+         | Celluar of Celluar.t
 
 val replicate : Relationship.t 
-	     -> donor:Eucaryote.t
+	     -> donor:Celluar.t
 	     -> acceptor:t option
 	     -> (t * t)
 

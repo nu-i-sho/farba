@@ -1,38 +1,19 @@
-type t = | Procaryotic of Procaryote.t
-         | Eucaryotic of Eucaryote.t
-       
-let replicate relationship ~donor:d ~acceptor:a = 
-  let parent, child = 
-    Eucaryote.replicate relationship d 
+type t = | Cytoplazm of HelsPigment.t
+         | Celluar of Celluar.t
+
+let replicate relationship ~donor:d ~acceptor:a =
+  let wrapp_to_celluars (x, y) =
+    (Celluar x), (Celluar y)
   in
-  
-  let open Procaryote in
-  let open Eucaryote in
-  match child with
-  | Cancer -> 
-     (Eucaryotic Cancer), 
-     (Eucaryotic Cancer)
 
-  | Nucleus x -> 
-     match a with 
-     | None -> 
-	(Eucaryotic parent), 
-	(Eucaryotic child)
-
-     | Some (Eucaryotic _) -> 
-	(Eucaryotic parent, 
-	 Eucaryotic Cancer)
-
-     | Some (Procaryotic Clot) -> 
-	(Procaryotic Clot), 
-	(Procaryotic Clot)
-
-     | Some (Procaryotic (Cytoplazm c)) ->
-	let Nucleus o = child in
-	if (Nucleus.pigment_of o) == (Cytoplazm.pigment_of c) 
-	then  
-	  (Eucaryotic parent),
-	  (Eucaryotic Cancer) 
-	else
-	  (Eucaryotic parent),
-	  (Eucaryotic (Celluar (Celluar.make o))) 
+  ( match a with
+    | None               -> Celluar.replicate relationship d
+    | Some (Cytoplazm c) -> Celluar.replicate_to_cytoplazm 
+  			      relationship
+			          ~donor:d
+			       ~acceptor:c
+    | Some (Celluar c)   -> Celluar.replicate_to_celluar 
+			      relationship
+			          ~donor:d
+			       ~acceptor:c
+  ) |> wrapp_to_celluars

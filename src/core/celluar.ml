@@ -5,7 +5,8 @@ type t = { cytoplazm : Cytoplazm.t;
 let make nucleus =
   let cytoplazm = 
     nucleus |> Nucleus.pigment_of
-            |> Pigment.opposie
+            |> Pigment.opposite
+            |> Cytoplazm.make
   in
 
   { cytoplazm; 
@@ -13,13 +14,16 @@ let make nucleus =
   }
 
 let turn side x =
-  { x with nucleus = Nucleus.turn side x }
+  let nucleus = 
+    x.nucleus |> Nucleus.turn side 
+  in
+ 
+  { x with nucleus }
 
 let replicate relationship x = 
-  let parent_nacleus, child = 
-    Nucleus.replicate relationship x.nacleus
+  let parent, child = 
+    x.nucleus |> Nucleus.replicate relationship
   in
 
-  { x with nucleus = parent_nacleus },
+  { x with nucleus = parent }, 
   child
-

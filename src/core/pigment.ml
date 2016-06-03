@@ -7,12 +7,6 @@ let opposite =
            | Gray -> Blue
 	   | Red  -> Red
 
-let to_char = 
-  function | Blue -> '1'
-           | Gray -> '0'
-	   | Red  -> '2'
-
-let of_char = 
-  function | '1' -> Blue
-           | '0' -> Gray
-	   | '2' -> Red
+let of_hels = 
+  function | HelsPigment.Blue -> Blue
+           | HelsPigment.Gray -> Gray

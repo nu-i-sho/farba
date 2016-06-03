@@ -1,10 +1,11 @@
-include Map.OrderedType with 
-	  t = | OOOOOO
-              | OOOOO
-	      | OOOO
-	      | OOO
-	      | OO
-	      | O
+type t = | OOOOOO
+         | OOOOO
+         | OOOO
+         | OOO
+         | OO
+         | O
+
+include Map.OrderedType with type t := t 
 
 val increment : t -> t
 val decrement : t -> t

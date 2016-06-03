@@ -6,6 +6,10 @@ type t = { program : Command.t list;
 	 }
 
 let pigment x = x.pigment
+let spirit x = x.spirit
+
+let with_spirit spirit x =
+  { x with spirit }
 
 let is_cancer x =
   Pigment.Red == x.pigment

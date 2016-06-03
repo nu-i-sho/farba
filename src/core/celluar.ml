@@ -1,17 +1,13 @@
-type t = { cytoplazm : Cytoplazm.t;
-	     nucleus : Nucleus.t;
-	 }
+type t = Nucleus.t;
 
-let make nucleus =
-  let cytoplazm = 
-    nucleus |> Nucleus.pigment_of
-            |> Pigment.opposite
-            |> Cytoplazm.make
-  in
+let make x = x
 
-  { cytoplazm; 
-    nucleus 
-  }
+let nucleus_pigment x = 
+   x |> Nucleus.pigment_of
+
+let cytoplazm_pigment x =
+  x |> nucleus_pigment
+    |> Pigment.opposite
 
 let is_cancer x =
   Nucleus.is_cancer x.nucleus

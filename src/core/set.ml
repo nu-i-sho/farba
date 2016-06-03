@@ -19,18 +19,15 @@ let read path =
 
   (* for empty border *) 
   let height = height + 2 in
-  let width = width + 2 in
+  let width  = width  + 2 in
   let set = Array.make_matrix width height None 
   in
   
   let process_line y =
-    let open Flesh in
     let process y x =
       function | ' ' -> () 
-               | chr -> let pigment = Pigment.of_char chr in
-			let c = Cytoplazm.make pigment in
-			let c = Procaryote.Cytoplazm c in
-                        let c = Flesh.Procaryotic c in
+               | chr -> let p = HelsPigment.of_char chr in
+			let c = Flesh.Cytoplazm p in
                         set.(x + 1).(y + 1) <- Some c
     in
 

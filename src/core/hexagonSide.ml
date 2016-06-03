@@ -29,8 +29,7 @@ let right_of =
            | LeftDown  -> LeftUp
            | LeftUp    -> Up
 
-let turn ~to':handSide = 
-  match handSide with
+let turn hand_side = 
+  match hand_side with
   | HandSide.Left  -> left_of 
   | HandSide.Right -> right_of
-

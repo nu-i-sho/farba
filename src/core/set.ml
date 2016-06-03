@@ -1,4 +1,4 @@
-type t = DNA.t option array array
+type t = Flesh.t option array array
 
 let read_lines path =
   let rec read file = 
@@ -23,12 +23,15 @@ let read path =
   let set = Array.make_matrix width height None 
   in
   
-  let process_line y = 
+  let process_line y =
+    let open Flesh in
     let process y x =
       function | ' ' -> () 
                | chr -> let pigment = Pigment.of_char chr in
-                        let cytoplazm = DNA.cytoplazm pigment in
-                        set.(x + 1).(y + 1) <- Some cytoplazm
+			let c = Cytoplazm.make pigment in
+			let c = Procaryote.Cytoplazm c in
+                        let c = Flesh.Procaryotic c in
+                        set.(x + 1).(y + 1) <- Some c
     in
 
     String.iteri (process y)

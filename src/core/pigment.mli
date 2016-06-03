@@ -3,5 +3,4 @@ type t = | Blue
 	 | Red
 
 val opposite : t -> t
-val to_char  : t -> char
-val of_char  : char -> t
+val of_hels  : HelsPigment.t -> t

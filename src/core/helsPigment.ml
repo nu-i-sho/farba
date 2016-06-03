@@ -1,5 +1,5 @@
-type = | Blue
-       | Gray
+type t = | Blue
+         | Gray
 
 let of_char = 
   function | '1' -> Blue

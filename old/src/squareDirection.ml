@@ -1,1 +1,0 @@
-include Direction.Make (SquareDirectionSeed)

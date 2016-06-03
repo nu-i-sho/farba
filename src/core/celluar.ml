@@ -13,6 +13,9 @@ let make nucleus =
     nucleus 
   }
 
+let is_cancer x =
+  Nucleus.is_cancer x.nucleus
+
 let turn side x =
   let nucleus = 
     x.nucleus |> Nucleus.turn side 

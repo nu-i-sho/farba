@@ -23,10 +23,10 @@ let kind_of x =
 let turn side x =
   { x with gaze = x.gaze |> HexagonSide.turn side }
 
-let replicate relationship x =       
+let replicate ~relationship:r ~donor:x =       
     { x with    gaze = HexagonSide.opposite x.gaze;
              pigment = let open Relationship in
-                       match relationship with
+                       match r with
 		       | Inverse -> Pigment.opposite x.pigment
 		       | Direct  -> x.pigment
     }                                         
@@ -43,8 +43,9 @@ let replicate_to_celluar
 
   match kind_of a with
   | Kind.Clot -> (to_clot d), a
-  | _ -> d, ({ (replicate r d) with cytoplazm = a.cytoplazm;
-                                      pigment = Pigment.Red; 
+  | _ -> let child = replicate ~relationship:r ~donor:d in
+          d, ({ d with cytoplazm = a.cytoplazm;
+                       pigment = Pigment.Red; 
 	     })
 
 let replicate_to_cytoplazm 
@@ -54,8 +55,10 @@ let replicate_to_cytoplazm
 
   let cytoplazm_pigment = Pigment.of_hels a in
   let cytoplazm = Some cytoplazm_pigment in
-  let child = { (replicate r d) with cytoplazm } in
+  let child = replicate ~relationship:r ~donor:d in
+  let child = if cytoplazm_pigment == child.pigment then
+		{ child with pigment = Pigment.Red } else
+		  child 
+  in
 
-  if cytoplazm_pigment == child.pigment then
-    { child with pigment = Pigment.Red } else
-      child
+  { child with cytoplazm }

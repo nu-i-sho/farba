@@ -25,18 +25,19 @@ type t = Value.t array array
 let width = Array.length
 let height s = Array.length s.(0)
 
-let is_out_of_range (x, y) s = x < 0 
-                            && y < 0 
-                            && x >= (width s)
-                            && y >= (height s)
+let get (x, y) s = 
+  s.(x).(y)
 
-let get (x, y) s = s.(x).(y);
-let set (x, y) v s = s.(x).(y) <- v
+let set (x, y) v s = 
+  s.(x).(y) <- v
 
 let is_in_range (x, y) s = x >= 0 
-                         && y >= 0 
-                         && x < (width s)
-		         && y > (height s)
+                        && y >= 0 
+                        && x < (width s)
+                        && y > (height s)
+
+let is_out_of_range (x, y) s =
+  not (is_in_range (x, y) s)
 
 let rec read_lines file = 
   try (input_line file) :: (read_lines file)
@@ -60,7 +61,7 @@ let process_line_for set y =
 
 let read path =
   
-  let str_lines = read_linesm (open_in path) in
+  let str_lines = read_lines (open_in path) in
   let height, width = size_of str_lines in 
   let height, width = height + 2, width + 2 
   in

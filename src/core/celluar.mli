@@ -1,32 +1,25 @@
-type t
-
 module Kind : sig
     type t = | Hels
 	     | Clot
 	     | Cancer
 end
 
-module State : sig
-    type t = 
-      private {    pigment : Pigment.t;
-                      gaze : HexagonSide.t;
-                 cytoplazm : Pigment.t option;
-	        has_spirit : bool;
-	              kind : Kind.t
-	      }
-  end
+type t = private {   pigment : Pigment.t;
+                        gaze : HexagonSide.t;
+                   cytoplazm : Pigment.t option;
+		 }
 
-val first     : Command.t array -> t
-val state_of  : t -> State.t 
+val first     : t 
+val kind_of   : t -> Kind.t
 val turn      : HandSide.t -> t -> t
-val replicate : Relationship.t -> t -> (t * t)
+val replicate : Relationship.t -> t -> t
 
-val replicate_to_cytoplazm : Relationship.t
+val replicate_to_cytoplazm : relationship : Relationship.t
 	                  -> donor : t 
                           -> acceptor : HelsPigment.t
-			  -> (t * t)
+			  -> t
 
-val replicate_to_celluar : Relationship.t
+val replicate_to_celluar : relationship : Relationship.t
 	                -> donor : t 
                         -> acceptor : t
 	                -> (t * t)

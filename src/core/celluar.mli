@@ -12,7 +12,10 @@ type t = private {   pigment : Pigment.t;
 val first     : t 
 val kind_of   : t -> Kind.t
 val turn      : HandSide.t -> t -> t
-val replicate : Relationship.t -> t -> t
+
+val replicate : relationship : Relationship.t 
+	     -> donor : t 
+	     -> t
 
 val replicate_to_cytoplazm : relationship : Relationship.t
 	                  -> donor : t 

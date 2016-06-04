@@ -1,11 +1,9 @@
-type t = {   set : Set.t;
-           index : int * int;
+type t = {   set : HexagonSet.t;
+           index : HexagonSet.Index.t;
          }
 
 let make set = 
-  { set; 
-    index = (0, 0)
-  }
+  { set; index = HexagonSet.Index.zero }
 
 let value_of hexagon =
   let set = hexagon.set in

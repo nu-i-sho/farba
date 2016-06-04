@@ -40,9 +40,9 @@ let next event x =
   in
   x
 
-let starto observer = 
-  { start with next = Some observer } 
-  |> next (Event.create Dots.O 0)
+let starto ~observer:next = 
+  let () = next (Event.Create (Dots.O, 0)) in 
+  { start with next = Some next }
 
 let last x = CrumbMap.max_binding x.crumbs 
 let last_place x = snd (last x)  

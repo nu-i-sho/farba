@@ -10,9 +10,9 @@ end
 type t 
 
 val start      : t
-val starto     : (BreadcrumbsEvent.t -> unit) -> t
-val last       : t -> DotsOfDice.t * int
-val last_crumb : t -> DotsOfDice.t
+val starto     : (Event.t -> unit) -> t
+val last       : t -> Dots.t * int
+val last_crumb : t -> Dots.t
 val last_place : t -> int
 val count      : t -> int
 val length     : t -> int

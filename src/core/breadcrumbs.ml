@@ -22,15 +22,15 @@ let start =
   }
 
 let next event x =
-  let () = match x.on_event with
-           | Some on -> on !event
-           | None    -> ()
+  let () = match x.next with
+           | Some f -> f !event
+           | None   -> ()
   in
   x
 
 let starto observer = 
   { start with next = Some observer } 
-  |> next Event.(New (Dots.O, 0))
+  |> next lazy(Event.(New (Dots.O, 0)))
 
 let last x = CrumbMap.max_binding x.crumbs 
 let last_place x = snd (last x)  
@@ -54,19 +54,19 @@ let add c p x =
 
 let increment x =
   let c, p = last x in
-  x |> next Event.(Move (c, p, p + 1))
+  x |> next lazy(Event.(Move (c, p, p + 1)))
     |> remove c p
     |> add c (p + 1)
 
 let decrement x =
    let rec (c, p), c', p' = 
-     (last x), (Dots.increment c), (p - 1)
+     (last x), lazy(Dots.increment c), (p - 1)
    in
 
    x |> remove c p
-     |> next Event.(Move (c, p, p'))
+     |> next lazy(Event.(Move (c, p, p')))
      |> if PlaceMap.mem p' x.places then 
-	  next Event.(Split (c, c', c', p')) else 
+	  next lazy(Event.(Split (c, c', !c', p'))) else 
 	  add c p'
 
 let split x =
@@ -74,6 +74,6 @@ let split x =
     (last x), (Dots.increment c), (p + 1) 
   in
 
-  x |> next Event.(Split (c, c, c', p))
-    |> next Event.(Split (c', p, p'))
+  x |> next lazy(Event.(Split (c, c, c', p)))
+    |> next lazy(Event.(Split (c', p, p')))
     |> add c' p'

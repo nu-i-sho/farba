@@ -1,10 +1,10 @@
 module Dots = DotsOfDice
 
 module Event : sig
-    type t = private | New   of Dots.t * int
-                     | Move  of Dots.t * int * int 
-                     | Split of Dots.t * Dots.t * Dots.t * int
-		     | Marge of Dots.t * Dots.t * Dots.t * int
+    type t = private | Create of Dots.t * int
+                     | Move   of Dots.t * int * int 
+                     | Split  of Dots.t * Dots.t * Dots.t * int
+		     | Marge  of Dots.t * Dots.t * Dots.t * int
 end
 
 type t 

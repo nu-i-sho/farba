@@ -91,20 +91,19 @@ let state_of o =
 let start ~level:set ~start:index =
   let hexagon = Set.get index set in
   match hexagon with
-  | Empty -> Started { body = Protocell.first; 
-		       next = None;
-		       index; 
-		       set
-		     }
-  | _     -> StartFailed hexagon
+  | Empty -> Some { body = Protocell.first; 
+		    next = None;
+		    index; 
+		    set
+		  }
+  | _     -> None
 
 let starto ~level:set ~start:index ~observer:next = 
   let result = start ~level:set ~start:index in
   let () = match result with
-           | Started cell        -> 
-	      next (Event.started (state_of cell))
-	   | StartFailed hexagon ->
-	      next (Event.start_failed hexagon)
+           | Some cell -> next (Event.started (state_of cell))
+	   | None      -> let hexagon = Set.get index set in
+			  next (Event.start_failed hexagon)
   in
 
   result

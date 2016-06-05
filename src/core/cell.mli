@@ -38,9 +38,6 @@ end
 
 type t
 
-type start_result_t = private | StartFailed of Set.Value.t 
-			      | Started of t
-
 type rep_res_t = private | SelfClotted of t
 			 | Replicated of t
 			 | ReplicatedOut
@@ -50,11 +47,11 @@ include CELL.T
 
 val start : level:Set.t 
          -> start:Set.Index.t 
-         -> start_result_t
+         -> t option
 
 val starto : level:Set.t
           -> start:Set.Index.t
           -> observer:(Event.t -> unit)
-	  -> start_result_t
+	  -> t option
 
 val state_of : t -> State.t

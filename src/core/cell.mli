@@ -6,8 +6,9 @@ type start_result_t =
 
 type replication_result_t = 
   | ReplicatedToOutOfWorld
+  | SelfClotted of t
   | Replicated of t
-  | SelfCloted of t
+  
 
 val start : level:Set.t 
          -> start:Set.Index.t 

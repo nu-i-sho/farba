@@ -27,57 +27,57 @@ let turn side o =
       	     
 type replication_result_t = 
   | ReplicatedToOutOfWorld
+  | SelfClotted of t
   | Replicated of t
-  | SelfCloted of t
 
-let replicate ~relationship:r ~donor:farba =
+let replicate ~relationship:r ~donor:cell =
   let (index', maybe_acceptor) = 
-    neighbor farba.body.gaze farba 
+    neighbor cell.body.gaze cell
   in
 
   match maybe_acceptor with
   | None          -> ReplicatedToOutOfWorld
   | Some acceptor -> 
      let with_set farba =
-       let value = Set.Value.Cell farba.body in
-       let () = Set.set farba.index value farba.set in 
-       farba 
+       let value = Set.Value.Cell cell.body in
+       let () = Set.set cell.index value cell.set in 
+       cell
      in
 
      match acceptor with
      | Set.Value.Empty -> 
 	let child = Protocell.replicate
 		      ~relationship:r 
-                             ~donor:farba.body 
+                             ~donor:cell.body 
 	in
 	
-	Replicated ({ farba with index = index';
-                                  body = child
+	Replicated ({ cell with index = index';
+                                 body = child
 		    } |> with_set)
 
-     | Set.Value.Cytoplazm c ->
-	let child = Protocell.replicate_to_cytoplazm 
+     | Set.Value.Cytoplasm c ->
+	let child = Protocell.replicate_to_cytoplasm 
 		      ~relationship:r 
-		             ~donor:farba.body
+		             ~donor:cell.body
 		          ~acceptor:c
 	in
 	
-	Replicated ({ farba with index = index';
-                                  body = child 
+	Replicated ({ cell with index = index';
+                                 body = child 
 		    } |> with_set)
 
      | Set.Value.Cell c -> 
 	let parent, child = Protocell.replicate_to_protocell
 			      ~relationship:r 
-		                     ~donor:farba.body
+		                     ~donor:cell.body
 		                  ~acceptor:c
 	in
 
 	let open Protocell.Kind in
 	match Protocell.kind_of parent with
 	| Cancer
-	| Hels -> Replicated ({ farba with index = index';
-                                            body = child   
+	| Hels -> Replicated ({ cell with index = index';
+                                           body = child   
 			     } |> with_set)
-	| Clot -> SelfCloted ({ farba with body = parent 
-			     } |> with_set)
+	| Clot -> SelfClotted ({ cell with body = parent 
+			       } |> with_set)

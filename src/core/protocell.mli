@@ -6,7 +6,7 @@ end
 
 type t = private {   pigment : Pigment.t;
                         gaze : HexagonSide.t;
-                   cytoplazm : Pigment.t option;
+                   cytoplasm : Pigment.t option;
 		 }
 
 val first   : t 
@@ -17,7 +17,7 @@ val replicate : relationship : Relationship.t
 	     -> donor : t 
 	     -> t
 
-val replicate_to_cytoplazm : relationship : Relationship.t
+val replicate_to_cytoplasm : relationship : Relationship.t
 	                  -> donor : t 
                           -> acceptor : HelsPigment.t
 			  -> t

@@ -9,13 +9,11 @@ type t = private {   pigment : Pigment.t;
                    cytoplasm : Pigment.t option;
 		 }
 
+include CELL.T with type t := t 
+                and type replication_result_t := t  
+
 val first   : t 
 val kind_of : t -> Kind.t
-val turn    : HandSide.t -> t -> t
-
-val replicate : relationship : Relationship.t 
-	     -> donor : t 
-	     -> t
 
 val replicate_to_cytoplasm : relationship : Relationship.t
 	                  -> donor : t 

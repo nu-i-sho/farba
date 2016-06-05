@@ -7,14 +7,14 @@ end
 type t = {   pigment : Pigment.t;
                 gaze : HexagonSide.t;
            cytoplasm : Pigment.t option;
-	 }
+         }
 
 let first = {   pigment = Pigment.Blue;
-		   gaze = HexagonSide.Up;
+                   gaze = HexagonSide.Up;
               cytoplasm = None;
 	    }
 
-let kind_of x = 
+let kind_of x =
   match x.pigment, x.cytoplasm with
   | _          , Some Pigment.Red -> Kind.Clot
   | Pigment.Red, _                -> Kind.Cancer
@@ -23,13 +23,13 @@ let kind_of x =
 let turn side x =
   { x with gaze = x.gaze |> HexagonSide.turn side }
 
-let replicate ~relationship:r ~donor:x =       
-    { x with    gaze = HexagonSide.opposite x.gaze;
-             pigment = let open Relationship in
-                       match r with
-		       | Inverse -> Pigment.opposite x.pigment
-		       | Direct  -> x.pigment
-    }                                         
+let replicate ~relationship:r ~donor:x =
+    { x with gaze = HexagonSide.opposite x.gaze;
+          pigment = let open Relationship in
+                    match r with
+                    | Inverse -> Pigment.opposite x.pigment
+                    | Direct  -> x.pigment
+    }
 
 let to_clot x = 
   { x with pigment = Pigment.Red;
@@ -44,9 +44,9 @@ let replicate_to_protocell
   match kind_of a with
   | Kind.Clot -> (to_clot d), a
   | _ -> let child = replicate ~relationship:r ~donor:d in
-          d, ({ d with cytoplasm = a.cytoplasm;
-                         pigment = Pigment.Red; 
-	     })
+          d, { d with cytoplasm = a.cytoplasm;
+                        pigment = Pigment.Red
+             }
 
 let replicate_to_cytoplasm 
       ~relationship:r 

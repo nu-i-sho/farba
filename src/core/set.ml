@@ -15,7 +15,7 @@ module Index = struct
   end
 
 module Value = struct
-    type t = | Cytoplazm of HelsPigment.t
+    type t = | Cytoplasm of HelsPigment.t
              | Cell of Protocell.t
              | Empty		      
   end
@@ -54,7 +54,7 @@ let process_line_for set y =
   let process_char x chr = 
     if chr == ' ' then () else
       set.(x + 1).(y + 1) <- 
-	Value.Cytoplazm (HelsPigment.of_char chr) 
+	Value.Cytoplasm (HelsPigment.of_char chr) 
   in      
       
   String.iteri process_char

@@ -6,16 +6,16 @@ end
 
 type t = {   pigment : Pigment.t;
                 gaze : HexagonSide.t;
-           cytoplazm : Pigment.t option;
+           cytoplasm : Pigment.t option;
 	 }
 
 let first = {   pigment = Pigment.Blue;
 		   gaze = HexagonSide.Up;
-              cytoplazm = None;
+              cytoplasm = None;
 	    }
 
 let kind_of x = 
-  match x.pigment, x.cytoplazm with
+  match x.pigment, x.cytoplasm with
   | _          , Some Pigment.Red -> Kind.Clot
   | Pigment.Red, _                -> Kind.Cancer
   | _                             -> Kind.Hels
@@ -33,7 +33,7 @@ let replicate ~relationship:r ~donor:x =
 
 let to_clot x = 
   { x with pigment = Pigment.Red;
-         cytoplazm = Some Pigment.Red;
+         cytoplasm = Some Pigment.Red;
   }
 
 let replicate_to_protocell
@@ -44,21 +44,20 @@ let replicate_to_protocell
   match kind_of a with
   | Kind.Clot -> (to_clot d), a
   | _ -> let child = replicate ~relationship:r ~donor:d in
-          d, ({ d with cytoplazm = a.cytoplazm;
+          d, ({ d with cytoplasm = a.cytoplasm;
                          pigment = Pigment.Red; 
 	     })
 
-let replicate_to_cytoplazm 
+let replicate_to_cytoplasm 
       ~relationship:r 
              ~donor:d 
           ~acceptor:a =
 
-  let cytoplazm_pigment = Pigment.of_hels a in
-  let cytoplazm = Some cytoplazm_pigment in
+  let cytoplasm = Pigment.of_hels a in
   let child = replicate ~relationship:r ~donor:d in
-  let child = if cytoplazm_pigment == child.pigment then
+  let child = if cytoplasm == child.pigment then
 		{ child with pigment = Pigment.Red } else
 		  child 
   in
 
-  { child with cytoplazm }
+  { child with cytoplasm = Some cytoplasm }

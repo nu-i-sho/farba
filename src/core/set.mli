@@ -6,7 +6,7 @@ module Index : sig
   end
 
 module Value : sig
-    type t = | Cytoplazm of HelsPigment.t
+    type t = | Cytoplasm of HelsPigment.t
              | Cell of Protocell.t
              | Empty
   end

@@ -36,7 +36,7 @@ let to_clot x =
          cytoplazm = Some Pigment.Red;
   }
 
-let replicate_to_celluar 
+let replicate_to_protocell
        ~relationship:r 
               ~donor:d 
            ~acceptor:a =
@@ -45,7 +45,7 @@ let replicate_to_celluar
   | Kind.Clot -> (to_clot d), a
   | _ -> let child = replicate ~relationship:r ~donor:d in
           d, ({ d with cytoplazm = a.cytoplazm;
-                       pigment = Pigment.Red; 
+                         pigment = Pigment.Red; 
 	     })
 
 let replicate_to_cytoplazm 

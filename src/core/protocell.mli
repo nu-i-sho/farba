@@ -7,20 +7,23 @@ end
 type t = private {   pigment : Pigment.t;
                         gaze : HexagonSide.t;
                    cytoplasm : Pigment.t option;
-		 }
+                 }
 
-include CELL.T with type t := t 
-                and type rep_res_t := t  
-
-val first   : t 
+val first : t
 val kind_of : t -> Kind.t
 
+val turn : HandSide.t -> t -> t
+
+val replicate : relationship : Relationship.t 
+             -> donor : t
+             -> t
+
 val replicate_to_cytoplasm : relationship : Relationship.t
-	                  -> donor : t 
+                          -> donor : t 
                           -> acceptor : HelsPigment.t
-			  -> t
+                          -> t
 
 val replicate_to_protocell : relationship : Relationship.t
-	                  -> donor : t 
+                          -> donor : t 
                           -> acceptor : t
-	                  -> (t * t)
+                          -> (t * t)

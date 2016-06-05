@@ -3,15 +3,17 @@ type t = {  body : Protocell.t;
              set : Set.t
          }
 
-type rep_res_t = | SelfClotted of t
-		 | Replicated of t
-		 | ReplicatedOut
+include CELL.Data.Make(struct type t' = t end)
 
-let start ~level:set ~start:index =
+let first ~level:set ~start:index =
   let hexagon = Set.get index set in
   match hexagon with
-  | Empty -> Some { body = Protocell.first; index; set }
+  | Empty -> let body = Protocell.first in
+             Some { body; index; set }
   | _     -> None
+
+let state_of { body; index; _ } =
+  State.({ body; index })
 
 let neighbor side o = 
   let index' = Set.Index.move side o.index in
@@ -29,7 +31,7 @@ let replicate ~relationship:r ~donor:cell =
   let (index', maybe_acceptor) = 
     neighbor cell.body.gaze cell
   in
-
+  let open ReplicationResult in
   match maybe_acceptor with
   | None          -> ReplicatedOut
   | Some acceptor -> 

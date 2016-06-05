@@ -126,9 +126,9 @@ let turn side o =
   in
   o'
       	     
-type replication_result_t = | SelfClotted of t
-                            | Replicated of t
-			    | ReplicatedOut
+type rep_res_t = | SelfClotted of t
+                 | Replicated of t
+                 | ReplicatedOut
 
 let replicate ~relationship:r ~donor:o =
   let (index', maybe_acceptor) = 

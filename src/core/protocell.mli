@@ -10,7 +10,7 @@ type t = private {   pigment : Pigment.t;
 		 }
 
 include CELL.T with type t := t 
-                and type replication_result_t := t  
+                and type rep_res_t := t  
 
 val first   : t 
 val kind_of : t -> Kind.t

@@ -34,7 +34,6 @@ module Event : sig
 		     | Turned of Turning.t
 		     | StartFailed of Set.Value.t
 		     | Started of State.t
-
 end
 
 type t
@@ -42,12 +41,12 @@ type t
 type start_result_t = private | StartFailed of Set.Value.t 
 			      | Started of t
 
-type replication_result_t = private | SelfClotted of t
-				    | Replicated of t
-				    | ReplicatedOut
+type rep_res_t = private | SelfClotted of t
+			 | Replicated of t
+			 | ReplicatedOut
 include CELL.T 
 	with type t := t 
-         and type replication_result_t := replication_result_t
+         and type rep_res_t := rep_res_t
 
 val start : level:Set.t 
          -> start:Set.Index.t 

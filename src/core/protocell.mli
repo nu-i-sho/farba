@@ -9,9 +9,9 @@ type t = private {   pigment : Pigment.t;
                    cytoplazm : Pigment.t option;
 		 }
 
-val first     : t 
-val kind_of   : t -> Kind.t
-val turn      : HandSide.t -> t -> t
+val first   : t 
+val kind_of : t -> Kind.t
+val turn    : HandSide.t -> t -> t
 
 val replicate : relationship : Relationship.t 
 	     -> donor : t 
@@ -22,7 +22,7 @@ val replicate_to_cytoplazm : relationship : Relationship.t
                           -> acceptor : HelsPigment.t
 			  -> t
 
-val replicate_to_celluar : relationship : Relationship.t
-	                -> donor : t 
-                        -> acceptor : t
-	                -> (t * t)
+val replicate_to_protocell : relationship : Relationship.t
+	                  -> donor : t 
+                          -> acceptor : t
+	                  -> (t * t)

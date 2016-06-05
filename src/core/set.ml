@@ -16,7 +16,7 @@ module Index = struct
 
 module Value = struct
     type t = | Cytoplazm of HelsPigment.t
-             | Celluar of Celluar.t
+             | Cell of Protocell.t
              | Empty		      
   end
 

@@ -3,9 +3,7 @@ type t = {  body : Protocell.t;
              set : Set.t
          }
 
-include CELL.Data.Make(struct type t' = t end)
-
-let first ~level:set ~start:index =
+let first set index =
   let hexagon = Set.get index set in
   match hexagon with
   | Empty -> let body = Protocell.first in
@@ -13,19 +11,19 @@ let first ~level:set ~start:index =
   | _     -> None
 
 let state_of { body; index; _ } =
-  State.({ body; index })
+  CellState.({ body; index })
 
 let neighbor side o = 
-  let index' = Set.Index.move side o.index in
-  if Set.is_in_range index' o.set then
-    (index', Some (Set.get index' o.set)) else
-    (index', None)
+  let i' = Set.Index.move side o.index in
+  if Set.is_in_range i' o.set then
+    (i', Some (Set.get i' o.set)) else
+    (i', None)
 
 let turn side o = 
-  let c = Protocell.turn side o.body in
-  let value = Set.Value.Cell c in
+  let turned = Protocell.turn side o.body in
+  let value = Set.Value.Cell turned in
   let () = Set.set o.index value o.set in
-  { o with body = c }
+  { o with body = turned }
 
 let replicate ~relationship:r ~donor:cell =
   let (index', maybe_acceptor) = 
@@ -33,7 +31,15 @@ let replicate ~relationship:r ~donor:cell =
   in
   let open ReplicationResult in
   match maybe_acceptor with
-  | None          -> ReplicatedOut
+  | None          ->
+     let child = Protocell.replicate
+                   ~relationship:r
+                          ~donor:cell.body
+     in
+	
+     ReplicatedOut ({ cell with index = index';
+                                 body = child
+		   })
   | Some acceptor -> 
      let with_set farba =
        let value = Set.Value.Cell cell.body in

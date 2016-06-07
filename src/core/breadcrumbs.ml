@@ -44,9 +44,9 @@ let starto ~observer:next =
   let () = next (Event.Create (Dots.O, 0)) in 
   { start with next = Some next }
 
-let last x = CrumbMap.max_binding x.crumbs 
-let last_place x = snd (last x)  
-let last_crumb x = fst (last x)
+let last_pair o = CrumbMap.max_binding o.crumbs 
+let last o = fst (last_pair o)
+let last_place o = snd (last_pair o)  
 
 let count x =
   CrumbMap.cardinal x.crumbs
@@ -65,13 +65,13 @@ let add c p x =
   }
 
 let increment x =
-  let c, p = last x in
+  let c, p = last_pair x in
   x |> next (Event.move c p (p + 1))
     |> remove c p
     |> add c (p + 1)
 
 let decrement x =
-   let c , p  = last x in
+   let c , p  = last_pair x in
    let c', p' = (Dots.decrement c), (p - 1) in
    x |> remove c p
      |> next (Event.move c p p')
@@ -80,7 +80,7 @@ let decrement x =
 	  add c p'
 
 let split x =
-  let c , p  = last x in 
+  let c , p  = last_pair x in 
   let c', p' = (Dots.increment c), (p + 1) in
   x |> next (Event.split c c c' p)
     |> next (Event.move c' p p')

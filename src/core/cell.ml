@@ -1,86 +1,44 @@
-type t = {  body : Protocell.t;
-           index : Set.Index.t;
+type t = { index : Set.Index.t;
              set : Set.t
          }
 
+let save cell o =
+  Set.set o.index (Set.Value.Cell cell) o.set 
+
 let first set index =
-  let hexagon = Set.get index set in
-  match hexagon with
-  | Empty -> let body = Protocell.first in
-             Some { body; index; set }
+  match Set.get index set with
+  | Empty -> let o = { index; set } in
+             let () = save Protocell.first o in
+             Some o
   | _     -> None
 
-let state_of { body; index; _ } =
-  CellState.({ body; index })
+let value_of { set; index; } =
+  let Set.Value.Cell v = Set.get index set in
+  v
 
-let neighbor side o = 
-  let i' = Set.Index.move side o.index in
-  if Set.is_in_range i' o.set then
-    (i', Some (Set.get i' o.set)) else
-    (i', None)
+let kind_of o =
+  Protocell.kind_of (value_of o)
 
-let turn side o = 
-  let turned = Protocell.turn side o.body in
-  let value = Set.Value.Cell turned in
-  let () = Set.set o.index value o.set in
-  { o with body = turned }
+let is_out o =
+  (Set.get o.index o.set) == Set.Value.Out
 
-let replicate ~relationship:r ~donor:cell =
-  let (index', maybe_acceptor) = 
-    neighbor cell.body.gaze cell
-  in
-  let open ReplicationResult in
-  match maybe_acceptor with
-  | None          ->
-     let child = Protocell.replicate
-                   ~relationship:r
-                          ~donor:cell.body
-     in
-	
-     ReplicatedOut ({ cell with index = index';
-                                 body = child
-		   })
-  | Some acceptor -> 
-     let with_set farba =
-       let value = Set.Value.Cell cell.body in
-       let () = Set.set cell.index value cell.set in 
-       cell
-     in
+let turn side o =
+  let cell  = value_of o in
+  let cell' = Protocell.turn side cell in
+  let () = save cell' o in
+  o
 
-     match acceptor with
-     | Set.Value.Empty -> 
-	let child = Protocell.replicate
-		      ~relationship:r 
-                             ~donor:cell.body 
-	in
-	
-	Replicated ({ cell with index = index';
-                                 body = child
-		    } |> with_set)
-
-     | Set.Value.Cytoplasm c ->
-	let child = Protocell.replicate_to_cytoplasm 
-		      ~relationship:r 
-		             ~donor:cell.body
-		          ~acceptor:c
-	in
-	
-	Replicated ({ cell with index = index';
-                                 body = child 
-		    } |> with_set)
-
-     | Set.Value.Cell c -> 
-	let parent, child = Protocell.replicate_to_protocell
-			      ~relationship:r 
-		                     ~donor:cell.body
-		                  ~acceptor:c
-	in
-
-	let open Protocell.Kind in
-	match Protocell.kind_of parent with
-	| Cancer
-	| Hels -> Replicated ({ cell with index = index';
-                                           body = child   
-			     } |> with_set)
-	| Clot -> SelfClotted ({ cell with body = parent 
-			       } |> with_set)
+let replicate relation o =
+  let cell = value_of o in
+  let i' = Set.Index.move cell.gaze o.index in
+  let o' = { o with index = i' } in
+  let acceptor = Set.get i' o.set in
+  let cell' = Protocell.replicate relation cell in
+  let open Set.Value in 
+  let () = match acceptor with
+           | Out         -> ()
+           | Empty       -> save cell' o' 
+           | Cytoplasm c -> save (Protocell.inject c cell') o'
+           | Cell c      -> save (Protocell.to_clot cell') o'
+  in 
+  o'

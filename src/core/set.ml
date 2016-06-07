@@ -17,7 +17,8 @@ module Index = struct
 module Value = struct
     type t = | Cytoplasm of HelsPigment.t
              | Cell of Protocell.t
-             | Empty		      
+             | Empty
+             | Out		      
   end
 
 type t = Value.t array array
@@ -25,19 +26,17 @@ type t = Value.t array array
 let width = Array.length
 let height s = Array.length s.(0)
 
+let is_out (x, y) s = x < 0 && y < 0 
+                            && 
+             x >= (width s) && y >= (height s)
+
 let get (x, y) s = 
-  s.(x).(y)
+  if is_out (x, y) s then
+    Value.Out else
+    s.(x).(y)
 
 let set (x, y) v s = 
   s.(x).(y) <- v
-
-let is_in_range (x, y) s = x >= 0 
-                        && y >= 0 
-                        && x < (width s)
-                        && y > (height s)
-
-let is_out_of_range (x, y) s =
-  not (is_in_range (x, y) s)
 
 let rec read_lines file = 
   try (input_line file) :: (read_lines file)

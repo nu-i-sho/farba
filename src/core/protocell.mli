@@ -1,29 +1,11 @@
-module Kind : sig
-    type t = | Hels
-	     | Clot
-	     | Cancer
-end
-
 type t = private {   pigment : Pigment.t;
                         gaze : HexagonSide.t;
                    cytoplasm : Pigment.t option;
                  }
 
 val first : t
-val kind_of : t -> Kind.t
-
+val kind_of : t -> CellKind.t
 val turn : HandSide.t -> t -> t
-
-val replicate : relationship : Relationship.t 
-             -> donor : t
-             -> t
-
-val replicate_to_cytoplasm : relationship : Relationship.t
-                          -> donor : t 
-                          -> acceptor : HelsPigment.t
-                          -> t
-
-val replicate_to_protocell : relationship : Relationship.t
-                          -> donor : t 
-                          -> acceptor : t
-                          -> (t * t)
+val to_clot : t -> t
+val inject : HelsPigment.t -> t -> t
+val replicate : Relationship.t -> t -> t

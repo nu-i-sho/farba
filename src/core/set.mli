@@ -9,6 +9,7 @@ module Value : sig
     type t = | Cytoplasm of HelsPigment.t
              | Cell of Protocell.t
              | Empty
+             | Out
   end
 
 type t
@@ -18,7 +19,4 @@ val height : t -> int
 val get    : Index.t -> t -> Value.t
 val set    : Index.t -> Value.t -> t -> unit
 val read   : string -> t
-
-val is_in_range : Index.t -> t -> bool
-val is_out_of_range : Index.t -> t -> bool
 

@@ -1,87 +1,52 @@
-module Dots = DotsOfDice 
-module CrumbMap = Map.Make (Dots)
+module CrumbMap = Map.Make (DotsOfDice)
 module PlaceMap = Map.Make (ComparableInt)
 
-module Event = struct
-    type t = | Create of Dots.t * int
-             | Move   of Dots.t * int * int 
-             | Split  of Dots.t * Dots.t * Dots.t * int
-	     | Marge  of Dots.t * Dots.t * Dots.t * int
-
-    let create crumb place = 
-      lazy(Create (crumb, place))
-
-    let move crumb place place' =
-      lazy(Move (crumb, place, place'))
-
-    let split crumb result result' place =
-      lazy(Split (crumb, result, result', place))
-
-    let marge crumb crumb' result place =
-      lazy(Marge (crumb, crumb', result, place))
-end
-
-
 type t = { crumbs : int CrumbMap.t;
-	   places : Dots.t PlaceMap.t;
-	     next : (Event.t -> unit) option 
+	   places : DotsOfDice.t PlaceMap.t 
          }
 
 let start =
-  { places = PlaceMap.singleton 0 Dots.O;
-    crumbs = CrumbMap.singleton Dots.O 0;
-      next = None;
+  { places = PlaceMap.singleton 0 DotsOfDice.O;
+    crumbs = CrumbMap.singleton DotsOfDice.O 0
   }
-
-let next event x =
-  let () = match x.next with
-           | Some f -> f (Lazy.force event)
-           | None   -> ()
-  in
-  x
-
-let starto ~observer:next = 
-  let () = next (Event.Create (Dots.O, 0)) in 
-  { start with next = Some next }
 
 let last_pair o = CrumbMap.max_binding o.crumbs 
 let last o = fst (last_pair o)
 let last_place o = snd (last_pair o)  
 
-let count x =
-  CrumbMap.cardinal x.crumbs
+let count o =
+  CrumbMap.cardinal o.crumbs
   
-let length x = 
-  (last_place x) + 1
+let length o = 
+  (last_place o) + 1
 
-let remove c p x = 
-  { x with crumbs = x.crumbs |> CrumbMap.remove c;
-           places = x.places |> PlaceMap.remove p;
+let is_empty o =
+  CrumbMap.is_empty o.crumbs
+
+let remove c p o = 
+  { crumbs = o.crumbs |> CrumbMap.remove c;
+    places = o.places |> PlaceMap.remove p
   }
 
-let add c p x = 
-  { x with crumbs = x.crumbs |> CrumbMap.add c p;
-           places = x.places |> PlaceMap.add p c;
+let add c p o = 
+  { crumbs = o.crumbs |> CrumbMap.add c p;
+    places = o.places |> PlaceMap.add p c
   }
 
-let increment x =
-  let c, p = last_pair x in
-  x |> next (Event.move c p (p + 1))
-    |> remove c p
+let increment o =
+  let c, p = last_pair o in
+  o |> remove c p
     |> add c (p + 1)
 
-let decrement x =
-   let c , p  = last_pair x in
-   let c', p' = (Dots.decrement c), (p - 1) in
-   x |> remove c p
-     |> next (Event.move c p p')
-     |> if PlaceMap.mem p' x.places then 
-	  next (Event.split c c' c' p') else 
-	  add c p'
+let decrement o =
+  let c, p  = last_pair o in
+  let p' = p - 1 in
+  let o = remove c p o in
+  if p' > 0 && PlaceMap.mem p' o.places then  
+    add c p' o else
+    o
 
-let split x =
-  let c , p  = last_pair x in 
-  let c', p' = (Dots.increment c), (p + 1) in
-  x |> next (Event.split c c c' p)
-    |> next (Event.move c' p p')
-    |> add c' p'
+let split o =
+  let c , p  = last_pair o in 
+  let c', p' = (DotsOfDice.increment c), (p + 1) in
+  add c' p' o

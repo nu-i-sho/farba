@@ -1,50 +1,62 @@
 type t = { program : Command.t array;
             crumbs : Breadcrumbs.t;
-              cell : Cell.t;
+             owner : Cell.t;
               mode : Mode.t
 	 }
 
-let make program start_cell =
-  { program;
-     crumbs = Breadcrumbs.start;
-       cell = start_cell;
-       mode = Mode.Run
+let make program infected =
+  {  program;
+      crumbs = Breadcrumbs.start;
+       owner = infected;
+        mode = Mode.Run
   }  
 
+let act command o = 
+  Command.(
+    match command with
+    | Turn side ->
+       { o with owner = Cell.turn side o.owner }
+    | Replicate relation ->
+       { o with owner = Cell.replicate relation o.owner }
+    | Call func -> 
+       { o with mode = Mode.Find func }
+    | Declare _ 
+    | End ->
+       let crumb  = Breadcrumbs.last o.crumbs in
+       let crumb' = DotsOfDice.decrement crumb in
+       { o with mode = Mode.Return crumb' }
+  ) 
+
+let move o =
+  let move = match o.mode with
+	     | Mode.Find _
+	     | Mode.Run      -> Breadcrumbs.increment
+	     | Mode.Return _ -> Breadcrumbs.decrement
+  in
+  
+  { o with crumbs = move o.crumbs}
+
 let next o =
-  let i = Breadcrumbs.last_place o.crumbs in
-  let command = o.program.(i) in
-  let o' =
-    match o.mode with
-    
-    | Mode.Run -> begin
-	match command with
-	| Command.Turn side ->
-	   { o with cell = Cell.turn side o.cell }
-	| Command.Replicate relation ->
-	   { o with cell = Cell.replicate relation o.cell }
-	| Command.Call func -> 
-	   { o with mode = Mode.Find func }
-	| Command.Declare _ 
-	| Command.End ->
-	   let crumb  = Breadcrumbs.last o.crumbs in
-	   let crumb' = DotsOfDice.decrement crumb in
-           { o with mode = Mode.Return crumb' }
-      end
+  let open CellKind in
+  let module Crumbs = Breadcrumbs in
+ 
+  match Cell.kind_of o.owner with
+  | _ when (Crumbs.is_empty o.crumbs) || 
+	     (Cell.is_out o.owner) -> None
+  | Clot                           -> None
+  | Hels | Cancer                  -> 
+     let cmd =  o.program.(Crumbs.last_place o.crumbs) in
+     Some ( Mode.( match o.mode with
+	           | Run -> act cmd o
+	           | Find f when cmd = (Command.Declare f) 
+	                 -> { o with mode = Run }
+	           | Return c when c = (Crumbs.last o.crumbs) 
+	                 -> { o with mode = Run }
+	           | _   -> o
+	         ) |> move
+	  )
 
-    | Mode.Find f when command == (Command.Declare f) ->
-       { o with mode = Mode.Run }
-
-    | Mode.Return c when c == (Breadcrumbs.last o.crumbs) ->
-       { o with mode = Mode.Run }
-
-    | _ -> o
-  in
-
-  let move = match o'.mode with
-             | Mode.Find _
-             | Mode.Run      -> Breadcrumbs.increment
-             | Mode.Return _ -> Breadcrumbs.decrement
-  in
-
-  { o' with crumbs = move o'.crumbs }
+let rec run o =
+  match next o with
+  | Some o -> run o
+  | None -> () 

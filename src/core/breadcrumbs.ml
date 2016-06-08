@@ -1,5 +1,10 @@
+module Int = struct
+    type t = int
+    let compare = compare
+end
+
 module CrumbMap = Map.Make (DotsOfDice)
-module PlaceMap = Map.Make (ComparableInt)
+module PlaceMap = Map.Make (Int)
 
 type t = { crumbs : int CrumbMap.t;
 	   places : DotsOfDice.t PlaceMap.t 

@@ -1,4 +1,4 @@
-type t = { program : Command.t array;
+type t = { program : Program.t;
             crumbs : Breadcrumbs.t;
              owner : Cell.t;
               mode : Mode.t
@@ -44,8 +44,10 @@ let next o =
   | _ when (Crumbs.is_empty o.crumbs) || 
 	     (Cell.is_out o.owner) -> None
   | Clot                           -> None
-  | Hels | Cancer                  -> 
-     let cmd =  o.program.(Crumbs.last_place o.crumbs) in
+  | Hels | Cancer                  ->
+
+     let i = Crumbs.last_place o.crumbs in
+     let cmd = Program.get i o.program in
      Some ( Mode.( match o.mode with
 	           | Run -> act cmd o
 	           | Find f when cmd = (Command.Declare f) 

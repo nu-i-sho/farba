@@ -6,4 +6,4 @@ type t = | Up
          | RightDown
 
 val opposite : t -> t
-val turn     : HandSide.t -> t -> t
+val turn     : Hand.t -> t -> t

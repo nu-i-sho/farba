@@ -1,26 +1,26 @@
-type t = { index : Set.Index.t;
-             set : Set.t
+type t = {  index : Index.t;
+           tissue : Tissue.t
          }
 
 let save cell o =
-  Set.set o.index (Set.Value.Cell cell) o.set 
+  Tissue.set o.index (Item.Cell cell) o.tissue 
 
-let first set index =
-  match Set.get index set with
-  | Empty -> let o = { index; set } in
+let first tissue index =
+  match Tissue.get index tissue with
+  | Empty -> let o = { index; tissue } in
              let () = save Protocell.first o in
              Some o
   | _     -> None
 
-let value_of { set; index; } =
-  let Set.Value.Cell v = Set.get index set in
+let value_of { tissue; index; } =
+  let Item.Cell v = Tissue.get index tissue in
   v
 
 let kind_of o =
   Protocell.kind_of (value_of o)
 
 let is_out o =
-  (Set.get o.index o.set) == Set.Value.Out
+  (Tissue.get o.index o.tissue) == Item.Out
 
 let turn side o =
   let cell  = value_of o in
@@ -30,11 +30,11 @@ let turn side o =
 
 let replicate relation o =
   let cell = value_of o in
-  let i' = Set.Index.move cell.gaze o.index in
+  let i' = Index.move cell.gaze o.index in
   let o' = { o with index = i' } in
-  let acceptor = Set.get i' o.set in
+  let acceptor = Tissue.get i' o.tissue in
   let cell' = Protocell.replicate relation cell in
-  let open Set.Value in 
+  let open Item in 
   let () = match acceptor with
            | Out         -> ()
            | Empty       -> save cell' o' 

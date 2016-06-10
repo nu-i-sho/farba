@@ -1,10 +1,9 @@
-type t = {   pigment : Pigment.t;
-                gaze : HexagonSide.t;
-           cytoplasm : Pigment.t option;
-         }
+type t = Protocell.t
+
+open Protocell
 
 let first = {   pigment = Pigment.Blue;
-                   gaze = HexagonSide.Up;
+                   gaze = Side.Up;
               cytoplasm = None;
 	    }
 
@@ -15,10 +14,10 @@ let kind_of o =
   |               _               -> CellKind.Hels
 
 let turn side o =
-  { o with gaze = HexagonSide.turn side o.gaze }
+  { o with gaze = Side.turn side o.gaze }
 
 let replicate relation o =
-  { o with gaze = HexagonSide.opposite o.gaze;
+  { o with gaze = Side.opposite o.gaze;
         pigment = let open Relationship in
                   match relation with
                   | Inverse -> Pigment.opposite o.pigment

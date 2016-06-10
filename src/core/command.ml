@@ -1,10 +1,10 @@
-type t = | Turn of HandSide.t
+type t = | Turn of Hand.t
 	 | Replicate of Relationship.t
 	 | Call of DotsOfDice.t 
 	 | Declare of DotsOfDice.t
          | End
 
-open HandSide
+open Hand
 open Relationship
 open DotsOfDice
 

@@ -1,4 +1,4 @@
-type t = | Turn of HandSide.t
+type t = | Turn of Hand.t
 	 | Replicate of Relationship.t
 	 | Call of DotsOfDice.t 
 	 | Declare of DotsOfDice.t
@@ -6,4 +6,3 @@ type t = | Turn of HandSide.t
 
 val of_char : char -> t
 val to_char : t -> char
-

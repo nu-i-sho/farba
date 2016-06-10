@@ -14,8 +14,8 @@ let make program infected =
 let act command o = 
   Command.(
     match command with
-    | Turn side ->
-       { o with owner = Cell.turn side o.owner }
+    | Turn hand ->
+       { o with owner = Cell.turn hand o.owner }
     | Replicate relation ->
        { o with owner = Cell.replicate relation o.owner }
     | Call func -> 

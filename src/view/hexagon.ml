@@ -9,13 +9,6 @@ let make side =
     external_radius = side
   }
 
-let round x =
-  let fractional, integral = modf x in
-  (int_of_float integral) 
-  + (if fractional > 0.5 then 
-       1 else 
-       0)
-
 let internal_radius_f o = o.internal_radius
 let external_radius_f o = o.external_radius
 let internal_radius o = Int.round (internal_radius_f o)

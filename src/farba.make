@@ -61,5 +61,22 @@ find . -type f -iname \*.cmi -delete
 find . -type f -iname \*.o   -delete
 
 #echo "Core build complete"
+
+cd ../view
+
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c hexagon.mli 
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c hexagon.ml
+
+ocamlopt -pack -o view.cmx hexagon.cmx
+
+mv view.cmx ../../bin/view.cmx
+mv view.cmi ../../bin/view.cmi
+mv view.o ../../bin/view.o
+
+find . -type f -iname \*.cmx -delete
+find . -type f -iname \*.cmi -delete
+find . -type f -iname \*.o   -delete
+
+#echo "View build complete"
 #echo "build all complete"
 

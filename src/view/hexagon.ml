@@ -16,11 +16,10 @@ let round x =
        1 else 
        0)
 
-
 let internal_radius_f o = o.internal_radius
 let external_radius_f o = o.external_radius
-let internal_radius o = round (internal_radius_f o)
-let external_radius o = round (external_radius_f o)
+let internal_radius o = Int.round (internal_radius_f o)
+let external_radius o = Int.round (external_radius_f o)
 let side = external_radius
 
 let center_coord_f (x, y) o =
@@ -32,18 +31,18 @@ let center_coord_f (x, y) o =
 
 let center_coord i o =
   let x, y = center_coord_f i o in
-  (round x), 
-  (round y)
-
+  (Int.round x), 
+  (Int.round y)
+ 
 let angles_coords i o =
   let x, y = center_coord_f i o in
   let r  = internal_radius_f o in
   let r' = external_radius_f o in
-
-  [| round (x +. r' /. 2.0), round (y -. r);
-     round (x +. r')       , round  y;
-     round (x +. r' /. 2.0), round (y +. r);
-     round (x -. r' /. 2.0), round (y +. r);
-     round (x -. r')       , round  y;
-     round (x -. r' /. 2.0), round (y -. r); 
-  |]
+  
+  Int.([| round (x +. r' /. 2.0), round (y -. r);
+	  round (x +. r')       , round  y      ;
+	  round (x +. r' /. 2.0), round (y +. r);
+	  round (x -. r' /. 2.0), round (y +. r);
+	  round (x -. r')       , round  y      ;
+	  round (x -. r' /. 2.0), round (y -. r); 
+      |])

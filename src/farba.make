@@ -9,9 +9,11 @@ ocamlopt -for-pack Shared -c side.mli
 ocamlopt -for-pack Shared -c side.ml
 ocamlopt -for-pack Shared -c protocell.ml
 ocamlopt -for-pack Shared -c index.ml
-ocamlopt -for-pack Shared -c PRINTER.ml
+ocamlopt -for-pack Shared -c int.mli
+ocamlopt -for-pack Shared -c int.ml
+ocamlopt -for-pack Shared -c TISSUE_PRINTER.ml
 
-ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx protocell.cmx index.cmx PRINTER.cmx
+ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx protocell.cmx index.cmx int.cmx TISSUE_PRINTER.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi
@@ -28,7 +30,6 @@ cd ../core
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c dotsOfDice.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c dotsOfDice.ml 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c relationship.ml 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c int.ml 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c breadcrumbs.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c breadcrumbs.ml 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c command.mli 
@@ -50,7 +51,7 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c program.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c virus.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c virus.ml
 
-ocamlopt -pack -o core.cmx dotsOfDice.cmx relationship.cmx int.cmx breadcrumbs.cmx command.cmx cellKind.cmx protocell.cmx item.cmx index.cmx TISSUE.cmx tissue.cmx cell.cmx mode.cmx program.cmx virus.cmx
+ocamlopt -pack -o core.cmx dotsOfDice.cmx relationship.cmx breadcrumbs.cmx command.cmx cellKind.cmx protocell.cmx item.cmx index.cmx TISSUE.cmx tissue.cmx cell.cmx mode.cmx program.cmx virus.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi
@@ -66,9 +67,8 @@ cd ../view
 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c hexagon.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c hexagon.ml
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissueColorSheme.ml
 
-ocamlopt -pack -o view.cmx hexagon.cmx tissueColorSheme.cmx
+ocamlopt -pack -o view.cmx hexagon.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

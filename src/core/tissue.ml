@@ -49,7 +49,7 @@ let load path =
   
   tissue
 
-module MakePrintable (Printer : Shared.PRINTER.T) = struct
+module MakePrintable (Printer : TISSUE_PRINTER.T) = struct
     type t' = t
     type t  = { storage : t';
                 printer : Printer.t

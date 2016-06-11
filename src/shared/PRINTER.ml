@@ -1,10 +1,10 @@
 module type T = sig
     type t
 
-    val print_empty : (int * int) -> t -> unit
-    val print_cyto  : (int * int) -> HelsPigment.t -> t -> unit
-    val print_cell  : (int * int) -> Protocell.t -> t -> unit
-    val print_diff  : (int * int)
+    val print_empty : Index.t -> t -> unit
+    val print_cyto  : Index.t -> HelsPigment.t -> t -> unit
+    val print_cell  : Index.t -> Protocell.t -> t -> unit
+    val print_diff  : Index.t
                    -> previous : Protocell.t
                    ->  current : Protocell.t
                    -> t

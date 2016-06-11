@@ -78,5 +78,12 @@ module MakePrintable (Printer : Shared.PRINTER.T) = struct
 		            o.printer
 
     let load path printer = 
-      { storage = load path; printer }
+      let o = { storage = load path; printer } in
+      let () = for x = 0 to width o do
+		 for y = 0 to height o do
+		   Printer.print_empty (x, y) printer
+		 done
+	       done
+      in
+      o
 end

@@ -8,9 +8,10 @@ ocamlopt -for-pack Shared -c hand.ml
 ocamlopt -for-pack Shared -c side.mli
 ocamlopt -for-pack Shared -c side.ml
 ocamlopt -for-pack Shared -c protocell.ml
+ocamlopt -for-pack Shared -c index.ml
 ocamlopt -for-pack Shared -c PRINTER.ml
 
-ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx protocell.cmx PRINTER.cmx
+ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx protocell.cmx index.cmx PRINTER.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi

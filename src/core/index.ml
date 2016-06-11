@@ -1,4 +1,4 @@
-type t = int * int
+type t = Index.t
 
 let zero = (0, 0)
 let move side (x, y) =

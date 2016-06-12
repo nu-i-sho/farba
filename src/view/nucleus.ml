@@ -19,5 +19,5 @@ let eye_radius o =
 let eyes_coords _ _ _ = 
   (0, 0)
 
-let cancer_lines_coords _ _ _ = 
+let cancer_eyes_coords _ _ _ = 
   ((0, 0), (0, 0))

@@ -1,8 +1,0 @@
-module type T = sig
-    type t
-
-    val print_border : unit
-    val print_cyto : unit
-    val print_cell : unit
-    val print_diff : unit
-end

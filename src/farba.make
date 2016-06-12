@@ -15,9 +15,11 @@ ocamlopt -for-pack Shared -c protocell.ml
 ocamlopt -for-pack Shared -c index.ml
 ocamlopt -for-pack Shared -c int.mli
 ocamlopt -for-pack Shared -c int.ml
+ocamlopt -for-pack Shared -c item.ml
+ocamlopt -for-pack Shared -c TISSUE.ml
 ocamlopt -for-pack Shared -c TISSUE_PRINTER.ml
 
-ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx TISSUE_PRINTER.cmx
+ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx TISSUE.cmx TISSUE_PRINTER.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi
@@ -41,9 +43,7 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c breadcrumbs.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c command.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c command.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c cell.mli 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c cell.ml 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c item.ml
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c TISSUE.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c cell.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c tissue.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c tissue.ml 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c tissueCell.mli 
@@ -54,7 +54,7 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c program.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c virus.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c virus.ml
 
-ocamlopt -pack -o core.cmx dotsOfDice.cmx relationship.cmx breadcrumbs.cmx command.cmx cell.cmx item.cmx TISSUE.cmx tissue.cmx tissueCell.cmx mode.cmx program.cmx virus.cmx
+ocamlopt -pack -o core.cmx dotsOfDice.cmx relationship.cmx breadcrumbs.cmx command.cmx cell.cmx tissue.cmx tissueCell.cmx mode.cmx program.cmx virus.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

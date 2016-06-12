@@ -1,44 +1,33 @@
-type t = {  index : Index.t;
-           tissue : Tissue.t
-         }
+type t = Protocell.t
 
-let save cell o =
-  Tissue.set o.index (Item.Cell cell) o.tissue 
+open Protocell
 
-let first tissue index =
-  match Tissue.get index tissue with
-  | Empty -> let o = { index; tissue } in
-             let () = save Protocell.first o in
-             Some o
-  | _     -> None
+let first = {   pigment = Pigment.Blue;
+                   gaze = Side.Up;
+              cytoplasm = None;
+	    }
 
-let value_of { tissue; index; } =
-  let Item.Cell v = Tissue.get index tissue in
-  v
-
-let kind_of o =
-  Protocell.kind_of (value_of o)
-
-let is_out o =
-  (Tissue.get o.index o.tissue) == Item.Out
+let kind_of = kind_of
 
 let turn side o =
-  let cell  = value_of o in
-  let cell' = Protocell.turn side cell in
-  let () = save cell' o in
-  o
+  { o with gaze = Side.turn side o.gaze }
 
 let replicate relation o =
-  let cell = value_of o in
-  let i' = Index.move cell.gaze o.index in
-  let o' = { o with index = i' } in
-  let acceptor = Tissue.get i' o.tissue in
-  let cell' = Protocell.replicate relation cell in
-  let open Item in 
-  let () = match acceptor with
-           | Out         -> ()
-           | Empty       -> save cell' o' 
-           | Cytoplasm c -> save (Protocell.inject c cell') o'
-           | Cell c      -> save (Protocell.to_clot cell') o'
-  in 
-  o'
+  { o with gaze = Side.opposite o.gaze;
+        pigment = let open Relationship in
+                  match relation with
+                  | Inverse -> Pigment.opposite o.pigment
+                  | Direct  -> o.pigment
+  }
+
+let to_clot o = 
+  { o with pigment = Pigment.Red;
+         cytoplasm = Some Pigment.Red;
+  }
+
+let inject cytoplasm o =
+  let c = Pigment.of_hels cytoplasm in
+  let o = { o with cytoplasm = Some c } in
+  if c == o.pigment then
+    { o with pigment = Pigment.Red } else
+      o 

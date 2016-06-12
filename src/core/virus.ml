@@ -1,6 +1,6 @@
 type t = { program : Program.t;
             crumbs : Breadcrumbs.t;
-             owner : Cell.t;
+             owner : TissueCell.t;
               mode : Mode.t
 	 }
 
@@ -15,9 +15,9 @@ let act command o =
   Command.(
     match command with
     | Turn hand ->
-       { o with owner = Cell.turn hand o.owner }
+       { o with owner = TissueCell.turn hand o.owner }
     | Replicate relation ->
-       { o with owner = Cell.replicate relation o.owner }
+       { o with owner = TissueCell.replicate relation o.owner }
     | Call func -> 
        { o with mode = Mode.Find func }
     | Declare _ 
@@ -40,11 +40,11 @@ let next o =
   let open CellKind in
   let module Crumbs = Breadcrumbs in
  
-  match Cell.kind_of o.owner with
+  match TissueCell.kind_of o.owner with
   | _ when (Crumbs.is_empty o.crumbs) || 
-	     (Cell.is_out o.owner) -> None
-  | Clot                           -> None
-  | Hels | Cancer                  ->
+           (TissueCell.is_out o.owner) -> None
+  | Clot                               -> None
+  | Hels | Cancer                      ->
 
      let i = Crumbs.last_place o.crumbs in
      let cmd = Program.get i o.program in

@@ -17,7 +17,7 @@ let eye_radius o =
   Int.round o.eye_radius
 
 let eyes_coords _ _ _ = 
-  (0, 0)
+  ((0, 0), (0, 0))
 
 let cancer_eyes_coords _ _ _ = 
   (((0, 0), (0, 0)), ((0, 0), (0, 0)))

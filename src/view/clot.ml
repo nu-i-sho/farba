@@ -1,4 +1,4 @@
 type t = Hexagon.t
 
-let coord_of_lines_points _ _ _ = 
+let eyes_coords _ _ _ = 
   ((0, 0), (0, 0))

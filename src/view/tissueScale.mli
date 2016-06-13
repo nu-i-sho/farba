@@ -1,4 +1,4 @@
-module Make (sig val hexagon_side : int end) : sig
+module Make (Scale : sig val hexagon_side : int end) : sig
    
     module Hexagon : sig
 	val side : int

@@ -2,13 +2,17 @@ type t = {  index : Index.t;
            tissue : Tissue.t
          }
 
-let save cell o =
-  Tissue.set o.index (Item.Cell cell) o.tissue 
+let activate cell o =
+  Tissue.set o.index (Item.ActiveCell cell) o.tissue 
+
+let deactivate o =
+  let Item.ActiveCell c = Tissue.get o.index o.tissue in
+  Tissue.set o.index (Item.ActiveCell c) o.tissue
 
 let first tissue index =
   match Tissue.get index tissue with
   | Empty -> let o = { index; tissue } in
-             let () = save Cell.first o in
+             let () = activate Cell.first o in
              Some o
   | _     -> None
 
@@ -25,7 +29,7 @@ let is_out o =
 let turn side o =
   let cell  = value_of o in
   let cell' = Cell.turn side cell in
-  let () = save cell' o in
+  let () = activate cell' o in
   o
 
 let move (x, y) ~side:s = 
@@ -44,10 +48,11 @@ let replicate relation o =
   let acceptor = Tissue.get i' o.tissue in
   let cell' = Cell.replicate relation cell in
   let open Item in 
+  let () = deactivate o in
   let () = match acceptor with
            | Out         -> ()
-           | Empty       -> save cell' o' 
-           | Cytoplasm c -> save (Cell.inject c cell') o'
-           | Cell c      -> save (Cell.to_clot cell') o'
+           | Empty       -> activate cell' o' 
+           | Cytoplasm c -> activate (Cell.inject c cell') o'
+           | Cell c      -> activate (Cell.to_clot cell') o'
   in 
   o'

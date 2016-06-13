@@ -5,6 +5,8 @@ module type T = sig
     val draw_poly      : (int * int) array -> unit
     val draw_ellipse   : int -> int -> int -> int -> unit
     val draw_circle    : int -> int -> int -> unit
+    val draw_arc       : int -> int -> int -> int -> int -> int
+                      -> unit
     val fill_poly      : (int * int) array -> unit
     val fill_ellipse   : int -> int -> int -> int -> unit
     val fill_circle    : int -> int -> int -> unit

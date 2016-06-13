@@ -66,8 +66,47 @@ find . -type f -iname \*.o   -delete
 echo "Core build complete"
 
 #=============================================================
+cd ../view/img/cmd
 
-cd ../view
+ocamlopt -for-pack View.Img.Command -c turnLeft.ml
+ocamlopt -for-pack View.Img.Command -c turnRight.ml
+ocamlopt -for-pack View.Img.Command -c replicateDirect.ml
+ocamlopt -for-pack View.Img.Command -c replicateInverse.ml
+ocamlopt -for-pack View.Img.Command -c OOOOOO.ml
+ocamlopt -for-pack View.Img.Command -c OOOOO.ml
+ocamlopt -for-pack View.Img.Command -c OOOO.ml
+ocamlopt -for-pack View.Img.Command -c OOO.ml
+ocamlopt -for-pack View.Img.Command -c OO.ml
+ocamlopt -for-pack View.Img.Command -c O.ml
+ocamlopt -for-pack View.Img.Command -c end.ml
+ocamlopt -for-pack View.Img.Command -c border.ml
+
+ocamlopt -for-pack View.Img -pack -o command.cmx turnLeft.cmx turnRight.cmx replicateDirect.cmx replicateInverse.cmx OOOOOO.cmx OOOO.cmx OOO.cmx OO.cmx O.cmx end.cmx border.cmx
+
+mv command.cmx ../command.cmx
+mv command.cmi ../command.cmi
+mv command.o ../command.o
+
+find . -type f -iname \*.cmx -delete
+find . -type f -iname \*.cmi -delete
+find . -type f -iname \*.o   -delete
+
+#=============================================================
+cd ../
+
+ocamlopt -for-pack View -pack -o img.cmx command.cmx
+
+mv img.cmx ../img.cmx
+mv img.cmi ../img.cmi
+mv img.o ../img.o
+
+find . -type f -iname \*.cmx -delete
+find . -type f -iname \*.cmi -delete
+find . -type f -iname \*.o   -delete
+
+#=============================================================
+
+cd ../
 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c pair.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c point.ml
@@ -86,8 +125,10 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c canvas.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c TISSUE_COLOR_SHEME.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissuePrinter.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissuePrinter.ml
+#ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.mli
+#ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.ml
 
-ocamlopt -pack -o view.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx tissuePrinter.cmx
+ocamlopt -pack -o view.cmx img.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx tissuePrinter.cmx #commandImg.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

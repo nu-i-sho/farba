@@ -25,7 +25,7 @@ module Make (O : sig val hexagon_side : int end) = struct
 	  |]
       end
 
-    module Cytoplazm = struct
+    module Cytoplasm = struct
 	let eyes_radius = 0
 	let eyes_coords = (0, 0), (0, 0)
       end

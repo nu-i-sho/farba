@@ -17,9 +17,8 @@ ocamlopt -for-pack Shared -c int.mli
 ocamlopt -for-pack Shared -c int.ml
 ocamlopt -for-pack Shared -c item.ml
 ocamlopt -for-pack Shared -c TISSUE.ml
-ocamlopt -for-pack Shared -c TISSUE_PRINTER.ml
 
-ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx TISSUE.cmx TISSUE_PRINTER.cmx
+ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx TISSUE.cmx 
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi
@@ -70,12 +69,6 @@ echo "Core build complete"
 
 cd ../view
 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c hexagon.mli 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c hexagon.ml
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c nucleus.mli
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c nucleus.ml
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c clot.mli
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c clot.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c pair.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c point.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c doublePoint.ml
@@ -83,15 +76,16 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c line.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c doubleLine.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c floatPoint.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c eyes.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c TISSUE_SCALE.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissueScale.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissueScale.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c TISSUE_PRINTER.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c CANVAS.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c TISSUE_COLOR_SHEME.ml
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.mli
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissuePrinter.mli
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissuePrinter.ml
 
-ocamlopt -pack -o view.cmx hexagon.cmx nucleus.cmx clot.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx tissueScale.cmx TISSUE_PRINTER.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx tissue.cmx
+ocamlopt -pack -o view.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx tissuePrinter.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

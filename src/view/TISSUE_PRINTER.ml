@@ -9,6 +9,6 @@ module type T = sig
     val draw_nucleus : t -> t
     val fill_nucleus : t -> t
     val draw_eyes    : Eyes.t -> t -> t
-    val fill_eyes    : t -> t
+    val fill_eyes    : Side.t -> t -> t
 
   end

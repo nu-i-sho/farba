@@ -17,8 +17,13 @@ ocamlopt -for-pack Shared -c int.mli
 ocamlopt -for-pack Shared -c int.ml
 ocamlopt -for-pack Shared -c item.ml
 ocamlopt -for-pack Shared -c TISSUE.ml
+ocamlopt -for-pack Shared -c dotsOfDice.mli 
+ocamlopt -for-pack Shared -c dotsOfDice.ml 
+ocamlopt -for-pack Shared -c relationship.ml
+ocamlopt -for-pack Shared -c command.mli 
+ocamlopt -for-pack Shared -c command.ml
 
-ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx TISSUE.cmx 
+ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx command.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi
@@ -34,13 +39,8 @@ echo "Shared build complete"
 
 cd ../core
 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c dotsOfDice.mli 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c dotsOfDice.ml 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c relationship.ml 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c breadcrumbs.mli 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c breadcrumbs.ml 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c command.mli 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c command.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c breadcrumbs.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c cell.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c cell.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c tissue.mli
@@ -53,7 +53,7 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c program.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c virus.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c virus.ml
 
-ocamlopt -pack -o core.cmx dotsOfDice.cmx relationship.cmx breadcrumbs.cmx command.cmx cell.cmx tissue.cmx tissueCell.cmx mode.cmx program.cmx virus.cmx
+ocamlopt -pack -o core.cmx breadcrumbs.cmx cell.cmx tissue.cmx tissueCell.cmx mode.cmx program.cmx virus.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

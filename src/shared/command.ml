@@ -19,12 +19,12 @@ let of_char =
            | '7' -> Call OOOO
            | '8' -> Call OOOOO
            | '9' -> Call OOOOOO
-           | 'A' -> Declare  OOOOOO
-           | 'B' -> Declare  OOOOO
-           | 'C' -> Declare  OOOO
-           | 'D' -> Declare  OOO
-           | 'E' -> Declare  OO
-           | 'F' -> Declare  O
+           | 'A' -> Declare OOOOOO
+           | 'B' -> Declare OOOOO
+           | 'C' -> Declare OOOO
+           | 'D' -> Declare OOO
+           | 'E' -> Declare OO
+           | 'F' -> Declare O
 
 let to_char = 
   function | Turn Left         -> '0'  

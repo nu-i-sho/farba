@@ -1,1 +1,1 @@
-type t = Point.t * Point.t
+type t = Point.t Pair.t

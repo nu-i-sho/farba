@@ -1,1 +1,1 @@
-type t = float * float
+type t = float Pair.t

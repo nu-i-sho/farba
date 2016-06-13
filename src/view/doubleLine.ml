@@ -1,2 +1,1 @@
-type t = Line.t * Line.t
-
+type t = Line.t Pair.t

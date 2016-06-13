@@ -1,2 +1,2 @@
-type t = int * int
+type t = int Pair.t
 

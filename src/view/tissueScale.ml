@@ -33,15 +33,15 @@ module Make (O : sig val hexagon_side : int end) = struct
     module Nucleus = struct
 	let radius = 0
 	let eyes_radius = 0
-	let eyes_coords = (0, 0), (0, 0)
+	let eyes_coords _ = (0, 0), (0, 0)
       end
 
     module Cancer = struct
-	let eyes_coords = ((0, 0), (0, 0)), ((0, 0), (0, 0))
+	let eyes_coords _ = ((0, 0), (0, 0)), ((0, 0), (0, 0))
       end
 
     module Clot = struct
-	let eyes_coords = ((0, 0), (0, 0)), ((0, 0), (0, 0))
+	let eyes_coords _ = ((0, 0), (0, 0)), ((0, 0), (0, 0))
       end
 		       
   end

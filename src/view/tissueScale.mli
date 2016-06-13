@@ -15,15 +15,15 @@ module Make (Scale : sig val hexagon_side : int end) : sig
     module Nucleus : sig
 	val radius : int
 	val eyes_radius : int
-	val eyes_coords : DoublePoint.t
+	val eyes_coords : Side.t -> DoublePoint.t
       end
 
     module Cancer : sig
-	val eyes_coords : DoubleLine.t
+	val eyes_coords : Side.t -> DoubleLine.t
       end
 
     module Clot : sig
-	val eyes_coords : DoubleLine.t
+	val eyes_coords : Side.t -> DoubleLine.t
       end
 		       
   end

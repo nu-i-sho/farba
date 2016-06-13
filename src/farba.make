@@ -76,6 +76,10 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c nucleus.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c nucleus.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c clot.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c clot.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c point.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c doublePoint.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c line.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c doubleLine.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c eyes.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c TISSUE_PRINTER.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c CANVAS.ml
@@ -83,7 +87,7 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c TISSUE_COLOR_SHE
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.ml
 
-ocamlopt -pack -o view.cmx hexagon.cmx nucleus.cmx clot.cmx eyes.cmx TISSUE_PRINTER.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx tissue.cmx
+ocamlopt -pack -o view.cmx hexagon.cmx nucleus.cmx clot.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx eyes.cmx TISSUE_PRINTER.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx tissue.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

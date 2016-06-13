@@ -32,12 +32,9 @@ module Make (Canvas : CANVAS.T)
       let () = apply_hexagon Canvas.fill_poly o in
       o
 
-    let point_friendly f (x, y) =
-      f x y
-
     let apply_circle r f o =
       (o |> Pair.map Int.round
-         |> point_friendly f) r 
+         |> f) r 
 
     let apply_nucleus =
       apply_circle Nucleus.radius
@@ -59,12 +56,11 @@ module Make (Canvas : CANVAS.T)
 
     let print_cross provide_lines gaze o =
       gaze |> provide_lines
-           |> Pair.map  (Pair.map (Pair.map float))
-           |> Pair.map  (Pair.map (Pair.foldl (+.) o))
-           |> Pair.map  (Pair.map (Pair.map Int.round))
-           |> Pair.iter (Pair.apply 
-			  (point_friendly Canvas.moveto)
-                          (point_friendly Canvas.lineto))
+           |> Pair.map (Pair.map (Pair.map float))
+           |> Pair.map (Pair.map (Pair.foldl (+.) o))
+           |> Pair.map (Pair.map (Pair.map Int.round))
+           |> Pair.map (Pair.apply Canvas.moveto Canvas.lineto)
+           |> ignore
 
     let draw_eyes eyes o =
       let () = 
@@ -75,9 +71,9 @@ module Make (Canvas : CANVAS.T)
 	| Cancer g  -> print_cross Cancer.eyes_coords g o
 	| Cytoplasm -> 
 	   let r = Cytoplasm.eyes_radius in
-	   let (x0, y0), (x1, y1) = Cytoplasm.eyes_coords in   
-	   let () = Canvas.draw_arc x0 y0 r r 0 180 in
-	   let () = Canvas.draw_arc x1 y1 r r 0 180 in
+	   let p0, p1 = Cytoplasm.eyes_coords in   
+	   let () = Canvas.draw_arc p0 r r 0 180 in
+	   let () = Canvas.draw_arc p1 r r 0 180 in
 	   ()
       in
       o

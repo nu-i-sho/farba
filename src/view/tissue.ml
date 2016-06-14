@@ -1,4 +1,5 @@
-module Make (Donor : TISSUE.T) = struct
+module Make (Frame : CANVAS.T)
+            (Donor : TISSUE.T) = struct
 
     type t = {   donor : Donor.t;
                printer : (module TISSUE_PRINTER.T)
@@ -85,12 +86,12 @@ module Make (Donor : TISSUE.T) = struct
       let tissue = Donor.load path in
 
       let max_side_1 =
-        (float Window.Tissue.width) /.
+        (float Frame.width) /.
           ((float (Donor.width tissue)) *. 1.5 +. 0.5)
       in
 
       let max_side_2 =
-        (float Window.Tissue.height) /.
+        (float Frame.height) /.
           ((float (Donor.width tissue)) *. 2.0 +. 1.0) /.
             Const.sqrt_3_div_2
       in
@@ -112,11 +113,11 @@ module Make (Donor : TISSUE.T) = struct
 
       let w = int_of_float (ceil w) in
       let h = int_of_float (ceil h) in
-      let dx = (Window.Tissue.width - w) / 2 in
-      let dy = (Window.Tissue.height - h) / 2 in
-      let module Canvas = Canvas.Shift
+      let dx = (Frame.width - w) / 2 in
+      let dy = (Frame.height - h) / 2 in
+      let module Frame' = Canvas.Shift
 			    (Canvas.Resize
-			       (Window.Tissue)
+			       (Frame)
 			       (struct
 				   let width  = w
 				   let height = h
@@ -127,7 +128,7 @@ module Make (Donor : TISSUE.T) = struct
 			      end)
       in
 
-      let module P = TissuePrinter.Make (Canvas) (Scale)
+      let module P = TissuePrinter.Make (Frame') (Scale)
                               (DefaultColorSheme.Tissue)
       in
 

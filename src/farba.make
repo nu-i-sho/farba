@@ -108,6 +108,7 @@ find . -type f -iname \*.o   -delete
 
 cd ../
 
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c const.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c pair.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c point.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c doublePoint.ml
@@ -123,12 +124,15 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c CANVAS.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c canvas.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c canvas.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c TISSUE_COLOR_SHEME.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c defaultColorSheme.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissuePrinter.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissuePrinter.ml
-#ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.mli
-#ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c window.mli
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c window.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.mli
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.ml
 
-ocamlopt -pack -o view.cmx img.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx tissuePrinter.cmx #commandImg.cmx
+ocamlopt -pack -o view.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

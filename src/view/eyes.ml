@@ -8,3 +8,4 @@ let of_cell c =
   | CellKind.Hels   -> Hels c.gaze
   | CellKind.Clot   -> Clot c.gaze
   | CellKind.Cancer -> Cancer c.gaze
+

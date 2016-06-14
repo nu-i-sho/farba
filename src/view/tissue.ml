@@ -82,8 +82,8 @@ module Make (Frame : CANVAS.T)
            |> P.draw_eyes (Eyes.Hels c.gaze)
            |> ignore
 
-    let load path =
-      let tissue = Donor.load path in
+    let make colony =
+      let tissue = Donor.make colony in
 
       let max_side_1 =
         (float Frame.width) /.

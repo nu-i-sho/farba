@@ -27,3 +27,14 @@ module type T = sig
       end
 		       
   end
+
+module SEED = struct
+    module type T = sig 
+	val hexagon_side : float 
+      end
+  end
+
+module MAKE = struct
+    module type T = 
+      functor (Seed : SEED.T) -> T
+  end

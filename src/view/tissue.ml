@@ -1,98 +1,151 @@
-module Make (ColorFor : TISSUE_COLOR_SHEME.T)
-            (Canvas   : CANVAS.T) = struct
-   
-    type t = Hexagon.t
+module Make (Donor : TISSUE.T) = struct
 
-    let print_empty i o =
-      let () = Canvas.set_color ColorFor.line in
-      o |> Hexagon.angles_coords i
-        |> Canvas.draw_poly
+    type t = {   donor : Donor.t;
+               printer : (module TISSUE_PRINTER.T)
+	     }
 
-    let print_cyto i pigment o =
-      let () = HelsPigment.( match pigment with
-                             | Blue -> ColorFor.blue_pigment
-                             | Gray -> ColorFor.gray_pigment
-                           ) |> Canvas.set_color in
+    let width o = Donor.width o.donor
+    let height o = Donor.height o.donor
+    let get i o = Donor.get i o.donor
 
-      o |> Hexagon.angles_coords i
-        |> Canvas.fill_poly
+    let print i current o =
+      let module P = (val o.printer : TISSUE_PRINTER.T) in
+      let p = P.zero in
+      let p = P.set_index i p in
+      let previous = get i o in
+      let open Item in
+      match previous, current with
 
-    let print_cell i cell o =
-      match Protocell.kind_of cell with
-      
-      | CellKind.Clot ->
-	 let () = Canvas.set_color ColorFor.clot in
-	 let () =  o |> Hexagon.angles_coords i
-                     |> Canvas.draw_poly
-	 in
-	 
-	 let ((l1_x1, l1_y1), (l1_x2, l1_y2)),
-	     ((l2_x1, l2_y1), (l2_x2, l2_y2)) = 
-	   Clot.eyes_coords i cell.gaze o
-	 in
+      | _, Empty ->
+         p |> P.set_color_for_line
+           |> P.draw_hexagon
+           |> ignore
 
-	 let () = Canvas.set_color ColorFor.line in
-	 let () = Canvas.moveto l1_x1 l1_y1 in
-	 let () = Canvas.lineto l1_x2 l1_y2 in
-	 let () = Canvas.moveto l2_x1 l2_y1 in
-	 let () = Canvas.lineto l2_x2 l2_y2 in
-	 ()
-     
-      | CellKind.Cancer ->
-	 let x, y = Hexagon.center_coord i o in
-	 let n = Nucleus.make o in
-	 let r = Nucleus.radius n in
+      | _, Cytoplasm c ->
+         p |> P.set_hels_pigment_as_color c
+           |> P.fill_hexagon
+           |> P.set_color_for_line
+           |> P.draw_hexagon
+           |> P.draw_eyes Eyes.Cytoplasm
+           |> ignore
 
-	 let () = Canvas.set_color ColorFor.line in
-	 let () = Canvas.draw_circle x y r in
-	 let () = Canvas.set_color ColorFor.cancer in
-	 let () = Canvas.fill_circle x y r in 
+      | ActiveCell _, Cell c ->
+         p |> P.set_color_for_line
+           |> P.draw_nucleus
+           |> P.draw_eyes (Eyes.of_cell c)
+           |> ignore
 
-	 let ((l1_x1, l1_y1), (l1_x2, l1_y2)),
-	     ((l2_x1, l2_y1), (l2_x2, l2_y2)) = 
-	   Nucleus.cancer_eyes_coords i cell.gaze n
-	 in
-	 
-	 let () = Canvas.set_color ColorFor.line in
-	 let () = Canvas.moveto l1_x1 l1_y1 in
-	 let () = Canvas.lineto l1_x2 l1_y2 in
-	 let () = Canvas.moveto l2_x1 l2_y1 in
-	 let () = Canvas.lineto l2_x2 l2_y2 in
-	 ()
+      | ActiveCell c, ActiveCell c'
+	   when (Protocell.kind_of c) == CellKind.Cancer ->
+         p |> P.set_color_for_line
+           |> P.draw_eyes (Eyes.Cancer c.gaze)
+           |> P.set_color_for_virus
+           |> P.draw_eyes (Eyes.Cancer c'.gaze)
+           |> ignore
 
-      | CellKind.Hels -> 
-	 let x, y = Hexagon.center_coord i o in
-	 let n = Nucleus.make o in
-	 let r = Nucleus.radius n in
+      | ActiveCell c, ActiveCell c' ->
+         p |> P.set_pigment_as_color c'.pigment
+           |> P.fill_eyes c.gaze
+           |> P.set_opposited_pigment_as_color c'.pigment
+           |> P.fill_eyes c'.gaze
+           |> P.set_color_for_virus
+           |> P.draw_eyes (Eyes.Hels c'.gaze)
+           |> ignore
 
-         let () = Canvas.set_color ColorFor.line in
-	 let () = Canvas.draw_circle x y r in
-	 let () = Pigment.( match cell.pigment with
-			    | Blue -> ColorFor.blue_pigment
-			    | Gray -> ColorFor.gray_pigment
-                          ) |> Canvas.set_color in
-	 let () = Canvas.fill_circle x y r in
+      | Cell _, ActiveCell c  ->
+         p |> P.set_color_for_clot
+           |> P.fill_hexagon
+           |> P.set_color_for_line
+           |> P.draw_hexagon
+           |> P.draw_eyes (Eyes.Clot c.gaze)
+           |> ignore
 
-	 let eyes_color = Pigment.opposite cell.pigment in
-	 let r = Nucleus.eye_radius n in
-	 let (x1, y1), (x2, y2) = 
-	   Nucleus.eyes_coords i cell.gaze n
-	 in
-	 
-	 let () = Canvas.set_color ColorFor.line in
-	 let () = Canvas.draw_circle x1 y1 r in
-	 let () = Canvas.draw_circle x2 y2 r in
-	 let () = Pigment.( match eyes_color with
-			    | Blue -> ColorFor.blue_pigment
-			    | Gray -> ColorFor.gray_pigment
-                          ) |> Canvas.set_color in 
-	 let () = Canvas.fill_circle x1 y1 r in
-	 let () = Canvas.fill_circle x2 y2 r in
-	 ()
-	
-    let print_diff i 
-         ~previous:_
-          ~current:c
-                   o = print_cell i c o
+      | Empty,       ActiveCell c
+      | Cytoplasm _, ActiveCell c
+	   when (Protocell.kind_of c) == CellKind.Cancer ->
+         p |> P.set_color_for_cancer
+           |> P.fill_nucleus
+           |> P.set_color_for_virus
+           |> P.draw_nucleus
+           |> P.draw_eyes (Eyes.Cancer c.gaze)
+           |> ignore
+
+      | Empty,       ActiveCell c
+      | Cytoplasm _, ActiveCell c ->
+         p |> P.set_pigment_as_color c.pigment
+           |> P.fill_nucleus
+           |> P.set_opposited_pigment_as_color c.pigment
+           |> P.fill_eyes c.gaze
+           |> P.set_color_for_virus
+           |> P.draw_nucleus
+           |> P.draw_eyes (Eyes.Hels c.gaze)
+           |> ignore
+
+    let load path =
+      let tissue = Donor.load path in
+
+      let max_side_1 =
+        (float Window.Tissue.width) /.
+          ((float (Donor.width tissue)) *. 1.5 +. 0.5)
+      in
+
+      let max_side_2 =
+        (float Window.Tissue.height) /.
+          ((float (Donor.width tissue)) *. 2.0 +. 1.0) /.
+            Const.sqrt_3_div_2
+      in
+
+      let max_side = min max_side_1 max_side_2 in
+      let module Scale =
+	TissueScale.Make (struct
+			     let hexagon_side = max_side
+			   end)
+      in
+
+      let w = Scale.Hexagon.external_radius *.
+		(((float (Donor.width tissue)) *. 1.5 +. 0.5))
+      in
+
+      let h = Scale.Hexagon.internal_radius *.
+		(((float (Donor.width tissue)) *. 2.0 +. 1.0))
+      in
+
+      let w = int_of_float (ceil w) in
+      let h = int_of_float (ceil h) in
+      let dx = (Window.Tissue.width - w) / 2 in
+      let dy = (Window.Tissue.height - h) / 2 in
+      let module Canvas = Canvas.Shift
+			    (Canvas.Resize
+			       (Window.Tissue)
+			       (struct
+				   let width  = w
+				   let height = h
+				 end))
+			    (struct
+				let dx = dx
+				let dy = dy
+			      end)
+      in
+
+      let module P = TissuePrinter.Make (Canvas) (Scale)
+                              (DefaultColorSheme.Tissue)
+      in
+
+      let o = {   donor = tissue;
+                printer = (module P : TISSUE_PRINTER.T)
+              }
+      in
+
+      let _ = for x = 0 to width o do
+		for y = 0 to height o do
+		  print (x, y) (get (x, y) o) o
+		done
+	      done
+      in
+      o
+
+    let set i item o =
+      let () = print i item o in
+      Donor.set i item o.donor
 
   end

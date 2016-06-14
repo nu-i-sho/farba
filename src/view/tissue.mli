@@ -1,3 +1,2 @@
-module Make (ColorFor : TISSUE_COLOR_SHEME.T)
-            (Canvas   : CANVAS.T) 
-                      : TISSUE_PRINTER.T
+module Make (Donor : TISSUE.T)
+                   : TISSUE.T

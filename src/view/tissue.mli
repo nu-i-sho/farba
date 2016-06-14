@@ -1,2 +1,3 @@
-module Make (Donor : TISSUE.T)
+module Make (Frame : CANVAS.T)
+	    (Donor : TISSUE.T)
                    : TISSUE.T

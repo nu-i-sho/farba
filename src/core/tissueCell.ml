@@ -33,13 +33,21 @@ let turn side o =
   o
 
 let move (x, y) ~side:s = 
-  Side.( match s with
-         | Up        -> (x    , y - 1)
-         | LeftUp    -> (x - 1, y - 1)
-         | RightUp   -> (x + 1, y - 1)
-         | Down      -> (x    , y + 1)
-         | LeftDown  -> (x - 1, y    )
-         | RightDown -> (x + 1, y    )) 
+  Side.( match (x mod 2), s with
+
+	 | 0, Up        -> (x    , y - 1)
+         | 0, LeftUp    -> (x - 1, y    )
+         | 0, RightUp   -> (x + 1, y    )
+         | 0, Down      -> (x    , y + 1) 
+         | 0, LeftDown  -> (x - 1, y + 1)
+         | 0, RightDown -> (x + 1, y + 1)  
+
+         | 1, Up        -> (x    , y - 1)  
+         | 1, LeftUp    -> (x - 1, y - 1)
+         | 1, RightUp   -> (x + 1, y - 1)
+         | 1, Down      -> (x    , y + 1)
+         | 1, LeftDown  -> (x - 1, y    )
+         | 1, RightDown -> (x + 1, y    ))
 
 let replicate relation o =
   let cell = value_of o in

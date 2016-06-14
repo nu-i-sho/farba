@@ -1,3 +1,1 @@
-module Make (Scale : sig val hexagon_side : int end)
-                   : TISSUE_SCALE.T
- 
+module Make : TISSUE_SCALE.MAKE.T

@@ -1,5 +1,6 @@
 module Make (Canvas : CANVAS.T)
-             (Scale : TISSUE_SCALE.T) = struct
+             (Scale : TISSUE_SCALE.T) 
+          (ColorFor : TISSUE_COLOR_SHEME.T) = struct
     
     open Scale
 
@@ -17,6 +18,38 @@ module Make (Canvas : CANVAS.T)
     let set_color c o = 
       let () = Graphics.set_color c in
       o
+
+    let color_for_hels_pigment =
+      function | HelsPigment.Blue -> ColorFor.blue_pigment
+               | HelsPigment.Gray -> ColorFor.gray_pigment
+
+    let color_for_pigment =
+      function | Pigment.Blue -> ColorFor.blue_pigment
+               | Pigment.Gray -> ColorFor.gray_pigment
+               | Pigment.Red  -> ColorFor.cancer
+
+    let set_hels_pigment_as_color p =
+      set_color (color_for_hels_pigment p)
+
+    let set_pigment_as_color p =
+      set_color (color_for_pigment p)
+
+    let set_opposited_pigment_as_color p =
+      set_color @@ color_for_pigment
+                @@ Pigment.opposite
+                @@ p
+
+    let set_color_for_cancer =
+      set_color ColorFor.cancer
+
+    let set_color_for_clot =
+      set_color ColorFor.clot
+
+    let set_color_for_virus =
+      set_color ColorFor.virus
+
+    let set_color_for_line =
+      set_color ColorFor.line
 
     let apply_hexagon f o =
       Hexagon.agles |> Array.map (Pair.map float)
@@ -77,6 +110,7 @@ module Make (Canvas : CANVAS.T)
 	   ()
       in
       o
+
       
     let fill_eyes gaze o = 
       let () = apply_hels_eyes Canvas.fill_circle gaze o in

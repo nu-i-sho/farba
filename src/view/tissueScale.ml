@@ -1,15 +1,15 @@
-module Make (O : sig val hexagon_side : int end) = struct
-   
+module Make (Seed : TISSUE_SCALE.SEED.T) = struct
+
     module Hexagon = struct
 
-	let side = 
-	  O.hexagon_side
-
 	let external_radius = 
-	  float side
+	  Seed.hexagon_side
+
+	let side =
+	  Int.round external_radius
 
 	let internal_radius = 
-	  external_radius *. 0.8
+	  external_radius *. Const.sqrt_3_div_2
 
 	let agles =
 	  let e  = Int.round external_radius in

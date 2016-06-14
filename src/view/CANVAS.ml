@@ -1,5 +1,7 @@
 module type T = sig
     
+    val width          : int
+    val height         : int
     val set_color      : Graphics.color -> unit
     val set_line_width : int -> unit
     val draw_poly      : Point.t array -> unit
@@ -13,6 +15,13 @@ module type T = sig
     val moveto         : Point.t -> unit
     val lineto         : Point.t -> unit
 
+  end
+
+module SIZE = struct
+    module type T = sig
+	val width  : int
+	val height : int
+      end
   end
 
 module SHIFT = struct

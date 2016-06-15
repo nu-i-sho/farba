@@ -7,3 +7,4 @@ type t = | Up
 
 val opposite : t -> t
 val turn     : Hand.t -> t -> t
+val index_of : t -> int 

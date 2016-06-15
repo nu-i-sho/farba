@@ -32,3 +32,11 @@ let right_of =
 let turn = 
   function | Hand.Left  -> left_of 
            | Hand.Right -> right_of
+
+let index_of =
+  function | RightUp   -> 0
+           | Up        -> 1
+           | LeftUp    -> 2
+           | LeftDown  -> 3
+           | Down      -> 4
+           | RightDown -> 5

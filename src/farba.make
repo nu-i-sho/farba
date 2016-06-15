@@ -85,7 +85,7 @@ ocamlopt -for-pack View.Img.Command -c O.ml
 ocamlopt -for-pack View.Img.Command -c end.ml
 ocamlopt -for-pack View.Img.Command -c border.ml
 
-ocamlopt -for-pack View.Img -pack -o command.cmx turnLeft.cmx turnRight.cmx replicateDirect.cmx replicateInverse.cmx OOOOOO.cmx OOOO.cmx OOO.cmx OO.cmx O.cmx end.cmx border.cmx
+ocamlopt -for-pack View.Img -pack -o command.cmx turnLeft.cmx turnRight.cmx replicateDirect.cmx replicateInverse.cmx OOOOOO.cmx OOOOO.cmx OOOO.cmx OOO.cmx OO.cmx O.cmx end.cmx border.cmx
 
 mv command.cmx ../command.cmx
 mv command.cmi ../command.cmi
@@ -135,8 +135,10 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c window.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c window.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.mli
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.ml
 
-ocamlopt -pack -o view.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx
+ocamlopt -pack -o view.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx commandImg.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

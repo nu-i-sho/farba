@@ -31,9 +31,30 @@ module Make (Seed : TISSUE_SCALE.SEED.T) = struct
       end
 
     module Nucleus = struct
-	let radius = 0
-	let eyes_radius = 0
-	let eyes_coords _ = (0, 0), (0, 0)
+    let radiusf = Hexagon.internal_radius *. 0.9
+	let radius = Int.round radiusf
+	let nucleolus_radius = radiusf *. 0.9
+	let eyes_radius = 
+	  Int.round (Const.pi *. nucleolus_radius /. 30.0) 
+
+	let angles_inc = [| Const.pi /. 10.0; 
+	                    Const.pi *. 7.0 /. 30.0 
+	                 |]
+
+	let eyes_coords side = 
+	  let i = float (Side.index_of side) in
+	  let calc_angles f g =
+	    angles_inc |> Array.copy
+	               |> Array.map ((+.) (Const.pi /. 3.0 *. i)) 
+	               |> Array.map f
+	               |> Array.map (( *.) (g nucleolus_radius))
+	               |> Array.map Int.round
+	  in
+
+	  let x_angles = calc_angles cos (~+.) in
+	  let y_angles = calc_angles sin (~-.) in  
+	  (x_angles.(0), y_angles.(0)),
+	  (x_angles.(1), y_angles.(1))
       end
 
     module Cancer = struct

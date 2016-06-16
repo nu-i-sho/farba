@@ -5,6 +5,14 @@ type t = | OOOOOO
          | OO
          | O
 
+let all = [ OOOOOO;
+            OOOOO;
+            OOOO;
+            OOO;
+            OO;
+            O
+	  ] 
+
 let of_int =
   function | 6 -> OOOOOO
            | 5 -> OOOOO
@@ -21,9 +29,8 @@ let to_int =
 	   | OO -> 2
 	   | O -> 1
 
-let compare x y= 
+let compare x y = 
   compare (to_int x) (to_int y)
-
 
 let min x y = 
   of_int (min (to_int x) (to_int y))

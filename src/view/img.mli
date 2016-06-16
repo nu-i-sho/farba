@@ -1,5 +1,3 @@
-type t = IMG.t
-
 module Command : sig
     module Default          : IMG.COMMAND.T
     module Make (Prototypes : IMG_PROTOTYPE.COMMAND.T)

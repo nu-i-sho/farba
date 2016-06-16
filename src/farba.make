@@ -181,6 +181,8 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c point.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c doublePoint.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c line.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c doubleLine.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c programPoint.mli
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c programPoint.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c floatPoint.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c eyes.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c TISSUE_SCALE.ml
@@ -201,7 +203,7 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.ml
 #ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.mli
 #ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.ml
 
-ocamlopt -pack -o view.cmx IMG_PROTOTYPE.cmx IMG.cmx imgPrototype.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx #commandImg.cmx
+ocamlopt -pack -o view.cmx IMG_PROTOTYPE.cmx IMG.cmx imgPrototype.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx programPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx #commandImg.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

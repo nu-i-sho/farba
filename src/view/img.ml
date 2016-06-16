@@ -3,8 +3,6 @@ open IMG_PROTOTYPE
 module Dots = DotsOfDice
 module Map = Map.Make(Dots)
 
-type t = IMG.t
-
 module Color = struct
 
     let blue  = 0x4682B4
@@ -17,12 +15,13 @@ module Color = struct
 
 let to_img parse prototype =
   lazy ( let module Prototype = (val prototype : T) in
-         let strs = Lazy.force (Prototype.matrix) in
+         let strs = Lazy.force Prototype.matrix in
          let width = Array.length strs in
          let height = String.length strs.(0) in  
          let parse y x = parse strs.(y).[x] in
          let parse_row y = Array.init height (parse y) in
-         Array.init width parse_row
+         let matrix = Array.init width parse_row in
+	 Graphics.make_image matrix
        )
 
 module MakeMapper (ProtoImg : DOTS_OF_DICE.T) = struct

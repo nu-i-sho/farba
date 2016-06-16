@@ -18,7 +18,7 @@ module ACT = struct
 	module TurnLeft : T
 	module TurnRight : T
 	module ReplicateDirect : T
-	module ReplicateInvarese : T
+	module ReplicateInverse : T
       end
   end
 

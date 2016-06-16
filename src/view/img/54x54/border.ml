@@ -1,4 +1,4 @@
-let prototype = lazy
+let matrix = lazy
 (*     012345678901234567890123456789012345678901234567890123*)
 (*     0    |    1    |    2    |    3    |    4    |    5   *)
   ([| "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH";

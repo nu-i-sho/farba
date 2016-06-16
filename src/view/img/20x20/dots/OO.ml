@@ -1,4 +1,4 @@
-let prototype =
+let matrix =
   lazy ([| 
        (*    01234567890123456789*) 
        (*0*)"  HHHHHHHHHHHHHHHH  ";

@@ -72,14 +72,14 @@ echo "Core build complete"
 #=============================================================
 cd ../view/img/54x54/dots 
 
-ocamlopt -for-pack View.ImgPrototypes._54x54_.DotsOfDice -c OOOOOO.ml
-ocamlopt -for-pack View.ImgPrototypes._54x54_.DotsOfDice -c OOOOO.ml
-ocamlopt -for-pack View.ImgPrototypes._54x54_.DotsOfDice -c OOOO.ml
-ocamlopt -for-pack View.ImgPrototypes._54x54_.DotsOfDice -c OOO.ml
-ocamlopt -for-pack View.ImgPrototypes._54x54_.DotsOfDice -c OO.ml
-ocamlopt -for-pack View.ImgPrototypes._54x54_.DotsOfDice -c O.ml
+ocamlopt -for-pack View.ImgPrototype.X54.DotsOfDice -c OOOOOO.ml
+ocamlopt -for-pack View.ImgPrototype.X54.DotsOfDice -c OOOOO.ml
+ocamlopt -for-pack View.ImgPrototype.X54.DotsOfDice -c OOOO.ml
+ocamlopt -for-pack View.ImgPrototype.X54.DotsOfDice -c OOO.ml
+ocamlopt -for-pack View.ImgPrototype.X54.DotsOfDice -c OO.ml
+ocamlopt -for-pack View.ImgPrototype.X54.DotsOfDice -c O.ml
 
-ocamlopt -for-pack View.ImgPrototypes._54x54_ -pack -o dotsOfDice.cmx OOOOOO.cmx OOOOO.cmx OOOO.cmx OOO.cmx OO.cmx O.cmx
+ocamlopt -for-pack View.ImgPrototype.X54 -pack -o dotsOfDice.cmx OOOOOO.cmx OOOOO.cmx OOOO.cmx OOO.cmx OO.cmx O.cmx
 
 mv dotsOfDice.cmx ../dotsOfDice.cmx
 mv dotsOfDice.cmi ../dotsOfDice.cmi
@@ -92,12 +92,12 @@ find . -type f -iname \*.o   -delete
 #=============================================================
 cd ../acts
 
-ocamlopt -for-pack View.ImgPrototypes._54x54_.Act -c turnLeft.ml
-ocamlopt -for-pack View.ImgPrototypes._54x54_.Act -c turnRight.ml
-ocamlopt -for-pack View.ImgPrototypes._54x54_.Act -c replicateDirect.ml
-ocamlopt -for-pack View.ImgPrototypes._54x54_.Act -c replicateInverse.ml
+ocamlopt -for-pack View.ImgPrototype.X54.Act -c turnLeft.ml
+ocamlopt -for-pack View.ImgPrototype.X54.Act -c turnRight.ml
+ocamlopt -for-pack View.ImgPrototype.X54.Act -c replicateDirect.ml
+ocamlopt -for-pack View.ImgPrototype.X54.Act -c replicateInverse.ml
 
-ocamlopt -for-pack View.ImgPrototypes._54x54_ -pack -o act.cmx turnLeft.cmx turnRight.cmx replicateDirect.cmx replicateInverse.cmx 
+ocamlopt -for-pack View.ImgPrototype.X54 -pack -o act.cmx turnLeft.cmx turnRight.cmx replicateDirect.cmx replicateInverse.cmx 
 
 mv act.cmx ../act.cmx
 mv act.cmi ../act.cmi
@@ -110,13 +110,13 @@ find . -type f -iname \*.o   -delete
 #=============================================================
 cd ../
 
-ocamlopt -for-pack View.ImgPrototypes._54x54_ end.ml
+ocamlopt -for-pack View.ImgPrototype.X54 end.ml
 
-ocamlopt -for-pack View.ImgPrototypes -pack -o _54x54_.cmx end.cmx act.cmx dotsOfDice.cmx
+ocamlopt -for-pack View.ImgPrototype -pack -o x54.cmx end.cmx act.cmx dotsOfDice.cmx
 
-mv _54x54_.cmx ../_54x54_.cmx
-mv _54x54_.cmi ../_54x54_.cmi
-mv _54x54_.o ../_54x54_.o
+mv x54.cmx ../x54.cmx
+mv x54.cmi ../x54.cmi
+mv x54.o ../x54.o
 
 find . -type f -iname \*.cmx -delete
 find . -type f -iname \*.cmi -delete
@@ -125,14 +125,14 @@ find . -type f -iname \*.o   -delete
 #=============================================================
 cd ../20x20/dots
 
-ocamlopt -for-pack View.ImgPrototypes._20x20_.DotsOfDice -c OOOOOO.ml
-ocamlopt -for-pack View.ImgPrototypes._20x20_.DotsOfDice -c OOOOO.ml
-ocamlopt -for-pack View.ImgPrototypes._20x20_.DotsOfDice -c OOOO.ml
-ocamlopt -for-pack View.ImgPrototypes._20x20_.DotsOfDice -c OOO.ml
-ocamlopt -for-pack View.ImgPrototypes._20x20_.DotsOfDice -c OO.ml
-ocamlopt -for-pack View.ImgPrototypes._20x20_.DotsOfDice -c O.ml
+ocamlopt -for-pack View.ImgPrototype.X20.DotsOfDice -c OOOOOO.ml
+ocamlopt -for-pack View.ImgPrototype.X20.DotsOfDice -c OOOOO.ml
+ocamlopt -for-pack View.ImgPrototype.X20.DotsOfDice -c OOOO.ml
+ocamlopt -for-pack View.ImgPrototype.X20.DotsOfDice -c OOO.ml
+ocamlopt -for-pack View.ImgPrototype.X20.DotsOfDice -c OO.ml
+ocamlopt -for-pack View.ImgPrototype.X20.DotsOfDice -c O.ml
 
-ocamlopt -for-pack View.ImgPrototypes._20x20_ -pack -o dotsOfDice.cmx OOOOOO.cmx OOOOO.cmx OOOO.cmx OOO.cmx OO.cmx O.cmx
+ocamlopt -for-pack View.ImgPrototype.X20 -pack -o dotsOfDice.cmx OOOOOO.cmx OOOOO.cmx OOOO.cmx OOO.cmx OO.cmx O.cmx
 
 mv dotsOfDice.cmx ../dotsOfDice.cmx
 mv dotsOfDice.cmi ../dotsOfDice.cmi
@@ -145,11 +145,11 @@ find . -type f -iname \*.o   -delete
 #=============================================================
 cd ../
 
-ocamlopt -for-pack View.ImgPrototypes -pack -o _20x20_.cmx dotsOfDice.cmx
+ocamlopt -for-pack View.ImgPrototype -pack -o x20.cmx dotsOfDice.cmx
 
-mv _20x20_.cmx ../_20x20_.cmx
-mv _20x20_.cmi ../_20x20_.cmi
-mv _20x20_.o ../_20x20_.o
+mv x20.cmx ../x20.cmx
+mv x20.cmi ../x20.cmi
+mv x20.o ../x20.o
 
 find . -type f -iname \*.cmx -delete
 find . -type f -iname \*.cmi -delete
@@ -158,11 +158,11 @@ find . -type f -iname \*.o   -delete
 #=============================================================
 cd ../
 
-ocamlopt -for-pack View -pack -o imgPrototypes.cmx _20x20_.cmx _54x54_.cmx
+ocamlopt -for-pack View -pack -o imgPrototype.cmx x20.cmx x54.cmx
 
-mv imgPrototypes.cmx ../imgPrototypes.cmx
-mv imgPrototypes.cmi ../imgPrototypes.cmi
-mv imgPrototypes.o ../imgPrototypes.o
+mv imgPrototype.cmx ../imgPrototype.cmx
+mv imgPrototype.cmi ../imgPrototype.cmi
+mv imgPrototype.o ../imgPrototype.o
 
 find . -type f -iname \*.cmx -delete
 find . -type f -iname \*.cmi -delete
@@ -172,6 +172,9 @@ find . -type f -iname \*.o   -delete
 cd ../
 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c IMG_PROTOTYPE.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c IMG.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c img.mli
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c img.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c const.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c pair.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c point.ml
@@ -198,7 +201,7 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.ml
 #ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.mli
 #ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.ml
 
-ocamlopt -pack -o view.cmx IMG_PROTOTYPE.cmx imgPrototypes.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx #commandImg.cmx
+ocamlopt -pack -o view.cmx IMG_PROTOTYPE.cmx IMG.cmx imgPrototype.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx #commandImg.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

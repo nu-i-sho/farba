@@ -25,8 +25,10 @@ ocamlopt -for-pack Shared -c relationship.ml
 ocamlopt -for-pack Shared -c BREADCRUMBS.ml
 ocamlopt -for-pack Shared -c command.mli 
 ocamlopt -for-pack Shared -c command.ml
+ocamlopt -for-pack Shared -c program.mli
+ocamlopt -for-pack Shared -c program.ml
 
-ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx colony.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx BREADCRUMBS.cmx command.cmx
+ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx colony.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx BREADCRUMBS.cmx command.cmx program.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi
@@ -52,12 +54,10 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c TISSUE_CELL.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c tissueCell.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c tissueCell.ml 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c mode.ml 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c program.mli
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c program.ml 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c virus.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -c virus.ml
 
-ocamlopt -pack -o core.cmx breadcrumbs.cmx cell.cmx tissue.cmx TISSUE_CELL.cmx tissueCell.cmx mode.cmx program.cmx virus.cmx
+ocamlopt -pack -o core.cmx breadcrumbs.cmx cell.cmx tissue.cmx TISSUE_CELL.cmx tissueCell.cmx mode.cmx virus.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi
@@ -181,8 +181,6 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c point.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c doublePoint.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c line.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c doubleLine.ml
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c programPoint.mli
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c programPoint.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c floatPoint.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c eyes.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c TISSUE_SCALE.ml
@@ -200,10 +198,11 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c window.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c window.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.ml
-#ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.mli
-#ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c commandImg.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c PROGRAM_POINTER.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c programPrinter.mli
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c programPrinter.ml
 
-ocamlopt -pack -o view.cmx IMG_PROTOTYPE.cmx IMG.cmx imgPrototype.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx programPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx #commandImg.cmx
+ocamlopt -pack -o view.cmx IMG_PROTOTYPE.cmx IMG.cmx imgPrototype.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx PROGRAM_POINTER.cmx programPrinter.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

@@ -3,7 +3,7 @@ type t = Command.t array
 let get i o = o.(i)
 let length = Array.length
 
-let parse src =
+let load src =
 
   let sep = String.index src ' ' in
   let count = int_of_string (String.sub src 0 (sep + 1)) in

@@ -2,6 +2,7 @@
 
 cd shared
 
+ocamlopt -for-pack Shared -c std.ml 
 ocamlopt -for-pack Shared -c helsPigment.mli 
 ocamlopt -for-pack Shared -c helsPigment.ml  
 ocamlopt -for-pack Shared -c pigment.mli 
@@ -28,7 +29,7 @@ ocamlopt -for-pack Shared -c command.ml
 ocamlopt -for-pack Shared -c program.mli
 ocamlopt -for-pack Shared -c program.ml
 
-ocamlopt -pack -o shared.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx colony.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx BREADCRUMBS.cmx command.cmx program.cmx
+ocamlopt -pack -o shared.cmx std.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx colony.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx BREADCRUMBS.cmx command.cmx program.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi
@@ -201,8 +202,10 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c tissue.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c PROGRAM_POINTER.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c programPrinter.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c programPrinter.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c breadcrumbs.mli
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -c breadcrumbs.ml
 
-ocamlopt -pack -o view.cmx IMG_PROTOTYPE.cmx IMG.cmx imgPrototype.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx PROGRAM_POINTER.cmx programPrinter.cmx
+ocamlopt -pack -o view.cmx IMG_PROTOTYPE.cmx IMG.cmx imgPrototype.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx PROGRAM_POINTER.cmx programPrinter.cmx breadcrumbs.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

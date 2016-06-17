@@ -15,7 +15,7 @@ module type T = sig
     val moveto         : Point.t -> unit
     val lineto         : Point.t -> unit
     val draw_image     : Graphics.image -> Point.t -> unit
-    val get_image      : Point.t -> Point.t -> Graphics.image
+    val get_image      : DoublePoint.t -> Graphics.image
   end
 
 module SIZE = struct

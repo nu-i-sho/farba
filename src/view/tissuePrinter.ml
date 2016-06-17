@@ -52,10 +52,10 @@ module Make (Canvas : CANVAS.T)
       set_color ColorFor.line
 
     let apply_hexagon f o =
-      Hexagon.agles |> Array.map (Pair.map float)
-                    |> Array.map (Pair.foldl (+.) o)
-                    |> Array.map (Pair.map Int.round)
-                    |> f
+      Hexagon.angles |> Array.map (Pair.map float)
+                     |> Array.map (Pair.foldl (+.) o)
+                     |> Array.map (Pair.map Int.round)
+                     |> f
 
     let draw_hexagon o =
       let () = apply_hexagon Canvas.draw_poly o in
@@ -86,7 +86,7 @@ module Make (Canvas : CANVAS.T)
            |> Pair.map (Pair.foldl (+.) o)
            |> Pair.map (apply_circle Nucleus.eyes_radius f)
            |> ignore
-
+(*
     let print_cross provide_lines gaze o =
       gaze |> provide_lines
            |> Pair.map (Pair.map (Pair.map float))
@@ -94,23 +94,32 @@ module Make (Canvas : CANVAS.T)
            |> Pair.map (Pair.map (Pair.map Int.round))
            |> Pair.map (Pair.apply Canvas.moveto Canvas.lineto)
            |> ignore
+ *)
+    let print_lines ls gaze o = 
+      gaze |> ls
+           |> List.map (Pair.map (Pair.map float))
+           |> List.map (Pair.map (Pair.foldl (+.) o))
+           |> List.map (Pair.map (Pair.map Int.round))
+           |> List.map (Pair.apply Canvas.moveto Canvas.lineto)
+           |> ignore
+
 
     let draw_eyes eyes o =
       let () = 
 	let open Eyes in
 	match eyes with
 	| Hels g    -> apply_hels_eyes Canvas.draw_circle g o
-	| Clot g    -> print_cross Clot.eyes_coords g o
-	| Cancer g  -> print_cross Cancer.eyes_coords g o
-	| Cytoplasm -> 
-	   let r = Cytoplasm.eyes_radius in
-	   let p0, p1 = Cytoplasm.eyes_coords in   
-	   let () = Canvas.draw_arc p0 r r 0 180 in
-	   let () = Canvas.draw_arc p1 r r 0 180 in
-	   ()
+	| Clot g    -> ()(* print_cross Clot.eyes_coords g o*)
+	| Cancer g  -> print_lines Cancer.eyes_coords g o
+	| Cytoplasm -> ()
+	 (*  let r = Cytoplasm.eyes_radius in
+	     let p0, p1 = Cytoplasm.eyes_coords in   
+	     let () = Canvas.draw_arc p0 r r 0 180 in
+	     let () = Canvas.draw_arc p1 r r 0 180 in
+	     ()
+	  *)
       in
       o
-
       
     let fill_eyes gaze o = 
       let () = apply_hels_eyes Canvas.fill_circle gaze o in

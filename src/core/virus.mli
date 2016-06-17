@@ -4,7 +4,7 @@ module Make (Crumbs : BREADCRUMBS.T)
 
     val make : program : Program.t 
             -> infected : Cell.t 
-            -> bredcrumbs : Crumbs.t 
+            -> breadcrumbs : Crumbs.t 
             -> t
 
     val next : t -> t option

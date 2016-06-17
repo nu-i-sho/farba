@@ -1,1 +1,2 @@
-include PROGRM_POINTER.T
+include PROGRAM_POINTER.T
+val make : int -> t

@@ -1,52 +1,33 @@
-module CrumbMap = Map.Make (DotsOfDice)
-module PlaceMap = Map.Make (Int)
-
-type t = { crumbs : int CrumbMap.t;
-	   places : DotsOfDice.t PlaceMap.t 
-         }
+type t = (DotsOfDice.t * int) Stack.t
 
 let start =
-  { places = PlaceMap.singleton 0 DotsOfDice.O;
-    crumbs = CrumbMap.singleton DotsOfDice.O 0
-  }
+  let o  = Stack.create () in
+  let () = Stack.push (DotsOfDice.O, 0) o in
+  o
 
-let last_pair o = CrumbMap.max_binding o.crumbs 
-let last o = fst (last_pair o)
+let last_pair    = Stack.pop 
+let last       o = fst (last_pair o)
 let last_place o = snd (last_pair o)  
-
-let count o =
-  CrumbMap.cardinal o.crumbs
-  
-let length o = 
-  (last_place o) + 1
-
-let is_empty o =
-  CrumbMap.is_empty o.crumbs
-
-let remove c p o = 
-  { crumbs = o.crumbs |> CrumbMap.remove c;
-    places = o.places |> PlaceMap.remove p
-  }
-
-let add c p o = 
-  { crumbs = o.crumbs |> CrumbMap.add c p;
-    places = o.places |> PlaceMap.add p c
-  }
+let count        = Stack.length
+let length     o = (last_place o) + 1
+let is_empty     = Stack.is_empty
 
 let increment o =
-  let c, p = last_pair o in
-  o |> remove c p
-    |> add c (p + 1)
+  let (crumb, place) = Stack.pop o in
+  let () = Stack.push (crumb, place + 1) o in
+  o
 
 let decrement o =
-  let c, p  = last_pair o in
-  let p' = p - 1 in
-  let o = remove c p o in
-  if p' > 0 && PlaceMap.mem p' o.places then  
-    add c p' o else
+  let crumb_1, place_1 = Stack.pop o in
+  let crumb_0, place_0 = Stack.top o in
+  let place_1 = place_1 - 1 in
+  if place_1 = place_0 then o else
+    let () = Stack.push (crumb_1, place_1) o in
     o
 
 let split o =
-  let c , p  = last_pair o in 
-  let c', p' = (DotsOfDice.increment c), (p + 1) in
-  add c' p' o
+  let crumb_0, place_0 = Stack.top o in
+  let crumb_1 = crumb_0 |> DotsOfDice.increment in
+  let place_1 = place_0 + 1 in
+  let () = Stack.push (crumb_1, place_1) o in
+  o

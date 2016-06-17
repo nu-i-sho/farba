@@ -4,7 +4,7 @@ module type T = sig
 	val side : int
 	val internal_radius : float
 	val external_radius : float
-	val agles : Point.t array
+	val angles : Point.t array
       end
 
     module Cytoplasm : sig
@@ -19,11 +19,11 @@ module type T = sig
       end
 
     module Cancer : sig
-	val eyes_coords : Side.t -> DoubleLine.t
+	val eyes_coords : Side.t -> Line.t list
       end
 
     module Clot : sig
-	val eyes_coords : Side.t -> DoubleLine.t
+	val eyes_coords : Side.t -> Line.t list
       end
 		       
   end

@@ -11,7 +11,7 @@ module Make (Canvas : CANVAS.T)
     let set_index (x, y) _ = 
        let e = Hexagon.internal_radius in
        let i = Hexagon.external_radius in
-       let y = y * 2 + lnot(x mod 2) in
+       let y = y * 2 + (compare 1 (x mod 2)) in
        (i +. (float x) *. i *. 1.5), 
        (((float y) +. 1.0) *. e)
 

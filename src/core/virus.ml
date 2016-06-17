@@ -7,12 +7,12 @@ module Make (Crumbs : BREADCRUMBS.T)
                   mode : Mode.t
 	     }
 
-    let make ~program: p
-            ~infected: owner
-          ~bredcrumbs: crumbs = {  program = p;
-				    crumbs;
-				     owner;
-				      mode = Mode.Run
+    let make  ~program: p
+             ~infected: owner
+          ~breadcrumbs: crumbs = {  program = p;
+	 			     crumbs;
+				      owner;
+				       mode = Mode.Run
 				 }  
     let act command o = 
       Command.(

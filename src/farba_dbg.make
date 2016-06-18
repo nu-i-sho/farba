@@ -204,7 +204,7 @@ echo "View build complete"
 #=============================================================
 cd ../main
 
-ocamlc unix.cma graphics.cma -I ../../dbg shared.cmo view.cmo core.cmo -open Shared -g -o farba_dbg.run main.ml
+ocamlc -thread unix.cma graphics.cma threads.cma -I ../../dbg shared.cmo view.cmo core.cmo -open Shared -g -o farba_dbg.run main.ml
 chmod +t farba_dbg.run
 ./farba_dbg.run
 #=============================================================

@@ -137,15 +137,15 @@ module Make (Frame : CANVAS.T)
               }
       in
 
-      let _ = for x = 0 to width o do
-		for y = 0 to height o do
+      let _ = for x = 0 to (width o) - 1 do
+		for y = 0 to (height o) - 1 do
 		  print (x, y) (get (x, y) o) o
 		done
 	      done
       in
       o
 
-    let set i item o =
+    let set i item o = 
       let () = print i item o in
       Donor.set i item o.donor
 

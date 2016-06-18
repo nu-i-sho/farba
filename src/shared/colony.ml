@@ -13,9 +13,9 @@ module Item = struct
 
 type t = Item.t array array
 
-let width = Array.length
-let height o = Array.length o.(0)
-let get (x, y) o = o.(x).(y)
+let width = Array.length o.(0)
+let height o = Array.length
+let get (x, y) o = o.(y).(x)
 	    
 let size_of lines =      
   (lines |> List.length),

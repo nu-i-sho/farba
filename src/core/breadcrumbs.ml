@@ -15,6 +15,7 @@ let increment ((a, x) :: t) = (a, x + 1) :: t
 let decrement = 
   function | (_, x) :: (b, y) :: t 
 		when (x - 1) = y -> (b, y) :: t
+           | [_, 0]              -> []
            | (a, x) :: t         -> (a, x - 1) :: t
 
 let split ((a, x) :: t) = 

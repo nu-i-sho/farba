@@ -20,7 +20,9 @@ module Make (Tissue : TISSUE.T) = struct
       | _                 -> None
 
     let value_of { tissue; index; } =
-      let Item.Cell v = Tissue.get index tissue in
+      let Item.ActiveCell v | Item.Cell v = 
+	Tissue.get index tissue 
+      in
       v
 
     let kind_of o =

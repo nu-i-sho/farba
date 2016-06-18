@@ -222,7 +222,7 @@ echo "View build complete"
 #=============================================================
 cd ../main
 
-ocamlopt unix.cmxa graphics.cmxa -I ../../bin shared.cmx view.cmx core.cmx -open Shared -g -o farba.run main.ml
+ocamlopt -thread unix.cmxa graphics.cmxa -I ../../bin shared.cmx view.cmx core.cmx -open Shared -g -o farba.run main.ml
 chmod +t farba.run
 ./farba.run
 #=============================================================

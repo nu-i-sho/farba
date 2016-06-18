@@ -74,11 +74,13 @@ module Command = struct
 	  function | 'H' -> Color.gray 
                    | '-' -> Color.white
                    | ' ' -> Color.empty
+		   | 'h' -> Color.blue (* hot fix *)
 
 	let declare_of_char = 
 	  function | 'H' -> Color.blue
                    | '-' -> Color.white
 	           | ' ' -> Color.empty
+                   | 'h' -> Color.blue (* hot fix *)
 
 	module Mapper = MakeMapper(ProtoImg.DotsOfDice)
  

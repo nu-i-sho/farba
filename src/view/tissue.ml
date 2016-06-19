@@ -38,7 +38,7 @@ module Make (Frame : CANVAS.T)
 
       | ActiveCell c, ActiveCell c'
 	   when (Protocell.kind_of c) == CellKind.Cancer ->
-         p |> P.set_color_for_line
+         p |> P.set_color_for_cancer
            |> P.draw_eyes (Eyes.Cancer c.gaze)
            |> P.set_color_for_virus
            |> P.draw_eyes (Eyes.Cancer c'.gaze)

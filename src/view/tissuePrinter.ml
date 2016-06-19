@@ -82,10 +82,10 @@ module Make (Canvas : CANVAS.T)
 
     let apply_hels_eyes f gaze o =
       gaze |> Nucleus.eyes_coords
-           |> Pair.map (Pair.map float) 
-           |> Pair.map (Pair.foldl (+.) o)
-           |> Pair.map (apply_circle Nucleus.eyes_radius f)
-           |> ignore
+           |> Pair.map  (Pair.map float) 
+           |> Pair.map  (Pair.foldl (+.) o)
+           |> Pair.iter (apply_circle Nucleus.eyes_radius f)
+ 
 (*
     let print_cross provide_lines gaze o =
       gaze |> provide_lines
@@ -100,9 +100,8 @@ module Make (Canvas : CANVAS.T)
            |> List.map (Pair.map (Pair.map float))
            |> List.map (Pair.map (Pair.foldl (+.) o))
            |> List.map (Pair.map (Pair.map Int.round))
-           |> List.map (Pair.apply Canvas.moveto Canvas.lineto)
+           |> List.map (Pair.apply Canvas.lineto Canvas.moveto)
            |> ignore
-
 
     let draw_eyes eyes o =
       let () = 
@@ -115,7 +114,7 @@ module Make (Canvas : CANVAS.T)
 	 (*  let r = Cytoplasm.eyes_radius in
 	     let p0, p1 = Cytoplasm.eyes_coords in   
 	     let () = Canvas.draw_arc p0 r r 0 180 in
-	     let () = Canvas.draw_arc p1 r r 0 180 in
+	     leta () = Canvas.draw_arc p1 r r 0 180 in
 	     ()
 	  *)
       in

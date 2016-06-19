@@ -2,11 +2,11 @@ type t = unit
 
 let make count = () 
 let get i _ = 
-  let y = (((i / 10) * 8)  
-        + (((i mod 10) / 5) * 4) 
-        + (((i mod 5) / 4) * 2)
-        + 2)
-        * 27
+  let y = (((i / 10) * 4)  
+        + (((i mod 10) / 5) * 2) 
+        + (((i mod 5) / 4))
+        + 1)
+        * 54
   in
 
   let x = ( match i mod 10 with

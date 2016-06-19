@@ -1,42 +1,34 @@
-module Make (Size : CANVAS.SIZE.T) = struct
+include Graphics
 
-    include Graphics
-
-    let width               = Size.width
-    let height              = Size.height
-    let draw_ellipse (x, y) = draw_ellipse x y
-    let draw_circle  (x, y) = draw_circle x y
-    let draw_arc     (x, y) = draw_arc x y
-    let fill_ellipse (x, y) = fill_ellipse x y
-    let fill_circle  (x, y) = fill_circle x y
-    let moveto       (x, y) = moveto x y
-    let lineto       (x, y) = lineto x y
-
-    let draw_image img (x, y) = draw_image img x y
-    let get_image ((x, y), (x', y')) = get_image x y x' y'
-  
-  end
-
-module Resize (Canvas : CANVAS.T)
-	        (Size : CANVAS.SIZE.T) = struct
+let inv y       = size_y () - y
+let invp (x, y) = x, (inv y)
     
-    include Canvas
+let draw_poly ps        = draw_poly (Array.map invp ps)
+let draw_ellipse (x, y) = draw_ellipse x (inv y)
+let draw_circle  (x, y) = draw_circle x (inv y)
+let draw_arc     (x, y) = draw_arc x (inv y)
+let fill_poly ps        = fill_poly (Array.map invp ps)
+let fill_ellipse (x, y) = fill_ellipse x (inv y)
+let fill_circle  (x, y) = fill_circle x (inv y)
+let moveto       (x, y) = moveto x (inv y)
+let lineto       (x, y) = lineto x (inv y)
 
-    let width  = Size.width
-    let height = Size.height
-	      
-  end
+let draw_image img (x, y) = 
+  draw_image img x (inv y)
 
-module Shift (Canvas : CANVAS.T) 
-	      (Shift : CANVAS.SHIFT.T) = struct
-    
-    include Canvas
+let get_image ((x, y), (x', y')) = 
+  get_image x (inv y) x' (inv y')
 
-    let shift point =
-      Pair.apply ((+) Shift.dx) 
-                 ((+) Shift.dy)
-		 point
+module Shift (Donor : CANVAS.T)
+	     (Shift : CANVAS.SHIFT.T) = struct
 
+    include Donor
+    open Std
+
+    let shift (x, y) = 
+      (x + Shift.dx), 
+      (y + Shift.dy)
+		
     let draw_poly ps      = draw_poly (Array.map shift ps)
     let draw_ellipse p    = draw_ellipse (shift p)
     let draw_circle p     = draw_circle (shift p)
@@ -50,3 +42,4 @@ module Shift (Canvas : CANVAS.T)
     let get_image (p, p') = get_image ((shift p), (shift p'))
   
   end
+ 

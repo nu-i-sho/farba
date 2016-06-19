@@ -1,10 +1,15 @@
 module Make (Crumbs : BREADCRUMBS.T) 
-            (Canvas : CANVAS.T)
+             (Frame : CANVAS.T)
            (Pointer : PROGRAM_POINTER.T)
            (DotsImg : IMG.DOTS_OF_DICE.T) = struct
     
     open Std
-    
+    module Frame = Canvas.Shift (Frame)
+				(struct
+				    let dx = +27
+				    let dy = +27
+				  end)
+
     type t = { current : Crumbs.t;
                hiddens : Graphics.image list;
 	       pointer : Pointer.t
@@ -24,7 +29,7 @@ module Make (Crumbs : BREADCRUMBS.T)
              |> ~<| Pointer.get ptr
              |> img_coords
              |> fst
-             |> Canvas.draw_image img
+             |> Frame.draw_image img
 
     let print crumbs ptr = 
       crumbs |> Crumbs.last
@@ -35,7 +40,7 @@ module Make (Crumbs : BREADCRUMBS.T)
       crumbs |> Crumbs.last_place
              |> ~<| Pointer.get ptr
              |> img_coords
-             |> Canvas.get_image
+             |> Frame.get_image
  
     let make ~breadcrumbs:b ~pointer:p =
       let () = print b p in

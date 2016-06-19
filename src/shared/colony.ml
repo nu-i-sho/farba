@@ -38,7 +38,7 @@ let load src =
     Array.init (width + 2) (parse_cell_in src) 
   in
 
-  let rec parse rows i = 
+  let rec parse rows i =
     match i, rows with
     | 0, _        -> (empty_row ()) :: (parse rows (i + 1))
     | _, hd :: [] -> (parse_row hd) :: [empty_row ()]

@@ -14,9 +14,10 @@ module Make (Crumbs : BREADCRUMBS.T)
     let last       o = Crumbs.last o.current
     let last_place o = Crumbs.last_place o.current
     let is_empty   o = Crumbs.is_empty o.current
+    let is_splited o = Crumbs.is_splited o.current
     let count      o = Crumbs.count o.current
-    let length     o = Crumbs.length o.current
-    
+    let length     o = Crumbs.length o.current    
+
     let get_point ptr i = 
       let x, y = Pointer.get i ptr in
       (x + 17), 
@@ -50,20 +51,19 @@ module Make (Crumbs : BREADCRUMBS.T)
 	pointer = p
       }
       
-   
-    let increment o = 
-      let next = Crumbs.increment o.current in
-      let next_h, buff = 
-	match o.buffer with
-        | img :: buff -> img, buff
-        | []          -> new_img (), []
-      in
+    let buffer_img o = 
+      match o.buffer with
+      | img :: buff -> buff, img 
+      | []          -> [], new_img ()
 
-      let () = scan_hidden next o.pointer next_h in
+    let increment o =
+      let next = Crumbs.increment o.current in
+      let buff, next_h = buffer_img o in
+      let () = scan_hidden next o.pointer next_h in	
       let current_h :: hs = o.hiddens in
       let () = print_img o.current o.pointer current_h in
       let () = print next o.pointer in
-      
+
       { o with hiddens = next_h :: hs;
 	        buffer = current_h :: buff;
                current = next;
@@ -80,15 +80,10 @@ module Make (Crumbs : BREADCRUMBS.T)
       let hiddens, buffer = 
 	if (Crumbs.last_place next) = 
            (Crumbs.last_place o.current) 
-	then 
+	then
 	  hs, (current_h :: o.buffer) 
 	else 
-	  let next_h, buff = 
-	    match o.buffer with
-            | img :: buff -> img, buff
-            | []          -> new_img (), []
-	  in
-	  
+	  let buff, next_h = buffer_img o in
 	  let () = scan_hidden next o.pointer next_h in
 	  let () = print next o.pointer in
 	  (next_h :: hs), (current_h :: buff)
@@ -101,17 +96,12 @@ module Make (Crumbs : BREADCRUMBS.T)
 	
     let split o =
       let next = Crumbs.split o.current in
-      let next_h, buffer = 
-	match o.buffer with
-        | img :: buff -> img, buff
-        | []          -> new_img (), []
-      in
-
+      let buffer, next_h = buffer_img o in
       let () = scan_hidden next o.pointer next_h in
       let () = print next o.pointer in
-      { o with current = next; 
+      { o with current = next;
 	       hiddens = next_h :: o.hiddens;
-	        buffer; 
+	        buffer;
       }
       
   end

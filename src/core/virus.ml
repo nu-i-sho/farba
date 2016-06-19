@@ -21,8 +21,10 @@ module Make (Crumbs : BREADCRUMBS.T)
 	   { o with owner = Cell.turn hand o.owner }
 	| Replicate relation ->
 	   { o with owner = Cell.replicate relation o.owner }
-	| Call func -> 
-	   { o with mode = Mode.Find func }
+	| Call func ->
+	   { o with crumbs = Crumbs.split o.crumbs;
+	              mode = Mode.Find func;
+	   }
 	| Declare _ 
 	| End ->
 	   let crumb  = Crumbs.last o.crumbs in

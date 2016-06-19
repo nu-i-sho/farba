@@ -45,7 +45,7 @@ module Make (Seed : TISSUE_SCALE.SEED.T) = struct
     module Nucleus = struct
 	let radiusf = Hexagon.internal_radius *. 0.9
 	let radius = Int.round radiusf
-	let nucleolus_radius = radiusf *. 0.9
+	let nucleolus_radius = radiusf *. 0.8
 	let eyes_radius = 
 	  Int.round (Const.pi_div_30 *. nucleolus_radius) 
 
@@ -57,9 +57,9 @@ module Make (Seed : TISSUE_SCALE.SEED.T) = struct
       end
 
     module Cancer = struct
-	let r0 = Nucleus.radiusf *. 0.95  
-	let r1 = Nucleus.radiusf *. 0.9
-	let r2 = Nucleus.radiusf *. 0.85
+	let r0 = Nucleus.radiusf *. 0.85  
+	let r1 = Nucleus.radiusf *. 0.8
+	let r2 = Nucleus.radiusf *. 0.75
 	let eyes_coords side = 
 	  let i = Side.index_of side in
 	  let point = circle_point i in

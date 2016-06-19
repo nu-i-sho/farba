@@ -38,10 +38,11 @@ module Make (Crumbs : BREADCRUMBS.T)
              |> Frame.get_image
  
     let make ~breadcrumbs:b ~pointer:p =
+      let h = scan_hidden b p in
       let () = print b p in
       { current = b; 
-	hiddens = [scan_hidden b p];
-	pointer = p
+	hiddens = [h];
+	pointer = p;
       }
       
     let increment o = 

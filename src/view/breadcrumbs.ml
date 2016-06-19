@@ -4,11 +4,6 @@ module Make (Crumbs : BREADCRUMBS.T)
            (DotsImg : IMG.DOTS_OF_DICE.T) = struct
     
     open Std
-    module Frame = Canvas.Shift (Frame)
-				(struct
-				    let dx = +27
-				    let dy = +27
-				  end)
 
     type t = { current : Crumbs.t;
                hiddens : Graphics.image list;
@@ -22,7 +17,7 @@ module Make (Crumbs : BREADCRUMBS.T)
     let length     o = Crumbs.length o.current
 
     let img_coords (x, y) = 
-      ((x - 10, y - 10), (x + 10, y + 10))
+      ((x + 17, y - 17), (x + 37, y - 37))
 
     let print_img crumbs ptr img =
       crumbs |> Crumbs.last_place

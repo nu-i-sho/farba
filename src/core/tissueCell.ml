@@ -9,7 +9,7 @@ module Make (Tissue : TISSUE.T) = struct
 
     let deactivate o =
       let Item.ActiveCell c = Tissue.get o.index o.tissue in
-      Tissue.set o.index (Item.ActiveCell c) o.tissue
+      Tissue.set o.index (Item.Cell c) o.tissue
 
     let make tissue index =
       match Tissue.get index tissue with

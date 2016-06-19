@@ -87,7 +87,7 @@ module Command = struct
 	let declare = Mapper.map declare_of_char
 	let call = Mapper.map call_of_char
 
-	let turnl, turnr, replinv, repldir = 0, 1, 2, 3
+	let turnl, turnr, repldir, replinv = 0, 1, 2, 3
 	let acts = 
 	  [| (module ProtoImg.Act.TurnLeft         : T);
 	     (module ProtoImg.Act.TurnRight        : T);

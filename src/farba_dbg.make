@@ -179,8 +179,6 @@ ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c TISSUE_COLOR_SH
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c defaultColorSheme.ml
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c tissuePrinter.mli
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c tissuePrinter.ml
-ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c window.mli
-ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c window.ml
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c tissue.mli
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c tissue.ml
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c PROGRAM_POINTER.ml
@@ -191,7 +189,7 @@ ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c programPointer.
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c breadcrumbs.mli
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack View -g -c breadcrumbs.ml
 
-ocamlc -pack -g -o view.cmo IMG_PROTOTYPE.cmo IMG.cmo imgPrototype.cmo img.cmo const.cmo pair.cmo point.cmo doublePoint.cmo line.cmo doubleLine.cmo floatPoint.cmo eyes.cmo TISSUE_SCALE.cmo tissueScale.cmo TISSUE_PRINTER.cmo canvas.cmo CANVAS.cmo TISSUE_COLOR_SHEME.cmo defaultColorSheme.cmo tissuePrinter.cmo window.cmo tissue.cmo PROGRAM_POINTER.cmo programPrinter.cmo programPointer.cmo breadcrumbs.cmo
+ocamlc -pack -g -o view.cmo IMG_PROTOTYPE.cmo IMG.cmo imgPrototype.cmo img.cmo const.cmo pair.cmo point.cmo doublePoint.cmo line.cmo doubleLine.cmo floatPoint.cmo eyes.cmo TISSUE_SCALE.cmo tissueScale.cmo TISSUE_PRINTER.cmo CANVAS.cmo canvas.cmo TISSUE_COLOR_SHEME.cmo defaultColorSheme.cmo tissuePrinter.cmo tissue.cmo PROGRAM_POINTER.cmo programPrinter.cmo programPointer.cmo breadcrumbs.cmo
 
 mv view.cmo ../../dbg/view.cmo
 mv view.cmi ../../dbg/view.cmi

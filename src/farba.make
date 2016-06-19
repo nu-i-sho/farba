@@ -195,8 +195,6 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c TISSUE_COLOR_
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c defaultColorSheme.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c tissuePrinter.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c tissuePrinter.ml
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c window.mli
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c window.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c tissue.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c tissue.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c PROGRAM_POINTER.ml
@@ -207,7 +205,7 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c programPointe
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c breadcrumbs.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack View -g -c breadcrumbs.ml
 
-ocamlopt -pack -g -o view.cmx IMG_PROTOTYPE.cmx IMG.cmx imgPrototype.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx canvas.cmx CANVAS.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx window.cmx tissue.cmx PROGRAM_POINTER.cmx programPrinter.cmx programPointer.cmx breadcrumbs.cmx
+ocamlopt -pack -g -o view.cmx IMG_PROTOTYPE.cmx IMG.cmx imgPrototype.cmx img.cmx const.cmx pair.cmx point.cmx doublePoint.cmx line.cmx doubleLine.cmx floatPoint.cmx eyes.cmx TISSUE_SCALE.cmx tissueScale.cmx TISSUE_PRINTER.cmx CANVAS.cmx canvas.cmx TISSUE_COLOR_SHEME.cmx defaultColorSheme.cmx tissuePrinter.cmx tissue.cmx PROGRAM_POINTER.cmx programPrinter.cmx programPointer.cmx breadcrumbs.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi
@@ -222,7 +220,7 @@ echo "View build complete"
 #=============================================================
 cd ../main
 
-ocamlopt -thread unix.cmxa graphics.cmxa -I ../../bin shared.cmx view.cmx core.cmx -open Shared -g -o farba.run main.ml
+ocamlopt -thread unix.cmxa graphics.cmxa threads.cmxa -I ../../bin shared.cmx view.cmx core.cmx -open Shared -g -o farba.run main.ml
 chmod +t farba.run
 ./farba.run
 #=============================================================

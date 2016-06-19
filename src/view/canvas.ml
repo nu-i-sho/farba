@@ -13,11 +13,12 @@ let fill_circle  (x, y) = fill_circle x (inv y)
 let moveto       (x, y) = moveto x (inv y)
 let lineto       (x, y) = lineto x (inv y)
 
-let draw_image img (x, y) = 
-  draw_image img x (inv y)
+let draw_image img (x, y) = draw_image img x (inv y)
+let blit_image img (x, y) = blit_image img x (inv y)
 
-let get_image ((x, y), (x', y')) = 
-  get_image x (inv y) x' (inv y')
+let get_image (x1, y1) (x2, y2) = 
+  get_image x1 (inv y1) x2 (inv y2)
+
 
 module Shift (Donor : CANVAS.T)
 	     (Shift : CANVAS.SHIFT.T) = struct
@@ -39,7 +40,8 @@ module Shift (Donor : CANVAS.T)
     let moveto p          = moveto (shift p)
     let lineto p          = lineto (shift p)
     let draw_image img p  = draw_image img (shift p)
-    let get_image (p, p') = get_image ((shift p), (shift p'))
+    let blit_image img p  = blit_image img (shift p)
+    let get_image p1 p2   = get_image (shift p1) (shift p2)
   
   end
  

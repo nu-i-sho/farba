@@ -13,7 +13,13 @@ module type T = sig
     val moveto         : Point.t -> unit
     val lineto         : Point.t -> unit
     val draw_image     : Graphics.image -> Point.t -> unit
-    val get_image      : DoublePoint.t -> Graphics.image
+    val create_image   : int -> int -> Graphics.image
+    val get_image      : Point.t -> Point.t -> Graphics.image
+    val blit_image     : Graphics.image -> Point.t -> unit
+    val dump_image     : Graphics.image 
+		      -> Graphics.color array array
+    val make_image     : Graphics.color array array 
+		      -> Graphics.image
   
   end
 

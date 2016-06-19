@@ -10,13 +10,18 @@ let count        = List.length
 let length     o = (last_place o) + 1
 let is_empty     = (=) []
 
+let is_splited =
+  function | (_, x) :: (_, y) :: _ when x = y 
+	       -> true
+           | _ -> false
+
 let increment ((a, x) :: t) = (a, x + 1) :: t
 
 let decrement = 
-  function | (_, x) :: (b, y) :: t 
-		when (x - 1) = y -> (b, y) :: t
-           | [_, 0]              -> []
-           | (a, x) :: t         -> (a, x - 1) :: t
+  function | (_, x) :: (b, y) :: t when x = y 
+	                 -> (b, y) :: t
+           | [_, 0]      -> []
+           | (a, x) :: t -> (a, x - 1) :: t
 
 let split ((a, x) :: t) = 
-  (Dots.increment a, x + 1) :: (a, x) :: t
+  (Dots.increment a, x) :: (a, x) :: t

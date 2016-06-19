@@ -57,16 +57,8 @@ let () = begin
 		      (TissueCell) 
     in
 
-    let colony = Colony.load [ "111111111111111";
-			       "111111111111111";
-			       "111111111111111";
-			       "111111111111111";
-			       "111111111111111";
-			       "111111111111111";
-			       "111111111111111";
-			       "111111111111111";
-			       "111111111111111";
-			       "111111111111111";
+    let colony = Colony.load [ "00";
+			       "00";
 			     ]
     in
     let () = print_string "<-1>" in
@@ -79,7 +71,7 @@ let () = begin
     let () = print_string "<1>" in
     let Some cell = TissueCell.make tissue (0, 0) in
     let () = print_string "<2>" in
-    let program = Program.load "011021011222212300" in
+    let program = Program.load "675473044202F200C26D55E1" in
     let () = print_string "<3>" in
     let pointer = View.ProgramPointer.make 
 		    (Program.length program) in
@@ -100,7 +92,7 @@ let () = begin
       | Some o -> 
 	 let () = print_string "*" in
 	 let rec delay () =
-	   let duration = frame_time +. 2.225 -. 
+	   let duration = frame_time +. 0.225 -. 
 			    Unix.gettimeofday () 
 	   in
 	   if duration > 0.0 then

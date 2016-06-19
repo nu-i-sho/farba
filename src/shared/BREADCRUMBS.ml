@@ -9,5 +9,5 @@ module type T = sig
     val increment  : t -> t
     val decrement  : t -> t
     val split      : t -> t
-
+    val is_splited : t -> bool
   end

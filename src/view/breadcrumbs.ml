@@ -7,6 +7,7 @@ module Make (Crumbs : BREADCRUMBS.T)
 
     type t = { current : Crumbs.t;
                hiddens : Graphics.image list;
+	        buffer : Graphics.image list;
 	       pointer : Pointer.t
 	     } 
 
@@ -15,15 +16,15 @@ module Make (Crumbs : BREADCRUMBS.T)
     let is_empty   o = Crumbs.is_empty o.current
     let count      o = Crumbs.count o.current
     let length     o = Crumbs.length o.current
-
-    let img_coords (x, y) = 
-      ((x + 17, y - 17), (x + 37, y - 37))
+    
+    let get_point ptr i = 
+      let x, y = Pointer.get i ptr in
+      (x + 17), 
+      (y - 17)
 
     let print_img crumbs ptr img =
       crumbs |> Crumbs.last_place
-             |> ~<| Pointer.get ptr
-             |> img_coords
-             |> fst
+             |> get_point ptr
              |> Frame.draw_image img
 
     let print crumbs ptr = 
@@ -31,28 +32,41 @@ module Make (Crumbs : BREADCRUMBS.T)
              |> DotsImg.get
              |> print_img crumbs ptr
 
-    let scan_hidden crumbs ptr = 
+    let new_img () = 
+      Frame.create_image 20 20
+
+    let scan_hidden crumbs ptr img =      
       crumbs |> Crumbs.last_place
-             |> ~<| Pointer.get ptr
-             |> img_coords
-             |> Frame.get_image
- 
+             |> get_point ptr
+             |> Frame.blit_image img
+
     let make ~breadcrumbs:b ~pointer:p =
-      let h = scan_hidden b p in
+      let h  = new_img () in 
+      let () = scan_hidden b p h in
       let () = print b p in
       { current = b; 
 	hiddens = [h];
-	pointer = p;
+	 buffer = [];
+	pointer = p
       }
       
+   
     let increment o = 
       let next = Crumbs.increment o.current in
-      let next_h = scan_hidden next o.pointer in
+      let next_h, buff = 
+	match o.buffer with
+        | img :: buff -> img, buff
+        | []          -> new_img (), []
+      in
+
+      let () = scan_hidden next o.pointer next_h in
       let current_h :: hs = o.hiddens in
       let () = print_img o.current o.pointer current_h in
       let () = print next o.pointer in
+      
       { o with hiddens = next_h :: hs;
-               current = next; 
+	        buffer = current_h :: buff;
+               current = next;
       }
 
     let decrement o =
@@ -63,25 +77,41 @@ module Make (Crumbs : BREADCRUMBS.T)
 			 current_h 
       in
 
-      let hiddens = 
+      let hiddens, buffer = 
 	if (Crumbs.last_place next) = 
            (Crumbs.last_place o.current) 
-	then hs 
-	else let next_h = scan_hidden next o.pointer in
-	     let () = print next o.pointer in
-	     next_h :: hs
+	then 
+	  hs, (current_h :: o.buffer) 
+	else 
+	  let next_h, buff = 
+	    match o.buffer with
+            | img :: buff -> img, buff
+            | []          -> new_img (), []
+	  in
+	  
+	  let () = scan_hidden next o.pointer next_h in
+	  let () = print next o.pointer in
+	  (next_h :: hs), (current_h :: buff)
       in
 
       { o with current = next; 
-	       hiddens
+	       hiddens;
+		buffer
       }
 	
     let split o =
       let next = Crumbs.split o.current in
-      let next_h = scan_hidden next o.pointer in
+      let next_h, buffer = 
+	match o.buffer with
+        | img :: buff -> img, buff
+        | []          -> new_img (), []
+      in
+
+      let () = scan_hidden next o.pointer next_h in
       let () = print next o.pointer in
       { o with current = next; 
-	       hiddens = next_h :: o.hiddens
+	       hiddens = next_h :: o.hiddens;
+	        buffer; 
       }
       
   end

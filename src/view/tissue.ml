@@ -47,6 +47,7 @@ module Make (Frame : CANVAS.T)
       | ActiveCell c, ActiveCell c' ->
          p |> P.set_pigment_as_color c'.pigment
            |> P.fill_eyes c.gaze
+           |> P.draw_eyes (Eyes.Hels c.gaze)
            |> P.set_opposited_pigment_as_color c'.pigment
            |> P.fill_eyes c'.gaze
            |> P.set_color_for_virus

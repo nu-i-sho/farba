@@ -11,13 +11,12 @@ module Make (Tissue : TISSUE.T) = struct
       let Item.ActiveCell c = Tissue.get o.index o.tissue in
       Tissue.set o.index (Item.ActiveCell c) o.tissue
 
-    let first colony index =
-      match Colony.get index colony with
-      | Colony.Item.Empty -> let tissue = Tissue.make colony in
-			     let o = {index; tissue } in
-			     let () = activate Cell.first o in
-			     Some o
-      | _                 -> None
+    let make tissue index =
+      match Tissue.get index tissue with
+      | Item.Empty -> let o = {index; tissue } in
+		      let () = activate Cell.first o in
+		      Some o
+      | _          -> None
 
     let value_of { tissue; index; } =
       let Item.ActiveCell v | Item.Cell v = 

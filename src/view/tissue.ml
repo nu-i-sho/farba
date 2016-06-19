@@ -13,7 +13,7 @@ module Make (Frame : CANVAS.T)
       let module P = (val o.printer : TISSUE_PRINTER.T) in
       let p = P.zero in
       let p = P.set_index i p in
-      let previous = get i o in
+      let previous = get i o in      
       let open Item in
       match previous, current with
 
@@ -82,66 +82,59 @@ module Make (Frame : CANVAS.T)
            |> P.draw_eyes (Eyes.Hels c.gaze)
            |> ignore
 
-    let make colony =
-      let tissue = Donor.make colony in
+    let make ~donor:d ~width:w ~height:h =
 
       let max_side_1 =
-        (float Frame.width) /.
-          ((float (Donor.width tissue)) *. 1.5 +. 0.5)
+        (float w) /.
+          ((float (Donor.width d)) *. 1.5 +. 0.5)
       in
 
       let max_side_2 =
-        (float Frame.height) /.
-          ((float (Donor.width tissue)) *. 2.0 +. 1.0) /.
+        (float h) /.
+          ((float (Donor.height d)) *. 2.0 +. 1.0) /.
             Const.sqrt_3_div_2
       in
 
       let max_side = min max_side_1 max_side_2 in
+
       let module Scale =
 	TissueScale.Make (struct
 			     let hexagon_side = max_side
 			   end)
       in
 
-      let w = Scale.Hexagon.external_radius *.
-		(((float (Donor.width tissue)) *. 1.5 +. 0.5))
+      let w' = Scale.Hexagon.external_radius *.
+		 (((float (Donor.width d)) *. 1.5 +. 0.5)) 
       in
 
-      let h = Scale.Hexagon.internal_radius *.
-		(((float (Donor.width tissue)) *. 2.0 +. 1.0))
+      let h' = Scale.Hexagon.internal_radius *.
+		(((float (Donor.height d)) *. 2.0 +. 1.0))
       in
-
-      let w = int_of_float (ceil w) in
-      let h = int_of_float (ceil h) in
-      let dx = (Frame.width - w) / 2 in
-      let dy = (Frame.height - h) / 2 in
-      let module Frame' = Canvas.Shift
-			    (Canvas.Resize
-			       (Frame)
-			       (struct
-				   let width  = w
-				   let height = h
-				 end))
-			    (struct
-				let dx = dx
-				let dy = dy
-			      end)
+      
+      let w' = int_of_float (ceil w') in
+      let h' = int_of_float (ceil h') in
+      let module Frame' = 
+	Canvas.Shift (Frame) 
+		     (struct 
+			 let dx = (w - w') / 2 
+			 let dy = (h - h') / 2 
+		       end)
       in
-
+      
       let module P = TissuePrinter.Make (Frame') (Scale)
                               (DefaultColorSheme.Tissue)
       in
 
-      let o = {   donor = tissue;
+      let o = {   donor = d;
                 printer = (module P : TISSUE_PRINTER.T)
               }
       in
 
-      let _ = for x = 0 to (width o) - 1 do
-		for y = 0 to (height o) - 1 do
-		  print (x, y) (get (x, y) o) o
-		done
-	      done
+      let () = ignore(for x = 0 to (width o) - 1 do
+			for y = 0 to (height o) - 1 do
+			  print (x, y) (get (x, y) o) o
+			done
+		      done)
       in
       o
 

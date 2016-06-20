@@ -30,7 +30,7 @@ module Make (Crumbs : BREADCRUMBS.T)
 	   let crumb  = Crumbs.last o.crumbs in
            let crumb' = DotsOfDice.decrement crumb in
 	   { o with mode = Mode.Return crumb' }
-  ) 
+      ) 
 
     let move o =
       let move = match o.mode with

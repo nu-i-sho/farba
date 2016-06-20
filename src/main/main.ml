@@ -1,3 +1,20 @@
+let _1 = [ "00";
+	   "11";
+	 ]
+
+let _2 = [ "1111111111";
+	   "1111111111";
+	   "1111111111";
+	 ]
+
+let _1_win = "11211120312"
+let _1_clot = "112111220312"
+let _1_cancer = "11211130312112002"
+
+let _2_win =  "1130002112002112002"
+let _2_func = "11309797979C112A002"
+let _2_func = "11304444F97C112A002"
+
 
 open Shared
 
@@ -57,9 +74,7 @@ let () = begin
 		      (TissueCell) 
     in
 
-    let colony = Colony.load [ "00";
-			       "00";
-			     ]
+    let colony = Colony.load _2
     in
     let () = print_string "<-1>" in
     let tissue = Core.Tissue.make colony in
@@ -71,7 +86,7 @@ let () = begin
     let () = print_string "<1>" in
     let Some cell = TissueCell.make tissue (0, 0) in
     let () = print_string "<2>" in
-    let program = Program.load "675473044202F200C26D55E1" in
+    let program = Program.load _2_func in
     let () = print_string "<3>" in
     let pointer = View.ProgramPointer.make 
 		    (Program.length program) in
@@ -92,7 +107,7 @@ let () = begin
       | Some o -> 
 	 let () = print_string "*" in
 	 let rec delay () =
-	   let duration = frame_time +. 0.225 -. 
+	   let duration = frame_time +. 0.825 -. 
 			    Unix.gettimeofday () 
 	   in
 	   if duration > 0.0 then

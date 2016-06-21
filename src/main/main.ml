@@ -13,8 +13,11 @@ let _1_cancer = "11211130312112002"
 
 let _2_win =  "1130002112002112002"
 let _2_func = "11309797979C112A002"
-let _2_func = "11304444F97C112A002"
+let _2_func2 = "11304444F97C112A002"
 
+
+let _colony = _2
+let _program = _2_func2
 
 open Shared
 
@@ -74,7 +77,7 @@ let () = begin
 		      (TissueCell) 
     in
 
-    let colony = Colony.load _2
+    let colony = Colony.load _colony
     in
     let () = print_string "<-1>" in
     let tissue = Core.Tissue.make colony in
@@ -86,7 +89,7 @@ let () = begin
     let () = print_string "<1>" in
     let Some cell = TissueCell.make tissue (0, 0) in
     let () = print_string "<2>" in
-    let program = Program.load _2_func in
+    let program = Program.load _program in
     let () = print_string "<3>" in
     let pointer = View.ProgramPointer.make 
 		    (Program.length program) in
@@ -104,7 +107,7 @@ let () = begin
     let () = print_string "<7>" in
     let rec main o frame_time =
       match o with
-      | Some o -> 
+      | Virus.Instant o -> 
 	 let () = print_string "*" in
 	 let rec delay () =
 	   let duration = frame_time +. 0.825 -. 
@@ -119,8 +122,8 @@ let () = begin
 	 in
 	 let () = delay () in
 	 let () = print_string "#" in
-	 main (Virus.next o) (Unix.gettimeofday  ())
-      | None -> ()
+	 main (Virus.tick o) (Unix.gettimeofday  ())
+      | Virus.End _ -> ()
     in
-    main (Some virus) (Unix.gettimeofday  ())
+    main (Virus.Instant virus) (Unix.gettimeofday  ())
   end

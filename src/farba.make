@@ -54,11 +54,13 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c tissue.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c TISSUE_CELL.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c tissueCell.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c tissueCell.ml 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c mode.ml 
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c mode.ml
+ocamlopt -for-pack Core -g -c lifeCounter.mli
+ocamlopt -for-pack Core -g -c lifeCounter.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c virus.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c virus.ml
 
-ocamlopt -pack -g -o core.cmx breadcrumbs.cmx cell.cmx tissue.cmx TISSUE_CELL.cmx tissueCell.cmx mode.cmx virus.cmx
+ocamlopt -pack -g -o core.cmx breadcrumbs.cmx cell.cmx tissue.cmx TISSUE_CELL.cmx tissueCell.cmx mode.cmx lifeCounter.cmx virus.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

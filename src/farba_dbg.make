@@ -55,10 +55,12 @@ ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c tissueCell.ml
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c mode.ml
 ocamlc -for-pack Core -g -c lifeCounter.mli
 ocamlc -for-pack Core -g -c lifeCounter.ml
+ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c runtime.mli
+ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c runtime.ml
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c virus.mli 
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c virus.ml
 
-ocamlc -pack -g -o core.cmo breadcrumbs.cmo cell.cmo tissue.cmo TISSUE_CELL.cmo tissueCell.cmo mode.cmo lifeCounter.cmo virus.cmo
+ocamlc -pack -g -o core.cmo breadcrumbs.cmo cell.cmo tissue.cmo TISSUE_CELL.cmo tissueCell.cmo mode.cmo lifeCounter.cmo runtime.cmo virus.cmo
 
 mv core.cmo ../../dbg/core.cmo
 mv core.cmi ../../dbg/core.cmi

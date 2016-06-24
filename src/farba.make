@@ -31,8 +31,9 @@ ocamlopt -for-pack Shared -g -c program.ml
 ocamlopt -for-pack Shared -g -c runtimeMode.ml
 ocamlopt -for-pack Shared -g -c RUNTIME.ml
 ocamlopt -for-pack Shared -g -c PROGRAM.ml
+ocamlopt -for-pack Shared -g -c RUNTIME_COUNTER.ml
 
-ocamlopt -pack -o shared.cmx std.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx colony.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx BREADCRUMBS.cmx command.cmx program.cmx runtimeMode.cmx RUNTIME.cmx PROGRAM.cmx
+ocamlopt -pack -o shared.cmx std.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx colony.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx BREADCRUMBS.cmx command.cmx program.cmx runtimeMode.cmx RUNTIME.cmx PROGRAM.cmx RUNTIME_COUNTER.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi

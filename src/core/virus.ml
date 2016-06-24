@@ -6,7 +6,7 @@ module Make (Crumbs : BREADCRUMBS.T)
     type t = {  program : Program.t;
                  crumbs : Crumbs.t;
                   owner : Cell.t;
-                   mode : Mode.t;
+                   mode : RuntimeMode.t;
                 counter : Counter.t
  	     }
 
@@ -20,7 +20,7 @@ module Make (Crumbs : BREADCRUMBS.T)
       {  program = p;
 	  crumbs;
 	   owner;
-	    mode = Mode.Run;
+	    mode = RuntimeMode.Run;
 	 counter = Counter.zero
       }				  
 
@@ -40,31 +40,31 @@ module Make (Crumbs : BREADCRUMBS.T)
 
       | Call func ->
 	 { o with crumbs = Crumbs.split o.crumbs;
-	            mode = Mode.Find func;
+	            mode = RuntimeMode.Find func;
 	 }
 
       | Declare _ 
       | End ->
 	 let crumb  = Crumbs.last o.crumbs in
          let crumb' = DotsOfDice.decrement crumb in
-	 { o with mode = Mode.Return crumb' }
+	 { o with mode = RuntimeMode.Return crumb' }
 
     let move o =
       match o.mode with
 
-      | Mode.Run      -> 	 
+      | RuntimeMode.Run      -> 	 
 	 { o with crumbs = Crumbs.increment o.crumbs;
                  counter = Counter.inc_crumbs_steps_of_run 
 			     o.counter
 	 }
 
-      | Mode.Find _   ->  
+      | RuntimeMode.Find _   ->  
 	 { o with crumbs = Crumbs.increment o.crumbs;
                  counter = Counter.inc_crumbs_steps_of_find 
 			     o.counter
 	 }
 
-      | Mode.Return _ -> 
+      | RuntimeMode.Return _ -> 
 	 { o with crumbs = Crumbs.decrement o.crumbs;
                  counter = Counter.inc_crumbs_steps_of_return 
 			     o.counter
@@ -80,7 +80,7 @@ module Make (Crumbs : BREADCRUMBS.T)
 
 	 let i = Crumbs.last_place o.crumbs in
 	 let cmd = Program.get i o.program in
-	 let open Mode in
+	 let open RuntimeMode in
          Instant (( match o.mode with
 		    | Run -> act cmd o  
 		    | Find f when cmd = (Command.Declare f) ->

@@ -28,8 +28,9 @@ ocamlopt -for-pack Shared -g -c command.mli
 ocamlopt -for-pack Shared -g -c command.ml
 ocamlopt -for-pack Shared -g -c program.mli
 ocamlopt -for-pack Shared -g -c program.ml
+ocamlopt -for-pack Shared -g -c runtimeMode.ml
 
-ocamlopt -pack -o shared.cmx std.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx colony.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx BREADCRUMBS.cmx command.cmx program.cmx
+ocamlopt -pack -o shared.cmx std.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx colony.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx BREADCRUMBS.cmx command.cmx program.cmx runtimeMode.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi
@@ -53,8 +54,7 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c tissue.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c tissue.ml 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c TISSUE_CELL.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c tissueCell.mli 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c tissueCell.ml 
-ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c mode.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c tissueCell.ml
 ocamlopt -for-pack Core -g -c lifeCounter.mli
 ocamlopt -for-pack Core -g -c lifeCounter.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c runtime.mli
@@ -62,7 +62,7 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c runtime.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c virus.mli 
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c virus.ml
 
-ocamlopt -pack -g -o core.cmx breadcrumbs.cmx cell.cmx tissue.cmx TISSUE_CELL.cmx tissueCell.cmx mode.cmx lifeCounter.cmx runtime.cmx virus.cmx
+ocamlopt -pack -g -o core.cmx breadcrumbs.cmx cell.cmx tissue.cmx TISSUE_CELL.cmx tissueCell.cmx lifeCounter.cmx runtime.cmx virus.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

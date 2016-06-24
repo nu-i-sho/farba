@@ -28,8 +28,9 @@ ocamlc -for-pack Shared -g -c command.mli
 ocamlc -for-pack Shared -g -c command.ml
 ocamlc -for-pack Shared -g -c program.mli
 ocamlc -for-pack Shared -g -c program.ml
+ocamlc -for-pack Shared -g -c runtimeMode.ml
 
-ocamlc -pack -o shared.cmo std.cmo helsPigment.cmo pigment.cmo hand.cmo side.cmo cellKind.cmo protocell.cmo index.cmo int.cmo item.cmo colony.cmo TISSUE.cmo dotsOfDice.cmo relationship.cmo BREADCRUMBS.cmo command.cmo program.cmo
+ocamlc -pack -o shared.cmo std.cmo helsPigment.cmo pigment.cmo hand.cmo side.cmo cellKind.cmo protocell.cmo index.cmo int.cmo item.cmo colony.cmo TISSUE.cmo dotsOfDice.cmo relationship.cmo BREADCRUMBS.cmo command.cmo program.cmo runtimeMode.cmo
 
 mv shared.cmo ../../dbg/shared.cmo
 mv shared.cmi ../../dbg/shared.cmi
@@ -51,8 +52,7 @@ ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c tissue.mli
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c tissue.ml 
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c TISSUE_CELL.ml
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c tissueCell.mli 
-ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c tissueCell.ml 
-ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c mode.ml
+ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c tissueCell.ml
 ocamlc -for-pack Core -g -c lifeCounter.mli
 ocamlc -for-pack Core -g -c lifeCounter.ml
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c runtime.mli
@@ -60,7 +60,7 @@ ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c runtime.ml
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c virus.mli 
 ocamlc -I ../../dbg shared.cmo -open Shared -for-pack Core -g -c virus.ml
 
-ocamlc -pack -g -o core.cmo breadcrumbs.cmo cell.cmo tissue.cmo TISSUE_CELL.cmo tissueCell.cmo mode.cmo lifeCounter.cmo runtime.cmo virus.cmo
+ocamlc -pack -g -o core.cmo breadcrumbs.cmo cell.cmo tissue.cmo TISSUE_CELL.cmo tissueCell.cmo lifeCounter.cmo runtime.cmo virus.cmo
 
 mv core.cmo ../../dbg/core.cmo
 mv core.cmi ../../dbg/core.cmi

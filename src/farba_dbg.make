@@ -29,8 +29,9 @@ ocamlc -for-pack Shared -g -c command.ml
 ocamlc -for-pack Shared -g -c program.mli
 ocamlc -for-pack Shared -g -c program.ml
 ocamlc -for-pack Shared -g -c runtimeMode.ml
+ocamlc -for-pack Shared -g -c RUNTIME.ml
 
-ocamlc -pack -o shared.cmo std.cmo helsPigment.cmo pigment.cmo hand.cmo side.cmo cellKind.cmo protocell.cmo index.cmo int.cmo item.cmo colony.cmo TISSUE.cmo dotsOfDice.cmo relationship.cmo BREADCRUMBS.cmo command.cmo program.cmo runtimeMode.cmo
+ocamlc -pack -o shared.cmo std.cmo helsPigment.cmo pigment.cmo hand.cmo side.cmo cellKind.cmo protocell.cmo index.cmo int.cmo item.cmo colony.cmo TISSUE.cmo dotsOfDice.cmo relationship.cmo BREADCRUMBS.cmo command.cmo program.cmo runtimeMode.cmo RUNTIME.cmo
 
 mv shared.cmo ../../dbg/shared.cmo
 mv shared.cmi ../../dbg/shared.cmi

@@ -1,4 +1,3 @@
-
 module Make (Crumbs : BREADCRUMBS.T) 
               (Cell : TISSUE_CELL.T) = struct
 

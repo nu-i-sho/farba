@@ -32,8 +32,9 @@ ocamlopt -for-pack Shared -g -c runtimeMode.ml
 ocamlopt -for-pack Shared -g -c RUNTIME.ml
 ocamlopt -for-pack Shared -g -c PROGRAM.ml
 ocamlopt -for-pack Shared -g -c RUNTIME_COUNTER.ml
+ocamlopt -for-pack Shared -g -c COUNTABLE_RUNTIME.ml
 
-ocamlopt -pack -o shared.cmx std.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx colony.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx BREADCRUMBS.cmx command.cmx program.cmx runtimeMode.cmx RUNTIME.cmx PROGRAM.cmx RUNTIME_COUNTER.cmx
+ocamlopt -pack -o shared.cmx std.cmx helsPigment.cmx pigment.cmx hand.cmx side.cmx cellKind.cmx protocell.cmx index.cmx int.cmx item.cmx colony.cmx TISSUE.cmx dotsOfDice.cmx relationship.cmx BREADCRUMBS.cmx command.cmx program.cmx runtimeMode.cmx RUNTIME.cmx PROGRAM.cmx RUNTIME_COUNTER.cmx COUNTABLE_RUNTIME.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi
@@ -66,6 +67,8 @@ ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c virus.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c virus.ml
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c runtimeCounter.mli
 ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c runtimeCounter.ml
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c countableRuntime.mli
+ocamlopt -I ../../bin shared.cmx -open Shared -for-pack Core -g -c countableRuntime.ml
 
 ocamlopt -pack -g -o core.cmx breadcrumbs.cmx cell.cmx tissue.cmx TISSUE_CELL.cmx tissueCell.cmx lifeCounter.cmx runtime.cmx virus.cmx runtimeCounter.cmx
 

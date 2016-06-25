@@ -13,6 +13,6 @@ let runs    o = o.runs
 let finds   o = o.finds
 let returns o = o.returns
     
-let increment_runs    o = { o with runs = o.runs + 1 }
-let increment_finds   o = { o with finds = o.finds + 1 }
-let increment_returns o = { o with returns = o.returns + 1 }
+let inc_runs    o = { o with runs = o.runs + 1 }
+let inc_finds   o = { o with finds = o.finds + 1 }
+let inc_returns o = { o with returns = o.returns + 1 }

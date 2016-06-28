@@ -15,8 +15,9 @@ cd ../core
 
 ocamlopt -I ../../bin data.cmx -for-pack Core -c pigment.mli 
 ocamlopt -I ../../bin data.cmx -for-pack Core -c pigment.ml
+ocamlopt -for-pack Core -c hand.ml
 
-ocamlopt -pack -o core.cmx pigment.cmx
+ocamlopt -pack -o core.cmx pigment.cmx hand.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

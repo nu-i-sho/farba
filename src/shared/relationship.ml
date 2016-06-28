@@ -1,3 +1,0 @@
-type t = | Direct
-         | Inverse
-

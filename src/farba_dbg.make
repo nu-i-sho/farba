@@ -19,8 +19,11 @@ ocamlc -I ../../bin data.cmo -for-pack Core -c side.mli
 ocamlc -I ../../bin data.cmo -for-pack Core -c side.ml
 ocamlc -I ../../bin data.cmo -for-pack Core -c nucleus.mli
 ocamlc -I ../../bin data.cmo -for-pack Core -c nucleus.ml
+ocamlc -for-pack Core -c COLONY.ml
 ocamlc -for-pack Core -c colony.mli
 ocamlc -for-pack Core -c colony.ml
+ocamlc -for-pack Core -c borderedColony.mli
+ocamlc -I ../../bin data.cmo -for-pack Core -c borderedColony.ml
 ocamlc -for-pack Core -c index.mli
 ocamlc -I ../../bin data.cmo -for-pack Core -c index.ml
 ocamlc -for-pack Core -c tissue.mli
@@ -28,7 +31,7 @@ ocamlc -for-pack Core -c tissue.ml
 ocamlc -I ../../bin data.cmo -for-pack Core -c activeCell.mli
 ocamlc -I ../../bin data.cmo -for-pack Core -c activeCell.ml
 
-ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo nucleus.cmo colony.cmo index.cmo tissue.cmo activeCell.cmo
+ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo nucleus.cmo COLONY.cmo colony.cmo borderedColony.cmo index.cmo tissue.cmo activeCell.cmo
 
 mv core.cmo ../../bin/core.cmo
 mv core.cmi ../../bin/core.cmi

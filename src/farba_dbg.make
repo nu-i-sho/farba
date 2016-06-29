@@ -15,9 +15,8 @@ cd ../core
 ocamlc -I ../../bin data.cmo -for-pack Core -c pigment.mli 
 ocamlc -I ../../bin data.cmo -for-pack Core -c pigment.ml
 ocamlc -for-pack Core -c hand.ml
-ocamlc -I ../../bin data.cmo -for-pack Core -c side.mli 
+ocamlc -I ../../bin data.cmo -for-pack Core -c side.mli
 ocamlc -I ../../bin data.cmo -for-pack Core -c side.ml
-
 
 ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo
 

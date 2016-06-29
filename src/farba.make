@@ -22,7 +22,6 @@ ocamlopt -I ../../bin data.cmx -for-pack Core -c nucleus.mli
 ocamlopt -I ../../bin data.cmx -for-pack Core -c nucleus.ml
 ocamlopt -for-pack Core -c colony.mli 
 ocamlopt -for-pack Core -c colony.ml
-ocamlopt -for-pack Core -c tissueItem.ml
 ocamlopt -for-pack Core -c index.mli 
 ocamlopt -I ../../bin data.cmx -for-pack Core -c index.ml
 ocamlopt -for-pack Core -c tissue.mli
@@ -30,7 +29,7 @@ ocamlopt -for-pack Core -c tissue.ml
 ocamlopt -I ../../bin data.cmx -for-pack Core -c activeCell.mli
 ocamlopt -I ../../bin data.cmx -for-pack Core -c activeCell.ml
 
-ocamlopt -pack -o core.cmx pigment.cmx hand.cmx nucleus.cmx colony.cmx tissueItem.cmx index.cmx tissue.cmx activeCell.cmx
+ocamlopt -pack -o core.cmx pigment.cmx hand.cmx nucleus.cmx colony.cmx index.cmx tissue.cmx activeCell.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

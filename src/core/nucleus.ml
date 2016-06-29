@@ -7,8 +7,8 @@ let turn hand o =
 
 let inject cytoplasm o =
   { o with pigment = if cytoplasm = o.pigment then
-		     Data.Pigment.None else
-		     o.pigment
+		       Data.Pigment.None else
+		       o.pigment
   }
 
 let replicate relation cytoplasm o =

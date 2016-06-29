@@ -11,3 +11,11 @@ let of_char =
            | '1' -> Blue
 	   | '2' -> Gray
 	   |  _  -> failwith "invalid symbol" 
+
+let to_int = 
+  function | None -> 0
+           | Blue -> 1
+           | Gray -> 2
+
+let compare a b = 
+  compare (to_int a) (to_int b)

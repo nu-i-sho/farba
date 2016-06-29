@@ -1,7 +1,2 @@
-type t
-
-val height : t -> int
-val width  : t -> int
-val get    : (int * int) -> t -> Pigment.t
-
+include COLONY.T
 val of_string_array : string array -> t

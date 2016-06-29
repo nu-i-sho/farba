@@ -12,3 +12,8 @@ module Side = struct
              | LeftDown
              | RightDown
   end
+
+module ReplicationType = struct
+    type t = | Direct
+             | Inverse
+  end

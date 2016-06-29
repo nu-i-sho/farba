@@ -1,15 +1,8 @@
-module Make (Colony : COLONY.T) : sig
-
-    type t
-    type out_t = | Cell of t
-                 | Clot
-	         | Out
-
-    val turn : Hand.t -> t -> t
-    val move : t -> out_t
-    val replicate : Data.Relation.t -> t -> out_t
-    val make :  colony : Colony.t
-	    ->   index : (int * int)
+module Make (Anatomy : ANATOMY.T) : sig
+    
+    include ACTIVE_CELL.T with type anatomy_t := Anatomy.t
+    val make : anatomy : Anatomy.t
+	    ->   index : int * int
             -> nucleus : Nucleus.t
 	    -> out_t
   end

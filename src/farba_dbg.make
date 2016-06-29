@@ -23,9 +23,11 @@ ocamlc -for-pack Core -c colony.mli
 ocamlc -for-pack Core -c colony.ml
 ocamlc -for-pack Core -c tissueItem.ml
 ocamlc -for-pack Core -c index.mli
+ocamlc -for-pack Core -c tissue.mli
+ocamlc -for-pack Core -c tissue.ml
 ocamlc -I ../../bin data.cmo -for-pack Core -c index.ml
 
-ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo nucleus.cmo colony.cmo tissueItem.cmo index.cmo
+ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo nucleus.cmo colony.cmo tissueItem.cmo index.cmo tissue.cmo
 
 mv core.cmo ../../bin/core.cmo
 mv core.cmi ../../bin/core.cmi

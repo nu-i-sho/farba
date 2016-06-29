@@ -16,6 +16,6 @@ let replicate relation cytoplasm o =
       in
   
       if cytoplasm = pigment then
-	D.Pigment.White else
+	D.Pigment.None else
 	pigment
   }

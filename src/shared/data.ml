@@ -1,5 +1,5 @@
 module Pigment = struct
-    type t = | White
+    type t = | None
              | Blue
              | Gray
   end
@@ -19,7 +19,7 @@ module Relation = struct
   end
 
 module Nucleus = struct
-    (* Nucleus with white pigment is Cancer *)
+    (* Nucleus without pigment is Cancer *)
     type t = { pigment : Pigment.t;
                   gaze : Side.t
 	     }

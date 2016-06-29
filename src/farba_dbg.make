@@ -34,11 +34,13 @@ ocamlc -for-pack Core -c tissue.ml
 ocamlc -for-pack Core -c ANATOMY.ml
 ocamlc -for-pack Core -c anatomy.mli
 ocamlc -for-pack Core -c anatomy.ml
+ocamlc -for-pack Core -c anatomyCounter.mli
+ocamlc -I ../../bin data.cmo -for-pack Core -c anatomyCounter.ml
 ocamlc -I ../../bin data.cmo -for-pack Core -c ACTIVE_CELL.ml
 ocamlc -I ../../bin data.cmo -for-pack Core -c activeCell.mli
 ocamlc -I ../../bin data.cmo -for-pack Core -c activeCell.ml
 
-ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo nucleus.cmo COLONY.cmo colony.cmo borderedColony.cmo colonyCounter.cmo index.cmo TISSUE.cmo tissue.cmo ANATOMY.cmo anatomy.cmo ACTIVE_CELL.cmo activeCell.cmo
+ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo nucleus.cmo COLONY.cmo colony.cmo borderedColony.cmo colonyCounter.cmo index.cmo TISSUE.cmo tissue.cmo ANATOMY.cmo anatomy.cmo anatomyCounter.cmo ACTIVE_CELL.cmo activeCell.cmo
 
 mv core.cmo ../../bin/core.cmo
 mv core.cmi ../../bin/core.cmi

@@ -25,8 +25,10 @@ ocamlopt -for-pack Core -c colony.ml
 ocamlopt -for-pack Core -c tissueItem.ml
 ocamlopt -for-pack Core -c index.mli 
 ocamlopt -I ../../bin data.cmx -for-pack Core -c index.ml
+ocamlopt -for-pack Core -c tissue.mli
+ocamlopt -for-pack Core -c tissue.ml
 
-ocamlopt -pack -o core.cmx pigment.cmx hand.cmx nucleus.cmx colony.cmx tissueItem.cmx index.cmx
+ocamlopt -pack -o core.cmx pigment.cmx hand.cmx nucleus.cmx colony.cmx tissueItem.cmx index.cmx tissue.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

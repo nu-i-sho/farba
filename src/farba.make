@@ -29,12 +29,17 @@ ocamlopt -for-pack Core -c colonyCounter.mli
 ocamlopt -I ../../bin data.cmx -for-pack Core -c colonyCounter.ml
 ocamlopt -for-pack Core -c index.mli 
 ocamlopt -I ../../bin data.cmx -for-pack Core -c index.ml
+ocamlopt -for-pack Core -c TISSUE.ml
 ocamlopt -for-pack Core -c tissue.mli
 ocamlopt -for-pack Core -c tissue.ml
+ocamlopt -for-pack Core -c ANATOMY.ml
+ocamlopt -for-pack Core -c anatomy.mli
+ocamlopt -for-pack Core -c anatomy.ml
+ocamlopt -I ../../bin data.cmx -for-pack Core -c ACTIVE_CELL.ml
 ocamlopt -I ../../bin data.cmx -for-pack Core -c activeCell.mli
 ocamlopt -I ../../bin data.cmx -for-pack Core -c activeCell.ml
 
-ocamlopt -pack -o core.cmx pigment.cmx hand.cmx nucleus.cmx COLONY.cmx colony.cmx borderedColony.cmx colonyCounter.cmx index.cmx tissue.cmx activeCell.cmx
+ocamlopt -pack -o core.cmx pigment.cmx hand.cmx nucleus.cmx COLONY.cmx colony.cmx borderedColony.cmx colonyCounter.cmx index.cmx TISSUE.cmx tissue.cmx ANATOMY.cmx anatomy.cmx ACTIVE_CELL.cmx activeCell.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

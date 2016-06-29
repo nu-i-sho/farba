@@ -13,7 +13,8 @@ module Side = struct
              | RightDown
   end
 
-module ReplicationType = struct
+module Relation = struct
     type t = | Direct
              | Inverse
   end
+

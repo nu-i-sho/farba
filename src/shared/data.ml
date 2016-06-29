@@ -18,3 +18,9 @@ module Relation = struct
              | Inverse
   end
 
+module Nucleus = struct
+    (* Nucleus with white pigment is Cancer *)
+    type t = { pigment : Pigment.t;
+                  gaze : Side.t
+	     }
+  end

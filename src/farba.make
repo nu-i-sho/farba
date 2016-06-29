@@ -8,6 +8,12 @@ mv data.cmx ../../bin/data.cmx
 mv data.cmi ../../bin/data.cmi
 mv data.o ../../bin/data.o
 
+ocamlopt -I ../../bin data.cmx -c T.ml
+
+mv T.cmx ../../bin/T.cmx
+mv T.cmi ../../bin/T.cmi
+mv T.o ../../bin/T.o
+
 echo "----- Shared build completed -----"
 echo "------- Core build started -------"
 

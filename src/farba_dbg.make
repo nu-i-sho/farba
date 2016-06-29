@@ -7,6 +7,11 @@ ocamlc -c data.ml
 mv data.cmo ../../bin/data.cmo
 mv data.cmi ../../bin/data.cmi
 
+ocamlc -I ../../bin data.cmo -c T.ml
+
+mv T.cmo ../../bin/T.cmo
+mv T.cmi ../../bin/T.cmi
+
 echo "----- Shared build completed -----"
 echo "------- Core build started -------"
 

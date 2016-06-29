@@ -17,8 +17,10 @@ ocamlc -I ../../bin data.cmo -for-pack Core -c pigment.ml
 ocamlc -for-pack Core -c hand.ml
 ocamlc -I ../../bin data.cmo -for-pack Core -c side.mli
 ocamlc -I ../../bin data.cmo -for-pack Core -c side.ml
+ocamlc -I ../../bin data.cmo -for-pack Core -c nucleus.mli
+ocamlc -I ../../bin data.cmo -for-pack Core -c nucleus.ml
 
-ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo
+ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo nucleus.cmo
 
 mv core.cmo ../../bin/core.cmo
 mv core.cmi ../../bin/core.cmi

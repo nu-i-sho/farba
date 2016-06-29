@@ -30,3 +30,11 @@ module Cell = struct
                  nucleus : Nucleus.t
 	     }
   end
+
+module AnatomyItem = struct
+    type t = | Cytoplasm of Pigment.t
+             | Active of Cell.t
+             | Static of Cell.t
+             | Out of Nucleus.t
+             | Clot of Side.t
+  end

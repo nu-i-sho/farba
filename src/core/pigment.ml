@@ -1,4 +1,5 @@
-include Data.Pigment
+type t = Data.Pigment.t
+open Data.Pigment
 
 let opposite = 
   function | White -> White

@@ -1,4 +1,4 @@
-include module type of Data.Side
+type t = Data.Side.t
 
 val opposite : t -> t
 val turn : Hand.t -> t -> t

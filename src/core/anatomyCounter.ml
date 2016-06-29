@@ -17,30 +17,29 @@ module Make (Anatomy : ANATOMY.T) = struct
 	  if x = width then calc 0 (y + 1) acc else
 	    
 	    let open Data.Nucleus in
-	    let module P = Data.Pigment in
+	    let open Data.Pigment in
 	    ( match (Anatomy.cytoplasm (x, y) anatomy), 
 	            (Anatomy.cell (x, y) anatomy) with
 	    
-	      | P.None, Some _ 
+	      | None, Some _ 
 		-> { acc with ccell = acc.ccell + 1 }
 
-	      | (P.Blue | P.Gray), None   
+	      | (Blue | Gray), None   
 		-> { acc with ucyto = acc.ucyto + 1;
                               pcyto = acc.pcyto + 1 
 		   }
 
-	      | (P.Blue | P.Gray), Some { pigment = P.None }
-		-> { acc with ccell = acc.ccell + 1; 
-                              pcyto = acc.pcyto + 1
-		   }
-
-	      | (P.Blue | P.Gray), 
-		Some { pigment = (P.Blue | P.Gray) }
+	      | (Blue | Gray), Some { pigment = (Blue | Gray) }
 		-> { acc with hcell = acc.hcell + 1;
 			      pcyto = acc.pcyto + 1
 		 }
 
-	      | P.None, None
+	      | (Blue | Gray), Some { pigment = None }
+		-> { acc with ccell = acc.ccell + 1; 
+                              pcyto = acc.pcyto + 1
+		   }
+
+	      | None, None
 		-> acc
 
 	    ) |> calc (x + 1) y

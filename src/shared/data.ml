@@ -24,3 +24,9 @@ module Nucleus = struct
                   gaze : Side.t
 	     }
   end
+
+module Cell = struct
+    type t = { cytoplasm : Pigment.t;
+                 nucleus : Nucleus.t
+	     }
+  end

@@ -21,8 +21,9 @@ ocamlc -I ../../bin data.cmo -for-pack Core -c nucleus.mli
 ocamlc -I ../../bin data.cmo -for-pack Core -c nucleus.ml
 ocamlc -for-pack Core -c colony.mli
 ocamlc -for-pack Core -c colony.ml
+ocamlc -for-pack Core -c nucleusGridItem.ml
 
-ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo nucleus.cmo colony.cmo
+ocamlc -pack -o core.cmo pigment.cmo hand.cmo side.cmo nucleus.cmo colony.cmo nucleusGridItem.cmo
 
 mv core.cmo ../../bin/core.cmo
 mv core.cmi ../../bin/core.cmi

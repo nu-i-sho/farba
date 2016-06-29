@@ -23,8 +23,9 @@ ocamlopt -I ../../bin data.cmx -for-pack Core -c nucleus.ml
 ocamlopt -for-pack Core -c colony.mli 
 ocamlopt -for-pack Core -c colony.ml
 ocamlopt -for-pack Core -c nucleusGridItem.ml
+ocamlopt -for-pack Core -c NUCLEUS_GRID.ml
 
-ocamlopt -pack -o core.cmx pigment.cmx hand.cmx nucleus.cmx colony.cmx nucleusGridItem.cmx
+ocamlopt -pack -o core.cmx pigment.cmx hand.cmx nucleus.cmx colony.cmx nucleusGridItem.cmx NUCLEUS_GRID.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

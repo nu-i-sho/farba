@@ -1,4 +1,5 @@
-include Data.Side
+type t = Data.Side.t
+open Data.Side
 
 let opposite = 
   function | Up        -> Down

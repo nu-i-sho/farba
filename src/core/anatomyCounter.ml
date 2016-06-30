@@ -19,7 +19,7 @@ module Make (Anatomy : ANATOMY.T) = struct
 	    let open Data.Nucleus in
 	    let open Data.Pigment in
 	    ( match (Anatomy.cytoplasm (x, y) anatomy), 
-	            (Anatomy.cell (x, y) anatomy) with
+	            (Anatomy.nucleus   (x, y) anatomy) with
 	    
 	      | None, Some _ 
 		-> { acc with ccell = acc.ccell + 1 }

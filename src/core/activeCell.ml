@@ -2,9 +2,9 @@ module Make (Anatomy : ANATOMY.T) = struct
 
     type t = { anatomy : Anatomy.t;
                nucleus : Nucleus.t;
-                 index : Index.t
+                 index : int * int
 	     }
-
+ 
     type out_t = | Cell of t
                  | Clot of Anatomy.t
                  | Out  of Anatomy.t
@@ -13,30 +13,35 @@ module Make (Anatomy : ANATOMY.T) = struct
                ~index:i
              ~nucleus:n = 
 
-      if Anatomy.is_out i a then Out a else
+      if Anatomy.is_out i a then 
+	Out (Anatomy.set_out i n a) else
 	let n = Nucleus.inject (Anatomy.cytoplasm i a) n in
 	Cell { anatomy = Anatomy.set i (Some n) a;
                nucleus = n;
 	         index = i
 	     }
-  
+
+    let index o   = o.index
+    let anatomy o = o.anatomy
+
     let turn hand o =
       let n = Nucleus.turn hand o.nucleus in
-      let cell = Some n in
-      { o with anatomy = Anatomy.set o.index cell o.anatomy;
+      let item = Some n in
+      { o with anatomy = Anatomy.set o.index item o.anatomy;
 	       nucleus = n
       }
 
     let transform next o = 
       let gaze  = Data.Nucleus.(o.nucleus.gaze) in
-      let index = Index.move gaze o.index in
-      
-      if Anatomy.is_out index o.anatomy 
-      then Out (Anatomy.out o.anatomy) 
-      else match Anatomy.cell index o.anatomy with
-	   | Some _ -> Clot (Anatomy.clot o.anatomy)
-	   | None   -> let nucleus, anatomy = next index in
-		       Cell { nucleus; anatomy; index }
+      let i = Index.move gaze o.index in
+      let nucleus, anatomy = next i in
+
+      if Anatomy.is_out i anatomy then 
+	Out (Anatomy.set_out i nucleus anatomy) else 
+	match Anatomy.nucleus i anatomy with
+	| Some _ -> let gaze = Data.Nucleus.(nucleus.gaze) in
+	            Clot (Anatomy.set_clot i gaze anatomy)
+	| None   -> Cell { nucleus; anatomy; index = i }
 				   
     let move o =
       let next i =

@@ -15,13 +15,13 @@ module Merge (Colony : COLONY.T)
       y < 0 || y >= (Colony.height o.colony)
   
     let cytoplasm i o = Colony.get i o.colony
-    let cell      i o = Tissue.get i o.tissue
+    let nucleus   i o = Tissue.get i o.tissue
  
     let set i v o = 
       { o with tissue = Tissue.set i v o.tissue }
 
-    let clot o = { o with clotted = true }
-    let out  o = { o with outed = true }
+    let set_clot _ _ o = { o with clotted = true }
+    let set_out  _ _ o = { o with outed = true }
 
     let clotted o = o.clotted
     let outed   o = o.outed

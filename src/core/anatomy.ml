@@ -26,11 +26,9 @@ module Merge (Colony : COLONY.T)
     let clotted o = o.clotted
     let outed   o = o.outed
 
-    let merge ~colony:c
-              ~tissue:t =
-      {  tissue = t;
-	 colony = c;
-	clotted = false;
-          outed = false
-      }
+    let make colony = {  colony;
+			 tissue = Tissue.empty;
+			clotted = false;
+			  outed = false
+		      }
   end

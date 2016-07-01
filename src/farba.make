@@ -41,13 +41,15 @@ ocamlopt -for-pack Core -c tissue.ml
 ocamlopt -for-pack Core -c ANATOMY.ml
 ocamlopt -for-pack Core -c anatomy.mli
 ocamlopt -for-pack Core -c anatomy.ml
+ocamlopt -I ../../bin T.cmx -for-pack Core -c observableAnatomy.mli
+ocamlopt -I ../../bin T.cmx data.cmx -for-pack Core -c observableAnatomy.ml
 ocamlopt -for-pack Core -c anatomyCounter.mli
 ocamlopt -I ../../bin data.cmx -for-pack Core -c anatomyCounter.ml
 ocamlopt -I ../../bin data.cmx -for-pack Core -c ACTIVE_CELL.ml
 ocamlopt -I ../../bin data.cmx -for-pack Core -c activeCell.mli
 ocamlopt -I ../../bin data.cmx -for-pack Core -c activeCell.ml
 
-ocamlopt -pack -o core.cmx pigment.cmx hand.cmx nucleus.cmx COLONY.cmx colony.cmx borderedColony.cmx colonyCounter.cmx index.cmx TISSUE.cmx tissue.cmx ANATOMY.cmx anatomy.cmx anatomyCounter.cmx ACTIVE_CELL.cmx activeCell.cmx
+ocamlopt -pack -o core.cmx pigment.cmx hand.cmx nucleus.cmx COLONY.cmx colony.cmx borderedColony.cmx colonyCounter.cmx index.cmx TISSUE.cmx tissue.cmx ANATOMY.cmx anatomy.cmx observableAnatomy.cmx anatomyCounter.cmx ACTIVE_CELL.cmx activeCell.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

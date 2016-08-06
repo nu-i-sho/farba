@@ -12,10 +12,12 @@ ocamlopt -for-pack Core -c dotsOfDiceNodeMap.mli
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDiceNodeMap.ml
 ocamlopt -I ../../bin -for-pack Core -c pigment.mli
 ocamlopt -I ../../bin -for-pack Core -c pigment.ml
+ocamlopt -for-pack Core -c hand.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
-LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx 
+LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx hand.cmx \
+
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

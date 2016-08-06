@@ -21,11 +21,15 @@ ocamlopt -for-pack Core -c index.mli
 ocamlopt -I ../../bin -for-pack Core -c index.ml
 ocamlopt -for-pack Core -c intMap.mli
 ocamlopt -for-pack Core -c intMap.ml
+ocamlopt -for-pack Core -c matrix.mli
+ocamlopt -for-pack Core -c matrix.ml
+ocamlopt -for-pack Core -c level.mli
+ocamlopt -I ../../bin -for-pack Core -c level.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
 LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx hand.cmx \
-side.cmx nucleus.cmx index.cmx intMap.cmx
+side.cmx nucleus.cmx index.cmx intMap.cmx matrix.cmx level.cmx \
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

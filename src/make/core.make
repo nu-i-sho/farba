@@ -6,9 +6,10 @@ ocamlopt -for-pack Core -c MODULE.ml
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.mli
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.ml 
 ocamlopt -for-pack Core -c DOTS_OF_DICE_NODE.ml
+ocamlopt -for-pack Core -c LEVEL_SOURCE.ml
 
 ocamlopt -pack -o core.cmx \
-MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx
+MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx
 
 
 mv core.cmx ../../bin/core.cmx

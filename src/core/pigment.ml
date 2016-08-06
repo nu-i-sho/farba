@@ -2,20 +2,20 @@ type t = Data.Pigment.t
 open Data.Pigment
 
 let opposite = 
-  function | None -> None
-           | Blue -> Gray
-           | Gray -> Blue
+  function | White -> White
+           | Blue  -> Gray
+           | Gray  -> Blue
 
 let of_char = 
-  function | '0' -> None
+  function | '0' -> White
            | '1' -> Blue
-	   | '2' -> Gray
-	   |  _  -> failwith "invalid symbol" 
+           | '2' -> Gray
+           |  _  -> failwith "invalid symbol" 
 
 let to_int = 
-  function | None -> 0
-           | Blue -> 1
-           | Gray -> 2
+  function | White -> 0
+           | Blue  -> 1
+           | Gray  -> 2
 
 let compare a b = 
   compare (to_int a) (to_int b)

@@ -15,11 +15,13 @@ ocamlopt -I ../../bin -for-pack Core -c pigment.ml
 ocamlopt -for-pack Core -c hand.ml
 ocamlopt -I ../../bin -for-pack Core -c side.mli
 ocamlopt -I ../../bin -for-pack Core -c side.ml
+ocamlopt -I ../../bin -for-pack Core -c nucleus.mli
+ocamlopt -I ../../bin -for-pack Core -c nucleus.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
 LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx hand.cmx \
-side.cmx
+side.cmx nucleus.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

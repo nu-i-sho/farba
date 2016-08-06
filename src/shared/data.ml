@@ -59,3 +59,12 @@ module WeaverActCounter = struct
     type t = | Field o Field.t
              | Summary of Summary.t
   end
+
+module DotsOfDice = struct
+    type t = | OOOOOO
+             | OOOOO
+             | OOOO
+             | OOO
+             | OO
+             | O
+  end

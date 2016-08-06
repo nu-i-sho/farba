@@ -26,9 +26,9 @@ let of_array src =
 let pair a b = 
   a, b
 
-let of_str_list src =
+let of_string_list src =
 
-  let add (i, v) = IntMap.add i v in 
+  let add acc (i, v) = IntMap.add i v acc in 
   let src = src |> List.mapi pair
                 |> List.fold_left add IntMap.empty 
   in
@@ -36,6 +36,7 @@ let of_str_list src =
   let get_char (x, y) = (IntMap.find y src).[x]
   and height = IntMap.cardinal src 
   and width  = src |> IntMap.choose
+                   |> snd
                    |> String.length in
 
   { get_base = get_char;
@@ -44,16 +45,16 @@ let of_str_list src =
        width;
   }
 
-let of_str_arr src = 
+let of_string_array src = 
   let get_char (x, y) = src.(y).[x] in
   { get_base = get_char;
     ovveride = Index.Map.empty;
       height = Array.length src;
-       width = String.length src.[o]
+       width = String.length src.(0)
   }
 
-let height o = Base.height o.base
-let width  o = Base.width  o.base
+let height o = o.height
+let width  o = o.width
 
 let set i v o = 
   { o with ovveride = 
@@ -69,7 +70,7 @@ let set i v o =
 let get i o = 
   if Index.Map.mem i o.ovveride then
     Index.Map.find i o.ovveride else
-    get_base i
+    o.get_base i
 
 let in_range (x, y) o =
   x >= 0 && x < (width o) &&
@@ -81,17 +82,17 @@ let is_out i o =
 let map f o =  
  let mapped i = f (get i o) in
   { get_base = mapped;
-    ovveride = Map.empty;
-      height = height a;
-       width = width a
+    ovveride = Index.Map.empty;
+      height = height o;
+       width = width o
   }
 
 let mapi f o =  
  let mapped i = f i (get i o) in
   { get_base = mapped;
     ovveride = Index.Map.empty;
-      height = height a;
-       width = width a
+      height = height o;
+       width = width o
   }
 
 let map2 f a b = 
@@ -119,7 +120,7 @@ let foldi f acc o =
   let rec fold ((x, y) as i) acc =
     if y = h then acc else
       if x = w then fold (0, (y + 1)) acc else
-	fold ((x + 1), y) (f acc i (get i o))
+	fold ((x + 1), y) (f i acc (get i o))
   in
   fold (0, 0) acc
 
@@ -139,7 +140,7 @@ let iteri f o =
 
 let index f o = 
   let w = width o and h = height o in
-  let find ((x, y) as i) =
+  let rec find ((x, y) as i) =
     if y = h            then None 
     else if x = w       then find (0, (y + 1)) 
     else if f (get i o) then Some i 

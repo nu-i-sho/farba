@@ -16,9 +16,8 @@ val zip      : 'a t -> 'b t -> ('a * 'b) t
 val iter     : ('a -> unit) -> 'a t -> unit
 val iteri    : ((int * int) -> 'a -> unit) -> 'a t -> unit
 val index    : ('a -> bool) -> 'a t -> (int * int) option
-val fold     : ('acc -> 'a -> 'acc) -> 'acc -> 'a t -> 'acc
-val foldi    : ((int * int) -> 'acc -> 'a -> 'acc) -> 'acc -> 'a t
-             -> 'acc
+val fold     : ('a -> 'b -> 'a) -> 'a -> 'b t -> 'a
+val foldi    : ('a -> (int * int) -> 'b -> 'a) -> 'a -> 'b t -> 'a
 
 val of_string_array : string array -> char t
 val of_string_list  : string list  -> char t

@@ -1,5 +1,5 @@
 module Pigment = struct
-    type t = | WHite
+    type t = | White
              | Blue
              | Gray
   end
@@ -56,7 +56,7 @@ module WeaverActCounter = struct
                  | All
       end
 
-    type t = | Field o Field.t
+    type t = | Field of Field.t
              | Summary of Summary.t
   end
 

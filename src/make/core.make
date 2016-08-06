@@ -5,8 +5,11 @@ cd ../core
 ocamlopt -for-pack Core -c MODULE.ml
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.mli
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.ml 
+ocamlopt -for-pack Core -c DOTS_OF_DICE_NODE.ml
 
-ocamlopt -pack -o core.cmx MODULE.cmx dotsOfDice.cmx
+ocamlopt -pack -o core.cmx \
+MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx
+
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

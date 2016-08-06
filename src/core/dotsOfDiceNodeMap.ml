@@ -1,7 +1,6 @@
 module Make (ITEM : MODULE.T) = struct
-    module NODE = DOTS_OF_DICE_NODE.MAKE (ITEM)
-    module type E = NODE.E
-    module type T = NODE.T
+    module type E = ITEM.T
+    module type T = DOTS_OF_DICE_NODE.MAKE (ITEM).T
 
     type e = (module E)
     type t = (module T)

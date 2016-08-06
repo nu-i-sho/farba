@@ -1,5 +1,5 @@
 module Pigment = struct
-    type t = | None
+    type t = | WHite
              | Blue
              | Gray
   end

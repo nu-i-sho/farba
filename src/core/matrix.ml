@@ -120,7 +120,7 @@ let foldi f acc o =
   let rec fold ((x, y) as i) acc =
     if y = h then acc else
       if x = w then fold (0, (y + 1)) acc else
-	fold ((x + 1), y) (f i acc (get i o))
+	fold ((x + 1), y) (f acc i (get i o))
   in
   fold (0, 0) acc
 

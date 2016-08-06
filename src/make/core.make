@@ -3,8 +3,10 @@ echo "------- Core build started -------"
 cd ../core
 
 ocamlopt -for-pack Core -c MODULE.ml
+ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.mli
+ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.ml 
 
-ocamlopt -pack -o core.cmx MODULE.cmx
+ocamlopt -pack -o core.cmx MODULE.cmx dotsOfDice.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

@@ -12,6 +12,18 @@ let of_map height width default src =
        width
   }
 
+let optional height width src =
+  let from_src i =
+    if Index.Map.mem i src then
+      Some (Index.Map.find i src) else
+      None in
+    
+  { get_base = from_src;
+    ovveride = Index.Map.empty;
+      height;
+       width
+  }
+
 let empty height width default =
   of_map height width default Index.Map.empty 
 

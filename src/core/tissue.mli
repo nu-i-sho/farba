@@ -1,6 +1,8 @@
 type t
 
 val load        : Level.t -> t
+val height      : t -> int
+val width       : t -> int
 val items       : t -> Data.TissueItem.t Matrix.t
 val fauna       : t -> Nucleus.t Index.Map.t
 val flora       : t -> Pigment.t Index.Map.t

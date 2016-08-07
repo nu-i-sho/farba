@@ -7,14 +7,14 @@ let turn hand o =
 
 let inject cytoplasm o =
   { o with pigment = if cytoplasm = o.pigment then
-		       Data.Pigment.None else
+		       Data.Pigment.White else
 		       o.pigment
   }
 
-let replicate relation cytoplasm o =
+let replicate relation o =
   {    gaze = Side.opposite o.gaze;
     pigment = let open Data.Relation in
               match relation with
 	      | Inverse -> Pigment.opposite o.pigment
 	      | Direct  -> o.pigment 
-  } |> inject cytoplasm
+  }

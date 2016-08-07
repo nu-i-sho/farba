@@ -25,6 +25,8 @@ ocamlopt -for-pack Core -c matrix.mli
 ocamlopt -for-pack Core -c matrix.ml
 ocamlopt -for-pack Core -c level.mli
 ocamlopt -I ../../bin -for-pack Core -c level.ml
+ocamlopt -I ../../bin -for-pack Core -c tissue.mli
+ocamlopt -I ../../bin -for-pack Core -c tissue.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \

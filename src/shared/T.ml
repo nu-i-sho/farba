@@ -1,11 +1,12 @@
-module type ANATOMY_OBSERVER = sig
+module type TISSUE_OBSERVER = sig
     type t
 
-    val set     : (int * int) -> Data.Pigment.t -> t -> t
-    val set_out : (int * int) -> Data.Nucleus.t -> t -> t
+    val init    : int -> int -> t
+    val set     : (int * int) -> Data.TissueItem.t -> t -> t
     val reset   : (int * int)
-               -> previous: Data.AnatomyItem.t
-               ->  current: Data.AnatomyItem.t
+               -> Data.TissueItem.t
+               -> Data.TissueItem.t
                -> t
                -> t
   end
+

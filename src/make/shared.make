@@ -3,7 +3,7 @@ echo "------ Shared build started ------"
 cd ../shared
 
 ocamlopt -c data.ml
-ocamlopt data.cmx -c T.ml
+ocamlopt -c T.ml
 
 mv *.cmx ../../bin/
 mv *.cmi ../../bin/

@@ -27,11 +27,13 @@ ocamlopt -for-pack Core -c level.mli
 ocamlopt -I ../../bin -for-pack Core -c level.ml
 ocamlopt -I ../../bin -for-pack Core -c tissue.mli
 ocamlopt -I ../../bin -for-pack Core -c tissue.ml
+ocamlopt -for-pack Core -c weavingResult.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
 LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx hand.cmx \
 side.cmx nucleus.cmx index.cmx intMap.cmx matrix.cmx level.cmx \
+tissue.cmx weavingResult.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

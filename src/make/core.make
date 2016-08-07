@@ -35,13 +35,15 @@ ocamlopt -for-pack Core -c weaver.mli
 ocamlopt -I ../../bin -for-pack Core -c weaver.ml
 ocamlopt -for-pack Core -c countableWeaver.mli
 ocamlopt -I ../../bin -for-pack Core -c countableWeaver.ml
+ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.mli
+ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
 LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx hand.cmx \
 side.cmx nucleus.cmx index.cmx intMap.cmx matrix.cmx level.cmx \
 tissue.cmx weavingResult.cmx weaverActsCounter.cmx WEAVER.cmx \
-weaver.cmx countableWeaver.cmx
+weaver.cmx countableWeaver.cmx tissueObservableWeaver.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

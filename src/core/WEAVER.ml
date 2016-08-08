@@ -8,9 +8,3 @@ module type T = sig
     val replicate : Data.Relation.t -> t -> t WeavingResult.OfMove.t
 end
 
-module COUNTABLE = struct
-    module type T = sig
-	include T
-	val acts_counter : t -> Data.WeaverActsStatistics.t
-      end
-  end 

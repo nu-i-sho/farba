@@ -1,5 +1,5 @@
-type t = Data.WeaverActsStatistics.t
-open Data.WeaverActsStatistics
+type t = Data.Statistics.OfActs.t
+open Data.Statistics.OfActs
 
 let zero = {      dummy_moves = 0;
                  dummy_passes = 0;

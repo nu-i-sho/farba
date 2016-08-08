@@ -3,6 +3,7 @@ type t = { active : int * int;
             width : int;
             flora : Pigment.t Index.Map.t;
             fauna : Nucleus.t Index.Map.t;
+             path : LevelPath.t
 	 }
 
     let active o = o.active
@@ -10,7 +11,8 @@ type t = { active : int * int;
     let width  o = o.width
     let flora  o = o.flora
     let fauna  o = o.fauna
-
+    let path   o = o.path
+                 
 module Loader = struct
     module TREE = LEVELS_SOURCE_TREE
     module Make (LevelsSourceTree : TREE.ROOT.T) = struct
@@ -55,12 +57,13 @@ module Loader = struct
                                  
                           |  _  -> failwith "invalid char")
 
-        let load branch branchlet leaf =
+        let load path =
           let root = (module LevelsSourceTree : TREE.ROOT.T) in
+          let open LevelPath in
           let module Src = 
-	    (val (root |> Root.get branch
-                       |> Branch.get branchlet
-                       |> Branchlet.get leaf) : TREE.LEAF.T) in
+	    (val (root |> Root.get path.branch
+                       |> Branch.get path.branchlet
+                       |> Branchlet.get path.leaf) : TREE.LEAF.T) in
 
           let empty = Index.Map.empty
           and flora = Lazy.force Src.flora
@@ -83,6 +86,7 @@ module Loader = struct
 	    height = flora |> List.length;
              width = flora |> List.hd
                            |> String.length;
+              path
           }
       end
   end

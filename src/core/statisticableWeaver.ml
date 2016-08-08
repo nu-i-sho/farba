@@ -11,8 +11,11 @@ let extend weaver =
 let tissue o = 
   Weaver.tissue o.base
 
-let acts_statistics o = 
-  Counter.calculate o.counter
+let statistics o = 
+  Data.Statistics.(
+    { tissue = TissueCounter.calculate_for (tissue o);
+        acts = Counter.calculate o.counter
+    })
 
 let inc field o = 
   { o with counter = Counter.increment field o.counter }

@@ -1,49 +1,36 @@
-open Data.WeaverActCounter
+type t = Data.WeaverActsStatistics.t
+open Data.WeaverActsStatistics
 
-module ComparableField = struct 
-    type t = Field.t
+let zero = {      dummy_moves = 0;
+                 dummy_passes = 0;
+             dummy_replicates = 0;
+                        turns = 0;
+                        moves = 0;
+                       passes = 0;
+                   replicates = 0;
+                    effective = 0;
+                      dummies = 0;
+                      summary = 0
+           }
+  
+let increment act o =
+  let open WeaverAct in
+  match act with
+  | Turn           -> { o with turns = o.turns + 1 }
+  | Move           -> { o with moves = o.moves + 1 }
+  | Pass           -> { o with passes = o.passes + 1 }
+  | Replicate      -> { o with replicates = o.replicates + 1 }
+  | DummyMove      -> { o with dummy_moves = o.dummy_moves + 1 }
+  | DummyPass      -> { o with dummy_passes = o.dummy_passes + 1 }
+  | DummyReplicate ->
+     { o with dummy_replicates = o.dummy_replicates + 1 }
 
-    let to_int = 
-      Field.( function | Turn           -> 0
-                       | Move           -> 1
-		       | Pass           -> 2
-		       | Replicate      -> 3
-		       | DummyMove      -> 4
-		       | DummyPass      -> 5
-		       | DummyReplicate -> 6 )
-    let compare x y =
-      compare (to_int x) (to_int y)
-  end
- 
-module CMap = Map.Make (ComparableField)
-type t = int CMap.t
-
-let zero =
-  Field.( 
-    CMap.empty |> CMap.add Turn 0 
-               |> CMap.add Move 0
-	       |> CMap.add Pass 0
-	       |> CMap.add Replicate 0
-	       |> CMap.add DummyMove 0
-	       |> CMap.add DummyPass 0
-               |> CMap.add DummyReplicate 0
-  )
-
-let increment counter o =  
-  o |> CMap.remove counter
-    |> CMap.add counter ((CMap.find counter o) + 1)
-
-let rec get counter o = 
-  let open Field in 
-  let open Summary in
-  match counter with  
-  | Field x           -> CMap.find x o 
-  | Summary Effective -> (get (Field Turn) o)
-                       + (get (Field Move) o)
-                       + (get (Field Pass) o)
-                       + (get (Field Replicate) o)
-  | Summary Dummy     -> (get (Field DummyMove) o)
-                       + (get (Field DummyPass) o)
-                       + (get (Field DummyReplicate) o)
-  | Summary All       -> (get (Summary Effective) o)
-                       + (get (Summary Dummy) o)
+let calculate o =
+  let effective, dummies =
+    (o.turns + o.moves + o.passes + o.replicates),
+    (o.dummy_moves + o.dummy_passes + o.dummy_replicates) in
+  let summary = effective + dummies in
+  { o with effective;
+           dummies;
+           summary
+  }

@@ -39,25 +39,18 @@ module TissueItem = struct
              | Out
   end
 
-module WeaverActCounter = struct
-    module Field = struct
-        type t = | Turn
-                 | Move
-                 | Pass
-                 | Replicate
-                 | DummyMove
-                 | DummyPass
-                 | DummyReplicate
-      end
-
-    module Summary = struct
-        type t = | Effective
-                 | Dummies
-                 | All
-      end
-
-    type t = | Field of Field.t
-             | Summary of Summary.t
+module WeaverActsStatistics = struct
+    type t = {      dummy_moves : int;
+                   dummy_passes : int;
+               dummy_replicates : int;
+                          turns : int;
+                          moves : int;
+                         passes : int;
+                     replicates : int;
+                      effective : int;
+                        dummies : int;
+                        summary : int
+             }
   end
 
 module DotsOfDice = struct

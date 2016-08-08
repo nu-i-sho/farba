@@ -1,6 +1,6 @@
 module Subscribe (Observer : T.TISSUE_OBSERVER) = struct
     
-    module Weaver = CountableWeaver
+    module Weaver = StatisticableWeaver
     type t = { observer : Observer.t;
                    base : Weaver.t
 	     }
@@ -18,8 +18,8 @@ module Subscribe (Observer : T.TISSUE_OBSERVER) = struct
                           |> Matrix.foldi set observer 
       }
 
-    let acts_statistics o =
-      Weaver.acts_statistics o.base
+    let statistics o =
+      Weaver.statistics o.base
       
     let tissue o = Weaver.tissue o.base
     let index  o = o |> tissue

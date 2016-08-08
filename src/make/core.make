@@ -32,23 +32,24 @@ ocamlopt -for-pack Core -c weavingResult.ml
 ocamlopt -I ../../bin -for-pack Core -c weaverActsCounter.mli
 ocamlopt -I ../../bin -for-pack Core -c weaverActsCounter.ml
 ocamlopt -I ../../bin -for-pack Core -c WEAVER.ml
-ocamlopt -I ../../bin -for-pack Core -c COUNTABLE_WEAVER.ml
+ocamlopt -I ../../bin -for-pack Core -c STATISTICABLE_WEAVER.ml
 ocamlopt -for-pack Core -c weaver.mli
 ocamlopt -I ../../bin -for-pack Core -c weaver.ml
-ocamlopt -for-pack Core -c countableWeaver.mli
-ocamlopt -I ../../bin -for-pack Core -c countableWeaver.ml
-ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.mli
-ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.ml
 ocamlopt -I ../../bin -for-pack Core -c tissueCounter.mli
 ocamlopt -I ../../bin -for-pack Core -c tissueCounter.ml
+ocamlopt -for-pack Core -c statisticableWeaver.mli
+ocamlopt -I ../../bin -for-pack Core -c statisticableWeaver.ml
+ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.mli
+ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
 LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx hand.cmx \
 side.cmx nucleus.cmx index.cmx intMap.cmx matrix.cmx level.cmx \
 tissue.cmx weaverAct.cmx weavingResult.cmx weaverActsCounter.cmx \
-WEAVER.cmx COUNTABLE_WEAVER.cmx weaver.cmx countableWeaver.cmx \
-tissueObservableWeaver.cmx tissueCounter.cmx
+WEAVER.cmx STATISTICABLE_WEAVER.cmx weaver.cmx \
+tissueCounter.cmx statisticableWeaver.cmx \
+tissueObservableWeaver.cmx 
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

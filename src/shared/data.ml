@@ -63,8 +63,8 @@ module Statistics = struct
                  }
       end
 
-    type t = { of_tissue : OfTissue.t; 
-                 of_acts : OfActs.t
+    type t = { tissue : OfTissue.t; 
+                 acts : OfActs.t
              }
   end
 

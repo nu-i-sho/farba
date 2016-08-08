@@ -12,7 +12,6 @@ ocamlopt -for-pack Core -c dotsOfDiceNodeMap.mli
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDiceNodeMap.ml
 ocamlopt -I ../../bin -for-pack Core -c pigment.mli
 ocamlopt -I ../../bin -for-pack Core -c pigment.ml
-ocamlopt -for-pack Core -c hand.ml
 ocamlopt -I ../../bin -for-pack Core -c side.mli
 ocamlopt -I ../../bin -for-pack Core -c side.ml
 ocamlopt -I ../../bin -for-pack Core -c nucleus.mli
@@ -44,7 +43,7 @@ ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
-LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx hand.cmx \
+LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx \
 side.cmx nucleus.cmx index.cmx intMap.cmx matrix.cmx level.cmx \
 tissue.cmx weaverAct.cmx weavingResult.cmx weaverActsCounter.cmx \
 WEAVER.cmx STATISTICABLE_WEAVER.cmx weaver.cmx \

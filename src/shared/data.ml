@@ -103,3 +103,9 @@ module CallStackPoint = struct
                index : int
              }
   end
+
+module RuntimeMode = struct
+    type t = | Run
+             | GoTo
+             | Return
+  end

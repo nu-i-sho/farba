@@ -1,3 +1,2 @@
-type t = { installation_dir : string;
-               programs_dir : string
-         }
+let installation_dir = ""
+let programs_dir = ""

@@ -11,6 +11,6 @@ end
 module COUNTABLE = struct
     module type T = sig
 	include T
-	val acts_counter : t -> WeaverActsCounter.t
+	val acts_counter : t -> Data.WeaverActsStatistics.t
       end
   end 

@@ -22,3 +22,11 @@ let increment =
            | OOO -> OOOO
            | OO -> OOO
            | O -> OO
+
+let to_string =
+  function | OOOOOO -> "OOOOOO"
+           | OOOOO -> "OOOOO"
+           | OOOO -> "OOOO"
+           | OOO -> "OOO"
+           | OO -> "OO"
+           | O -> "O"

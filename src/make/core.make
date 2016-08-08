@@ -44,6 +44,7 @@ ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.ml
 ocamlopt -I ../../bin -for-pack Core -c callStack.mli
 ocamlopt -I ../../bin -for-pack Core -c callStack.ml
 ocamlopt -I ../../bin -for-pack Core -c config.ml
+ocamlopt -I ../../bin -for-pack Core -c programLabel.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
@@ -52,7 +53,8 @@ side.cmx nucleus.cmx index.cmx intMap.cmx matrix.cmx level.cmx \
 tissue.cmx weaverAct.cmx weavingResult.cmx weaverActsCounter.cmx \
 WEAVER.cmx STATISTICABLE_WEAVER.cmx weaver.cmx \
 tissueCounter.cmx statisticableWeaver.cmx \
-tissueObservableWeaver.cmx callStack.cmx config.cmx
+tissueObservableWeaver.cmx callStack.cmx config.cmx \
+programLabel.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

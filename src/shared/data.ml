@@ -39,17 +39,32 @@ module TissueItem = struct
              | Out
   end
 
-module WeaverActsStatistics = struct
-    type t = {      dummy_moves : int;
-                   dummy_passes : int;
-               dummy_replicates : int;
-                          turns : int;
-                          moves : int;
-                         passes : int;
-                     replicates : int;
-                      effective : int;
-                        dummies : int;
-                        summary : int
+module Statistics = struct
+    module OfActs = struct
+        type t = {      dummy_moves : int;
+                       dummy_passes : int;
+                   dummy_replicates : int;
+                              turns : int;
+                              moves : int;
+                             passes : int;
+                         replicates : int;
+                          effective : int;
+                            dummies : int;
+                            summary : int
+                 }
+      end
+                  
+    module OfTissue = struct
+        type t = { healthy_cells_capacity : int;
+                            healthy_cells : int;
+                             cancer_cells : int;
+                                is_cloted : int;
+                                 is_outed : int;
+                 }
+      end
+
+    type t = { of_tissue : OfTissue.t; 
+                 of_acts : OfActs.t
              }
   end
 

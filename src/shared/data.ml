@@ -76,3 +76,9 @@ module DotsOfDice = struct
              | OO
              | O
   end
+
+module Hand = struct
+    type t = | Left
+             | Right
+  end
+

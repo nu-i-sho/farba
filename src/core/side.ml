@@ -10,7 +10,7 @@ let opposite =
            | RightDown -> LeftUp
 
 let turn = 
-  function | Hand.Left  -> 
+  function | Data.Hand.Left  -> 
 	      ( function | Up        -> LeftUp
 	                 | LeftUp    -> LeftDown
 			 | LeftDown  -> Down
@@ -18,7 +18,7 @@ let turn =
 			 | RightDown -> RightUp
 			 | RightUp   -> Up 
 	      )
-           | Hand.Right -> 
+           | Data.Hand.Right -> 
 	      ( function | Up        -> RightUp
                          | RightUp   -> RightDown
 			 | RightDown -> Down

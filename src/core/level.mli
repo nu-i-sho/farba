@@ -7,7 +7,7 @@ val flora  : t -> Pigment.t Index.Map.t
 val fauna  : t -> Nucleus.t Index.Map.t
 
 module Loader : sig
-    module Make (Root : LEVELS_SOURCE_TREE.ROOT.T) : sig
+    module Make (LevelsSourceTree : LEVELS_SOURCE_TREE.ROOT.T) : sig
         val load : DotsOfDice.t -> DotsOfDice.t -> DotsOfDice.t -> t
       end
   end

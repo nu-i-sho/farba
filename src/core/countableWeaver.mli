@@ -1,2 +1,2 @@
-include WEAVER.COUNTABLE.T
+include COUNTABLE_WEAVER.T
 val extend : Weaver.t -> t

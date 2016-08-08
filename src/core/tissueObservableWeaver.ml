@@ -8,16 +8,18 @@ module Subscribe (Observer : T.TISSUE_OBSERVER) = struct
     let subscribe observer weaver =
       {     base = weaver;
 	observer = let tissue = Weaver.tissue weaver in
-		   let h = Tissue.height tissue  
-		   and w = Tissue.width tissue in
-	           let observer = Observer.init h w observer 
-	           and items = Tissue.items tissue
-	           and set acc i v = Observer.set i v acc in
-		   Matrix.foldi set observer items 
+		   let observer =
+                     Observer.init (Tissue.height tissue)
+                                   (Tissue.width  tissue)
+                                    observer
+	           and set acc i v =
+                     Observer.set i v acc in
+		   tissue |> Tissue.items
+                          |> Matrix.foldi set observer 
       }
 
-    let acts_counter o =
-      Weaver.acts_counter o.base
+    let acts_statistics o =
+      Weaver.acts_statistics o.base
       
     let tissue o = Weaver.tissue o.base
     let index  o = o |> tissue
@@ -29,7 +31,6 @@ module Subscribe (Observer : T.TISSUE_OBSERVER) = struct
       Data.Nucleus.((o |> tissue
                        |> Tissue.fauna
                        |> Index.Map.find (index o)).gaze)
-
     let turn hand o =
       let i = index o in
       let previous = item i o

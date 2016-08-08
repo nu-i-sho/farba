@@ -1,5 +1,5 @@
 type t
 
 val zero      : t
-val get       : Data.WeaverActCounter.t -> t -> int
-val increment : Data.WeaverActCounter.Field.t -> t -> t
+val calculate : t -> Data.WeaverActsStatistics.t
+val increment : WeaverAct.t -> t -> t

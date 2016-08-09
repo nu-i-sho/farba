@@ -29,7 +29,10 @@ ocamlopt -I ../../bin -for-pack Core -c level.ml
 ocamlopt -I ../../bin -for-pack Core -c tissue.mli
 ocamlopt -I ../../bin -for-pack Core -c tissue.ml
 ocamlopt -for-pack Core -c weaverAct.ml
-ocamlopt -for-pack Core -c weavingResult.ml
+ocamlopt -for-pack Core -c statused.mli
+ocamlopt -for-pack Core -c statused.ml
+ocamlopt -for-pack Core -c moveStatus.ml
+ocamlopt -for-pack Core -c passStatus.ml
 ocamlopt -I ../../bin -for-pack Core -c weaverActsCounter.mli
 ocamlopt -I ../../bin -for-pack Core -c weaverActsCounter.ml
 ocamlopt -I ../../bin -for-pack Core -c WEAVER.ml
@@ -54,11 +57,11 @@ ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
 LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx \
 side.cmx nucleus.cmx index.cmx intMap.cmx matrix.cmx levelPath.cmx \
-level.cmx tissue.cmx weaverAct.cmx weavingResult.cmx \
-weaverActsCounter.cmx WEAVER.cmx STATISTICABLE_WEAVER.cmx \
-weaver.cmx tissueCounter.cmx statisticableWeaver.cmx \
-tissueObservableWeaver.cmx callStack.cmx solutionLabel.cmx \
-command.cmx solution.cmx
+level.cmx tissue.cmx weaverAct.cmx statused.cmx passStatus.cmx \
+moveStatus.cmx weaverActsCounter.cmx WEAVER.cmx \
+STATISTICABLE_WEAVER.cmx weaver.cmx tissueCounter.cmx \
+statisticableWeaver.cmx tissueObservableWeaver.cmx callStack.cmx \
+solutionLabel.cmx command.cmx solution.cmx 
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

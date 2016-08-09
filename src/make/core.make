@@ -52,6 +52,10 @@ ocamlopt -I ../../bin -for-pack Core -c command.mli
 ocamlopt -I ../../bin -for-pack Core -c command.ml
 ocamlopt -for-pack Core -c solution.mli
 ocamlopt -for-pack Core -c solution.ml
+ocamlopt -for-pack Core -c tickStatus.ml
+ocamlopt -for-pack Core -c runtimeMode.ml
+ocamlopt -I ../../bin -for-pack Core -c runtime.mli
+ocamlopt -I ../../bin -for-pack Core -c runtime.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
@@ -61,7 +65,8 @@ level.cmx tissue.cmx weaverAct.cmx statused.cmx passStatus.cmx \
 moveStatus.cmx weaverActsCounter.cmx WEAVER.cmx \
 STATISTICABLE_WEAVER.cmx weaver.cmx tissueCounter.cmx \
 statisticableWeaver.cmx tissueObservableWeaver.cmx callStack.cmx \
-solutionLabel.cmx command.cmx solution.cmx 
+solutionLabel.cmx command.cmx solution.cmx tickStatus.cmx \
+runtimeMode.cmx runtime.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

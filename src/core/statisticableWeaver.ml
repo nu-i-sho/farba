@@ -23,26 +23,37 @@ let inc field o =
 let turn hand o =
   { (inc WeaverAct.Turn o) with base = Weaver.turn hand o.base }
 
-let pass o = 
-  let open WeavingResult.OfPass in
-  match Weaver.pass o.base with 
-  | Success base -> Success { (inc WeaverAct.Pass o) with base }
-  | Dummy   base -> Dummy { (inc  WeaverAct.DummyPass o) with base }
-
-let move act success dummy o =
-  let open WeavingResult.OfMove in
-  match act o.base with
-  | Success base -> Success { (inc success o) with base }
-  | Dummy   base -> Dummy   { (inc dummy o)   with base }
-  | Outed   base -> Outed   { (inc success o) with base }
-  | Clot    base -> Clot    { (inc success o) with base }
+let pass o =
+  let base = Weaver.pass o.base
+  and with_statistics x =
+    Statused.(
+      { ( match x.status with 
+          | PassStatus.Success -> (inc WeaverAct.Pass o)
+          | PassStatus.Dummy   -> (inc WeaverAct.DummyPass o)
+        ) with base = x.value
+      }
+    ) in Statused.map with_statistics base
+  
+let statisticable_move act success dummy o =
+  let with_statistics x =
+    Statused.(
+      { ( match x.status with
+          | MoveStatus.Success 
+          | MoveStatus.Outed   
+          | MoveStatus.Clot  -> (inc success o)
+          | MoveStatus.Dummy -> (inc dummy o)
+        ) with base = x.value
+      }
+    ) in (act o.base) |> Statused.map with_statistics   
 
 let replicate relation = 
-  move (Weaver.replicate relation) 
-        WeaverAct.Replicate
-        WeaverAct.DummyReplicate
-
+  statisticable_move
+    (Weaver.replicate relation) 
+     WeaverAct.Replicate
+     WeaverAct.DummyReplicate
+  
 let move = 
-  move Weaver.move
-       WeaverAct.Move
-       WeaverAct.DummyMove
+  statisticable_move
+    Weaver.move
+    WeaverAct.Move
+    WeaverAct.DummyMove

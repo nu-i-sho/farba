@@ -3,8 +3,9 @@ module type T = sig
 
     val tissue    : t -> Tissue.t
     val turn      : Data.Hand.t -> t -> t
-    val move      : t -> t WeavingResult.OfMove.t
-    val pass      : t -> t WeavingResult.OfPass.t
-    val replicate : Data.Relation.t -> t -> t WeavingResult.OfMove.t
+    val move      : t -> (MoveStatus.t, t) Statused.t
+    val pass      : t -> (PassStatus.t, t) Statused.t
+    val replicate : Data.Relation.t -> t
+                 -> (MoveStatus.t, t) Statused.t
 end
 

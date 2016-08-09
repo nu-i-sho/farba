@@ -26,7 +26,7 @@ module Subscribe (Observer : T.TISSUE_OBSERVER) = struct
                      |> Tissue.weaver
     let item i o = o |> tissue
                      |> Tissue.items
-                     |> Matrix.get (index o)
+                     |> Matrix.get i
     let gaze o =
       Data.Nucleus.((o |> tissue
                        |> Tissue.fauna
@@ -70,25 +70,33 @@ module Subscribe (Observer : T.TISSUE_OBSERVER) = struct
       in { base; observer }
 
     let pass o = 
-      let open WeavingResult.OfPass in
-      let snap = snap o in
-      match Weaver.pass o.base with
-      | Success base -> Success (next snap base o)
-      | Dummy base   -> Dummy { o with base }
+      let base = Weaver.pass o.base
+      and snap = snap o in
+      let observed x =
+        Statused.(
+          match x.status with
+          | PassStatus.Success -> next snap x.value o
+          | PassStatus.Dummy   -> { o with base = x.value }
+        ) in
+      Statused.map observed base 
 
-    let move act o = 
-      let open WeavingResult.OfMove in
-      let snap = snap o in
-      match act o.base with
-      | Success base -> Success (next snap base o)
-      | Dummy base   -> Dummy { o with base }
-      | Outed base   -> Outed (next snap base o)
-      | Clot base    -> Clot (next snap base o)
+    let observable_move act o =
+      let base = act o.base
+      and snap = snap o in
+      let observed x =
+        Statused.(
+          match x.status with
+          | MoveStatus.Success 
+          | MoveStatus.Outed 
+          | MoveStatus.Clot  -> next snap x.value o
+          | MoveStatus.Dummy -> { o with base = x.value }
+        ) in
+      Statused.map observed base
       
     let replicate relation =
-      move (Weaver.replicate relation) 
+      observable_move (Weaver.replicate relation) 
                       
     let move = 
-      move Weaver.move
+      observable_move Weaver.move
 
   end

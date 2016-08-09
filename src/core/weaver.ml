@@ -16,7 +16,7 @@ let turn hand o =
      |> Tissue.with_fauna) o
 
 let move o =
-  WeavingResult.OfMove.( Data.Nucleus.(
+  Data.Nucleus.(
     match IMap.find (Tissue.weaver o) (Tissue.flora o) with
 
     | Data.Pigment.White ->
@@ -26,7 +26,9 @@ let move o =
 
        if IMap.mem i (Tissue.fauna o) then 
 	 let gaze' = Side.opposite nucleus.gaze in
-	 Clot (Tissue.with_clot i gaze' o) else
+         Statused.({ status = MoveStatus.Clot;
+                      value = Tissue.with_clot i gaze' o
+                  }) else
 
 	 let move nucleus = (o |> Tissue.with_weaver i
                                |> Tissue.fauna
@@ -36,50 +38,70 @@ let move o =
  
 	 if IMap.mem i (Tissue.flora o) then
 	   let cytoplasm = IMap.find i (Tissue.flora o) in 
-	   Success (nucleus |> Nucleus.inject cytoplasm
-	                    |> move) else
-	   Outed   (nucleus |> move)
-	    
+           Statused.({ status = MoveStatus.Success;
+                        value = nucleus |> Nucleus.inject cytoplasm
+	                                |> move
+                    }) else
+           Statused.({ status = MoveStatus.Outed;
+                        value = nucleus |> move
+                    })
+ 
     | Data.Pigment.Blue
     | Data.Pigment.Gray  -> 
-       Dummy o
-  ))
+       Statused.({ status = MoveStatus.Dummy;
+                    value = o
+                })
+  )
  
 let pass o =
-  WeavingResult.OfPass.( Data.Nucleus.(
+  Data.Nucleus.(
+    let dummy weaver =
+      Statused.({ status = PassStatus.Dummy;
+                   value = weaver
+               }) in
+    
     let nucleus = IMap.find (Tissue.weaver o) (Tissue.fauna o) in
     let i = Index.move nucleus.gaze (Tissue.weaver o) in
     if IMap.mem i (Tissue.fauna o) then
       let acceptor = IMap.find i (Tissue.fauna o) in
       if acceptor.gaze = (Side.opposite nucleus.gaze) then
-	Success (Tissue.with_weaver i o) else
-	Dummy o else
-      Dummy o
-  ))
+	Statused.({ status = PassStatus.Success;
+                     value = Tissue.with_weaver i o
+                 }) else
+	dummy o else
+      dummy o
+  )
 
 let replicate relation o =
-  WeavingResult.OfMove.( Data.Nucleus.(
+  Data.Nucleus.(
     if (IMap.find (Tissue.weaver o) (Tissue.flora o)) = 
 	 Data.Pigment.White then
-      Dummy o else 
+      Statused.({ status = MoveStatus.Dummy;
+                   value = o
+               }) else 
 
       let nucleus = IMap.find (Tissue.weaver o) (Tissue.fauna o) in
       let i = Index.move nucleus.gaze (Tissue.weaver o) in
       
       if IMap.mem i (Tissue.fauna o) then
 	let gaze' = Side.opposite nucleus.gaze in
-	Clot (Tissue.with_clot i gaze' o) else 
-	  
+        Statused.({ status = MoveStatus.Clot;
+                     value = Tissue.with_clot i gaze' o
+                 }) else
+
 	let child = Nucleus.replicate relation nucleus
 	and set nucleus = 
 	  (o |> Tissue.with_weaver i
 	     |> Tissue.fauna
              |> IMap.set i nucleus
              |> Tissue.with_fauna) o in
-
+        
 	if IMap.mem i (Tissue.flora o) then
-	  let cytoplasm = IMap.find i (Tissue.flora o) in
-	  let child = Nucleus.inject cytoplasm child in
-	  Success (set child) else
-	  Outed   (set child)
-  ))
+          let cytoplasm = IMap.find i (Tissue.flora o) in
+	  Statused.({ status = MoveStatus.Success;
+                       value = set (Nucleus.inject cytoplasm child)
+                   }) else
+	  Statused.({ status = MoveStatus.Outed;
+                       value = set child
+                   })
+  )

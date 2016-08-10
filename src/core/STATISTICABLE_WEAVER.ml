@@ -1,4 +1,4 @@
 module type T = sig
     include WEAVER.T
-    val statistics : t -> Data.Statistics.t
+    val statistics : t -> WeaverStatistics.t
   end

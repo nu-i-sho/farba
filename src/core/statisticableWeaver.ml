@@ -12,7 +12,7 @@ let tissue o =
   Weaver.tissue o.base
 
 let statistics o = 
-  Data.Statistics.(
+  WeaverStatistics.(
     { tissue = TissueCounter.calculate_for (tissue o);
         acts = Counter.calculate o.counter
     })

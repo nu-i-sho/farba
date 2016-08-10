@@ -63,8 +63,25 @@ module Statistics = struct
                  }
       end
 
-    type t = { tissue : OfTissue.t; 
-                 acts : OfActs.t
+    module OfCommands = struct
+      type t = { replications : int;
+                       passes : int;
+                        turns : int;
+                        moves : int;
+                        calls : int;
+                 declarations : int;
+                         ends : int;
+                        nopes : int;
+                         acts : int;
+                        marks : int;
+                       senced : int;
+                          all : int
+               }
+      end
+                    
+    type t = { solution : OfCommands.t;
+                 tissue : OfTissue.t; 
+                   acts : OfActs.t
              }
   end
 
@@ -87,9 +104,9 @@ module Command = struct
              | Move
              | Turn of Hand.t
              | Replicate of Relation.t
+             | Nope
              | Call of DotsOfDice.t
              | Declare of DotsOfDice.t
-             | Nope
              | End
   end
 

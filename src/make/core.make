@@ -36,6 +36,7 @@ ocamlopt -for-pack Core -c passStatus.ml
 ocamlopt -I ../../bin -for-pack Core -c weaverActsCounter.mli
 ocamlopt -I ../../bin -for-pack Core -c weaverActsCounter.ml
 ocamlopt -I ../../bin -for-pack Core -c WEAVER.ml
+ocamlopt -I ../../bin -for-pack Core -c weaverStatistics.ml
 ocamlopt -I ../../bin -for-pack Core -c STATISTICABLE_WEAVER.ml
 ocamlopt -for-pack Core -c weaver.mli
 ocamlopt -I ../../bin -for-pack Core -c weaver.ml
@@ -54,8 +55,14 @@ ocamlopt -for-pack Core -c solution.mli
 ocamlopt -for-pack Core -c solution.ml
 ocamlopt -for-pack Core -c tickStatus.ml
 ocamlopt -for-pack Core -c runtimeMode.ml
-ocamlopt -I ../../bin -for-pack Core -c runtime.mli
+ocamlopt -I ../../bin -for-pack Core -c RUNTIME.ml
+ocamlopt -for-pack Core -c runtime.mli
 ocamlopt -I ../../bin -for-pack Core -c runtime.ml
+ocamlopt -I ../../bin -for-pack Core -c commandsCounter.mli
+ocamlopt -I ../../bin -for-pack Core -c commandsCounter.ml
+ocamlopt -I ../../bin -for-pack Core -c STATISTICABLE_RUNTIME.ml
+ocamlopt -for-pack Core -c statisticableRuntime.mli
+ocamlopt -I ../../bin -for-pack Core -c statisticableRuntime.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
@@ -63,10 +70,12 @@ LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx pigment.cmx \
 side.cmx nucleus.cmx index.cmx intMap.cmx matrix.cmx levelPath.cmx \
 level.cmx tissue.cmx weaverAct.cmx statused.cmx passStatus.cmx \
 moveStatus.cmx weaverActsCounter.cmx WEAVER.cmx \
-STATISTICABLE_WEAVER.cmx weaver.cmx tissueCounter.cmx \
-statisticableWeaver.cmx tissueObservableWeaver.cmx callStack.cmx \
-solutionLabel.cmx command.cmx solution.cmx tickStatus.cmx \
-runtimeMode.cmx runtime.cmx
+weaverStatistics.cmx STATISTICABLE_WEAVER.cmx weaver.cmx \
+tissueCounter.cmx statisticableWeaver.cmx \
+tissueObservableWeaver.cmx callStack.cmx solutionLabel.cmx \
+command.cmx solution.cmx tickStatus.cmx runtimeMode.cmx \
+RUNTIME.cmx runtime.cmx commandsCounter.cmx \
+STATISTICABLE_RUNTIME.cmx statisticableRuntime.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

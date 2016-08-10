@@ -6,6 +6,9 @@ let label o = o.label
 let command i o = o.code.(i)
 let length o = Array.length o.code
 
+let fold f acc o =
+  Array.fold_left f acc o.code
+             
 module Loader = struct
     let load branch =
       lazy ( let channel =

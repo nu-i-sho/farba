@@ -4,8 +4,9 @@ module Make (Weaver : WEAVER.T) = struct
     module Stack = CallStack
     module StackPoint = Data.CallStackPoint
     module Command = Data.Command
-                   
-    type t = {   weaver : Weaver.t;
+
+    type weaver_t = Weaver.t
+    type t = {   weaver : weaver_t;
                solution : Solution.t;
                   stack : CallStack.t;
                    mode : Mode.t

@@ -123,6 +123,13 @@ module CallStackPoint = struct
 
 module RuntimeMode = struct
     type t = | Run
-             | GoTo
+             | GoTo of DotsOfDice.t
+             | RunNext
              | Return
+  end
+
+module RuntimePoint = struct
+    type t = { call_stack_top : CallStackPoint.t;
+                         mode : RuntimeMode.t
+             }
   end

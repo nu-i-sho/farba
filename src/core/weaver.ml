@@ -1,11 +1,9 @@
 type t = Tissue.t
 module IMap = Index.Map
 
-let make   o = o
+let make tissue = tissue
 let tissue o = o
-
-let index = 
-  Tissue.weaver
+let index = Tissue.weaver
 
 let turn hand o =
   let nucleus = o |> Tissue.fauna

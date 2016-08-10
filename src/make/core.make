@@ -54,7 +54,6 @@ ocamlopt -I ../../bin -for-pack Core -c command.ml
 ocamlopt -for-pack Core -c solution.mli
 ocamlopt -for-pack Core -c solution.ml
 ocamlopt -for-pack Core -c tickStatus.ml
-ocamlopt -for-pack Core -c runtimeMode.ml
 ocamlopt -I ../../bin -for-pack Core -c RUNTIME.ml
 ocamlopt -for-pack Core -c runtime.mli
 ocamlopt -I ../../bin -for-pack Core -c runtime.ml
@@ -63,6 +62,8 @@ ocamlopt -I ../../bin -for-pack Core -c commandsCounter.ml
 ocamlopt -I ../../bin -for-pack Core -c STATISTICABLE_RUNTIME.ml
 ocamlopt -for-pack Core -c statisticableRuntime.mli
 ocamlopt -I ../../bin -for-pack Core -c statisticableRuntime.ml
+ocamlopt -I ../../bin -for-pack Core -c observableRuntime.mli
+ocamlopt -I ../../bin -for-pack Core -c observableRuntime.ml
 
 ocamlopt -pack -o core.cmx \
 MODULE.cmx dotsOfDice.cmx DOTS_OF_DICE_NODE.cmx LEVEL_SOURCE.cmx \
@@ -73,9 +74,9 @@ moveStatus.cmx weaverActsCounter.cmx WEAVER.cmx \
 weaverStatistics.cmx STATISTICABLE_WEAVER.cmx weaver.cmx \
 tissueCounter.cmx statisticableWeaver.cmx \
 tissueObservableWeaver.cmx callStack.cmx solutionLabel.cmx \
-command.cmx solution.cmx tickStatus.cmx runtimeMode.cmx \
-RUNTIME.cmx runtime.cmx commandsCounter.cmx \
-STATISTICABLE_RUNTIME.cmx statisticableRuntime.cmx
+command.cmx solution.cmx tickStatus.cmx RUNTIME.cmx runtime.cmx \
+commandsCounter.cmx STATISTICABLE_RUNTIME.cmx \
+statisticableRuntime.cmx observableRuntime.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

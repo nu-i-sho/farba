@@ -1,6 +1,6 @@
 module Make (Weaver : WEAVER.T) = struct
 
-    module Mode = RuntimeMode
+    module Mode = Data.RuntimeMode
     module Stack = CallStack
     module StackPoint = Data.CallStackPoint
     module Command = Data.Command

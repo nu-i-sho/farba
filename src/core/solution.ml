@@ -5,7 +5,8 @@ type t = {  code : Command.t array;
 let label o = o.label
 let command i o = o.code.(i)
 let length o = Array.length o.code
-
+let to_array o = Array.copy o.code
+               
 let fold f acc o =
   Array.fold_left f acc o.code
              

@@ -28,7 +28,7 @@ module Make (Prototypes : IMAGE_PROTOTYPES.T) = struct
                  | Replicate Relation.Inverse -> 6
                  | End                        -> 7
                  | Declare x                  -> 8 + (dots_index x)
-                 | Call x                     -> 9 +  dots_count
+                 | Call x                     -> 8 +  dots_count
                                                    + (dots_index x)
       ))
       

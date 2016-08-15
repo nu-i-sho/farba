@@ -13,10 +13,13 @@ ocamlopt -I ../../bin -for-pack View -c imagesStorage.ml
 ocamlopt -for-pack View -c const.ml
 ocamlopt -I ../../bin -for-pack View -c tissueItemScale.mli
 ocamlopt -I ../../bin -for-pack View -c tissueItemScale.ml
+ocamlopt -for-pack View -c hexagonSideCalculator.mli
+ocamlopt -for-pack View -c hexagonSideCalculator.ml
 
 ocamlopt -pack -o view.cmx \
 canvas.cmx IMAGE_PROTOTYPE.cmx IMAGE_PROTOTYPES.cmx \
 colorScheme.cmx imagesStorage.cmx const.cmx tissueItemScale.cmx \
+hexagonSideCalculator.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

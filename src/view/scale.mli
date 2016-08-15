@@ -1,6 +1,6 @@
-type t = float
+type t
 
-val make : float -> t
+val make : int -> int -> int -> int -> t
 
 module Hexagon : sig
     val side            : t -> int
@@ -9,6 +9,11 @@ module Hexagon : sig
     val angles          : t -> (int * int) array
   end
 
+module Tissue : sig
+    val dx : t -> int
+    val dy : t -> int
+  end
+     
 module Cytoplasm : sig
     val eyes_radius : t -> int
     val eyes_coords : t -> ((int * int) * (int * int))

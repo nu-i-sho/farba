@@ -11,10 +11,12 @@ ocamlopt -for-pack View -c colorScheme.ml
 ocamlopt -I ../../bin -for-pack View -c imagesStorage.mli
 ocamlopt -I ../../bin -for-pack View -c imagesStorage.ml
 ocamlopt -for-pack View -c const.ml
+ocamlopt -I ../../bin -for-pack View -c tissueItemScale.mli
+ocamlopt -I ../../bin -for-pack View -c tissueItemScale.ml
 
 ocamlopt -pack -o view.cmx \
 canvas.cmx IMAGE_PROTOTYPE.cmx IMAGE_PROTOTYPES.cmx \
-colorScheme.cmx imagesStorage.cmx const.cmx
+colorScheme.cmx imagesStorage.cmx const.cmx tissueItemScale.cmx \
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

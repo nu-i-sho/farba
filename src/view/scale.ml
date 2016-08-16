@@ -1,21 +1,12 @@
 type t = {  hexagon_external_r : float;
             hexagon_internal_r : float;
-                  hexagon_side : int;
-                hexagon_angles : (int * int) array;
+                hexagon_angles : (float * float) array;
                      tissue_dx : int;
                      tissue_dy : int;
-                    nucleus_rf : float;
-                     nucleus_r : int;
+                     nucleus_r : float;
            nucleus_eyes_line_r : float;
-                nucleus_eyes_r : int 
+                nucleus_eyes_r : float
          }
-
-let round i =
-  let fractional, integral = modf i in
-  (int_of_float integral) 
-  + (if fractional > 0.5 then 
-       1 else 
-       0)
        
 let make canvas_height canvas_width
          tissue_height tissue_width =
@@ -37,18 +28,17 @@ let make canvas_height canvas_width
                                max_vertical_side in
   let hexagon_internal_r = hexagon_external_r *.
                              Const.sqrt_3_div_2 in
-  let hexagon_side = round hexagon_external_r in
   let hexagon_angles =
-    let e  = hexagon_side
-    and i  = round hexagon_internal_r
-    and e' = round (hexagon_external_r *. 0.5) in
+    let e  = hexagon_external_r
+    and i  = hexagon_internal_r
+    and e' = hexagon_external_r *. 0.5 in
 
-      [| +e', -i;
-         +e ,  0;
-         +e', +i;
-         -e', +i;
-         -e ,  0;
-         -e', -i; 
+      [| +.e', -.i;
+         +.e , 0.0;
+         +.e', +.i;
+         -.e', +.i;
+         -.e , 0.0;
+         -.e', -.i
       |]
   
   and tissue_height' = 
@@ -62,21 +52,18 @@ let make canvas_height canvas_width
   and tissue_dy =
     ((tissue_height -. tissue_height') /. 2.0)
         |> ceil
-        |> int_of_float
-    
-  and nucleus_rf = hexagon_internal_r *. 0.9 in
-  let nucleus_r = round nucleus_rf
-  and nucleus_eyes_line_r = nucleus_rf *. 0.8 in
-  let nucleus_eyes_r = 
-    round (Const.pi_div_30 *. nucleus_eyes_line_r) in 
+        |> int_of_float in
+
+  let nucleus_r = hexagon_internal_r *. 0.9 in
+  let nucleus_eyes_line_r = nucleus_r *. 0.8 in
+  let nucleus_eyes_r =
+    Const.pi_div_30 *. nucleus_eyes_line_r in
 
   {  hexagon_external_r;
      hexagon_internal_r;
-           hexagon_side;
          hexagon_angles;
               tissue_dx;
               tissue_dy;
-             nucleus_rf;
               nucleus_r;
     nucleus_eyes_line_r;
          nucleus_eyes_r
@@ -84,7 +71,7 @@ let make canvas_height canvas_width
     
 module Hexagon = struct
     let external_radius o = o.hexagon_external_r
-    let side            o = o.hexagon_side 
+    let side            o = o.hexagon_external_r
     let internal_radius o = o.hexagon_internal_r
     let angles          o = o.hexagon_angles
   end
@@ -95,8 +82,8 @@ module Tissue = struct
   end
                
 module Cytoplasm = struct
-    let eyes_radius o = 0
-    let eyes_coords o = (0, 0), (0, 0)
+    let eyes_radius o = 0.0
+    let eyes_coords o = (0.0, 0.0), (0.0, 0.0)
   end
 
 let sector =
@@ -108,7 +95,7 @@ let sector =
            | Data.Side.RightDown -> 5.0
 
 let calc_coord f g radius angle sector =  
-  round ((f (angle +. (Const.pi_div_3 *. sector))) *. (g radius))
+  (f (angle +. (Const.pi_div_3 *. sector))) *. (g radius)
 
 let calc_x = calc_coord cos (~+.)
 let calc_y = calc_coord sin (~-.)
@@ -129,9 +116,9 @@ module Nucleus = struct
 
 module Cancer = struct
     let eyes_coords side o =
-      let r0 = o.nucleus_rf *. 0.85  
-      and r1 = o.nucleus_rf *. 0.8
-      and r2 = o.nucleus_rf *. 0.75 
+      let r0 = o.nucleus_r *. 0.85
+      and r1 = o.nucleus_r *. 0.8
+      and r2 = o.nucleus_r *. 0.75
       and point = circle_point (sector side) in
       
       let p00 = point r0 Const.pi_div_15

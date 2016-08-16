@@ -8,14 +8,6 @@ let increment =
            | OOO -> OOOO
            | OO -> OOO
            | O -> OO
-        
-let to_int = 
-  function | OOOOOO -> 6
-           | OOOOO -> 5
-	   | OOOO -> 4
-	   | OOO -> 3
-	   | OO -> 2
-	   | O -> 1
 
 let to_string =
   function | OOOOOO -> "OOOOOO"
@@ -25,18 +17,18 @@ let to_string =
            | OO -> "OO"
            | O -> "O"
 
+let index_of =
+  function | OOOOOO -> 5
+           | OOOOO -> 4
+           | OOOO -> 3
+           | OOO -> 2
+           | OO -> 1
+           | O -> 0
+
 let all = [ OOOOOO;
             OOOOO;
             OOOO;
             OOO;
             OO;
             O
-	  ] 
-
-                
-module Map = Map.Make (
-                 struct
-                     type t = Data.DotsOfDice.t
-                     let compare x y = 
-                       compare (to_int x) (to_int y)
-                   end)
+	  ]

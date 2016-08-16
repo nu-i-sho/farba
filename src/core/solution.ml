@@ -31,13 +31,13 @@ module Loader = struct
     let load label =
       let open SolutionLabel in
       let open LevelPath in
-      let index dots = (DotsOfDice.to_int dots) - 1 in
-      let code =
-        (root.(index label.level.branch) |> Lazy.force)
-             .(((index label.level.branchlet) * 6 * 6)
-             + ((index label.level.leaf) * 6)
-               +  (index label.id)) in
       
+      let index_of = DotsOfDice.index_of in
+      let code = (root.(index_of label.level.branch) |> Lazy.force)
+                      .(((index_of label.level.branchlet) * 6 * 6)
+                        + ((index_of label.level.leaf) * 6)
+                        +  (index_of label.id)) in
+
       let parse i = Command.of_char code.[i] in
       {  code = Array.init (String.length code) parse;
         label;

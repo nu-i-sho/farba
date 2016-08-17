@@ -13,10 +13,14 @@ ocamlopt -I ../../bin -for-pack View -c imagesStorage.ml
 ocamlopt -for-pack View -c const.ml
 ocamlopt -I ../../bin -for-pack View -c scale.mli
 ocamlopt -I ../../bin -for-pack View -c scale.ml
+ocamlopt -for-pack View -c pair.mli
+ocamlopt -for-pack View -c pair.ml
+ocamlopt -I ../../bin -for-pack View -c cellElementPrinter.mli
+ocamlopt -I ../../bin -for-pack View -c cellElementPrinter.ml
 
 ocamlopt -pack -o view.cmx \
 canvas.cmx IMAGE_PROTOTYPE.cmx IMAGE_PROTOTYPES.cmx \
-colorScheme.cmx imagesStorage.cmx const.cmx scale.cmx
+colorScheme.cmx imagesStorage.cmx const.cmx scale.cmx pair.cmx \
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

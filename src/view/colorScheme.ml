@@ -9,19 +9,9 @@ type call_stack_point_t =
   {  run : char -> Graphics.color;
     find : char -> Graphics.color
   }
-
-type tissue_t =
-  { clot   : Graphics.color;
-    virus  : Graphics.color;
-    line   : Graphics.color; 
-    white  : Graphics.color;
-    blue   : Graphics.color;
-    gray   : Graphics.color;
-  }
   
 type t = { call_stack_point : call_stack_point_t;
-                    command : command_t;
-                     tissue : tissue_t
+                    command : command_t
          }           
   
 let default =
@@ -68,19 +58,10 @@ let default =
     {  run = call_stack_point_map_for_run;
       find = call_stack_point_map_for_find
     }
-  and color_scheme_for_tissue = 
-    {  clot = Color.red;
-      virus = Color.yellow;
-       line = Color.black;  
-      white = Color.white;
-       blue = Color.blue;
-       gray = Color.gray 
-    }
   in
 
   { call_stack_point = color_scheme_for_call_stack_point;
-             command = color_scheme_for_command;
-              tissue = color_scheme_for_tissue;
+             command = color_scheme_for_command
   }
 
 module Command = struct
@@ -93,13 +74,4 @@ module Command = struct
 module CallStackPoint = struct
     let run  o = o.call_stack_point.run
     let find o = o.call_stack_point.find
-  end
-
-module Tissue = struct
-    let clot   o = o.tissue.clot
-    let virus  o = o.tissue.virus
-    let line   o = o.tissue.line
-    let white  o = o.tissue.white
-    let blue   o = o.tissue.blue
-    let gray   o = o.tissue.gray
   end

@@ -1,6 +1,6 @@
 type t
 
-val make : Canvas.t -> Scale.t -> ColorScheme.t -> t
+val make : Canvas.t -> Scale.t -> TissueColorScheme.t -> t
 
 val set_index             : (int * int) -> t -> t
 val set_color_for_pigment : Data.Pigment.t -> t -> t

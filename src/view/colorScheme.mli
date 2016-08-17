@@ -13,13 +13,3 @@ module CallStackPoint : sig
     val run  : t -> (char -> Graphics.color)
     val find : t -> (char -> Graphics.color)
   end
-
-module Tissue : sig
-    val clot   : t -> Graphics.color
-    val virus  : t -> Graphics.color
-    val line   : t -> Graphics.color
-      
-    val white  : t -> Graphics.color
-    val blue   : t -> Graphics.color
-    val gray   : t -> Graphics.color
-  end

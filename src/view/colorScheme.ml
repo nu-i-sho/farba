@@ -1,27 +1,39 @@
-type for_command_t =
-  {     map_for_act : char -> Graphics.color;
-        map_for_end : char -> Graphics.color;
-    map_for_declare : char -> Graphics.color;
-       map_for_call : char -> Graphics.color
+type command_t =
+  {     act : char -> Graphics.color;
+     finish : char -> Graphics.color;
+    declare : char -> Graphics.color;
+       call : char -> Graphics.color
   }
 
-type for_call_stack_point_t =
-  {  map_for_run : char -> Graphics.color;
-    map_for_find : char -> Graphics.color
+type call_stack_point_t =
+  {  run : char -> Graphics.color;
+    find : char -> Graphics.color
   }
 
-type t = { for_call_stack_point : for_call_stack_point_t;
-                    for_command : for_command_t
+type tissue_t =
+  { clot   : Graphics.color;
+    virus  : Graphics.color;
+    line   : Graphics.color; 
+    white  : Graphics.color;
+    blue   : Graphics.color;
+    gray   : Graphics.color;
+  }
+  
+type t = { call_stack_point : call_stack_point_t;
+                    command : command_t;
+                     tissue : tissue_t
          }           
 
 module Color = struct
 
-    let blue  = 0x4682B4
-    let gray  = 0x808080
-    let khaky = 0xF0E68C
-    let white = 0xF8F8FF
-    let black = 0x000000
-    let empty = -1 
+    let blue   = 0x4682B4
+    let gray   = 0x808080
+    let khaky  = 0xF0E68C
+    let white  = 0xF8F8FF
+    let black  = 0x000000
+    let red    = 0x000000
+    let yellow = 0x000000
+    let empty  = -1
   
   end
        
@@ -32,7 +44,7 @@ let default =
 	     | '-' -> Color.white
              | ' ' -> Color.empty
              |  _  -> failwith "unmapped char"
-  and command_map_for_end =
+  and command_map_for_finish =
     function | 'H' -> Color.blue
              | '-' -> Color.white
 	     | ' ' -> Color.empty
@@ -56,33 +68,51 @@ let default =
     function | 'H' -> Color.white
              | '-' -> Color.black
 	     | ' ' -> Color.empty
-             |  _  -> failwith "unmapped char" 
+             |  _  -> failwith "unmapped char"
   in
 
-  let color_sheme_for_command =
-    {     map_for_act = command_map_for_act;
-          map_for_end = command_map_for_end;
-      map_for_declare = command_map_for_declare;
-         map_for_call = command_map_for_call
+  let color_scheme_for_command =
+    {     act = command_map_for_act;
+       finish = command_map_for_finish;
+      declare = command_map_for_declare;
+         call = command_map_for_call
     }
-  and color_sheme_for_call_stack_point =
-    {  map_for_run = call_stack_point_map_for_run;
-      map_for_find = call_stack_point_map_for_find
+  and color_scheme_for_call_stack_point =
+    {  run = call_stack_point_map_for_run;
+      find = call_stack_point_map_for_find
+    }
+  and color_scheme_for_tissue = 
+    {  clot = Color.red;
+      virus = Color.yellow;
+       line = Color.black;  
+      white = Color.white;
+       blue = Color.blue;
+       gray = Color.gray 
     }
   in
 
-  { for_call_stack_point = color_sheme_for_call_stack_point;
-             for_command = color_sheme_for_command
+  { call_stack_point = color_scheme_for_call_stack_point;
+             command = color_scheme_for_command;
+              tissue = color_scheme_for_tissue;
   }
 
-module ForCommand = struct
-    let map_for_act     o = o.for_command.map_for_act
-    let map_for_end     o = o.for_command.map_for_end
-    let map_for_declare o = o.for_command.map_for_declare
-    let map_for_call    o = o.for_command.map_for_call
+module Command = struct
+    let act     o = o.command.act
+    let finish  o = o.command.finish
+    let declare o = o.command.declare
+    let call    o = o.command.call
   end
 
-module ForCallStackPoint = struct
-    let map_for_run  o = o.for_call_stack_point.map_for_run
-    let map_for_find o = o.for_call_stack_point.map_for_find
+module CallStackPoint = struct
+    let run  o = o.call_stack_point.run
+    let find o = o.call_stack_point.find
+  end
+
+module Tissue = struct
+    let clot   o = o.tissue.clot
+    let virus  o = o.tissue.virus
+    let line   o = o.tissue.line
+    let white  o = o.tissue.white
+    let blue   o = o.tissue.blue
+    let gray   o = o.tissue.gray
   end

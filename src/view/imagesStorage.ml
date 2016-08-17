@@ -57,7 +57,7 @@ module Make (Prototypes : IMAGE_PROTOTYPES.T) = struct
     let make color_scheme =
       let commands_images =
         let module ProtoAct = Prototypes.X54.Act in
-        let module ColorScheme = ColorScheme.ForCommand in
+        let module ColorScheme = ColorScheme.Command in
         let module ProtoDots = Prototypes.X54.DotsOfDice in
         let dots_of_dice_prototypes =
           [ (module ProtoDots.OOOOOO : PROTO);
@@ -68,33 +68,29 @@ module Make (Prototypes : IMAGE_PROTOTYPES.T) = struct
             (module ProtoDots.O)
           ]
         in
-        [ ( let char_map =
-              ColorScheme.map_for_act color_scheme in
-            [ (* 00 *) (module ProtoAct.Nope : PROTO);
-              (* 01 *) (module ProtoAct.Move);
-              (* 02 *) (module ProtoAct.Pass);
-              (* 03 *) (module ProtoAct.TurnLeft);
-              (* 04 *) (module ProtoAct.TurnRight);
-              (* 05 *) (module ProtoAct.ReplicateDirect); 
-              (* 06 *) (module ProtoAct.ReplicateInverse)
+        [ ( let char_map = ColorScheme.act color_scheme in
+            [ (* 0 *) (module ProtoAct.Nope : PROTO);
+              (* 1 *) (module ProtoAct.Move);
+              (* 2 *) (module ProtoAct.Pass);
+              (* 3 *) (module ProtoAct.TurnLeft);
+              (* 4 *) (module ProtoAct.TurnRight);
+              (* 5 *) (module ProtoAct.ReplicateDirect); 
+              (* 6 *) (module ProtoAct.ReplicateInverse)
             ] |> List.map (image_of_prototype char_map)
           );
           
-          ( let char_map =
-              ColorScheme.map_for_end color_scheme in
-            [ (* 07 *) (module Prototypes.X54.End : PROTO)
+          ( let char_map = ColorScheme.finish color_scheme in
+            [ (* 7 *) (module Prototypes.X54.End : PROTO)
               |> image_of_prototype char_map
             ]
           );
 
-          ( let char_map =
-              ColorScheme.map_for_declare color_scheme in
-            (* 08 - 13 *) dots_of_dice_prototypes
+          ( let char_map = ColorScheme.declare color_scheme in
+            (* 8 - 13 *) dots_of_dice_prototypes
               |> List.map (image_of_prototype char_map)
           );
 
-          ( let char_map =
-              ColorScheme.map_for_call color_scheme in
+          ( let char_map = ColorScheme.call color_scheme in
             (* 14 - 19 *) dots_of_dice_prototypes
               |> List.map (image_of_prototype char_map)
           )
@@ -103,7 +99,7 @@ module Make (Prototypes : IMAGE_PROTOTYPES.T) = struct
         |> Array.of_list
         
       and call_stack_points_images =
-        let module ColorScheme = ColorScheme.ForCallStackPoint in
+        let module ColorScheme = ColorScheme.CallStackPoint in
         let module ProtoDots = Prototypes.X20.DotsOfDice in
         let dots_of_dice_prototypes =
           [ (module ProtoDots.OOOOOO : PROTO);
@@ -114,14 +110,12 @@ module Make (Prototypes : IMAGE_PROTOTYPES.T) = struct
             (module ProtoDots.O)
           ]
         in
-        [ ( let char_map =
-              ColorScheme.map_for_run color_scheme in
+        [ ( let char_map = ColorScheme.run color_scheme in
             dots_of_dice_prototypes
               |> List.map (image_of_prototype char_map)
           );
           
-          ( let char_map =
-              ColorScheme.map_for_find color_scheme in
+          ( let char_map = ColorScheme.find color_scheme in
             dots_of_dice_prototypes
               |> List.map (image_of_prototype char_map)
           );

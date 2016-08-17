@@ -2,14 +2,24 @@ type t
 
 val default : t
 
-module ForCommand : sig
-    val map_for_act     : t -> (char -> Graphics.color)
-    val map_for_end     : t -> (char -> Graphics.color)
-    val map_for_declare : t -> (char -> Graphics.color)
-    val map_for_call    : t -> (char -> Graphics.color)
+module Command : sig
+    val act     : t -> (char -> Graphics.color)
+    val finish  : t -> (char -> Graphics.color)
+    val declare : t -> (char -> Graphics.color)
+    val call    : t -> (char -> Graphics.color)
   end
 
-module ForCallStackPoint : sig
-    val map_for_run  : t -> (char -> Graphics.color)
-    val map_for_find : t -> (char -> Graphics.color)
+module CallStackPoint : sig
+    val run  : t -> (char -> Graphics.color)
+    val find : t -> (char -> Graphics.color)
+  end
+
+module Tissue : sig
+    val clot   : t -> Graphics.color
+    val virus  : t -> Graphics.color
+    val line   : t -> Graphics.color
+      
+    val white  : t -> Graphics.color
+    val blue   : t -> Graphics.color
+    val gray   : t -> Graphics.color
   end

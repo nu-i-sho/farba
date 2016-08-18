@@ -2,13 +2,10 @@ echo "------- Data build started -------"
 
 cd ../data
 
-ocamlopt -for-pack Data -c dotsOfDice.mli
 ocamlopt -for-pack Data -c dotsOfDice.ml
 ocamlopt -for-pack Data -c callStackPoint.ml
-ocamlopt -for-pack Data -c pigment.mli
 ocamlopt -for-pack Data -c pigment.ml
 ocamlopt -for-pack Data -c hand.ml
-ocamlopt -for-pack Data -c side.mli
 ocamlopt -for-pack Data -c side.ml
 ocamlopt -for-pack Data -c nucleus.ml
 ocamlopt -for-pack Data -c cell.ml

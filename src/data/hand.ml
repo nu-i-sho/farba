@@ -1,0 +1,2 @@
+type t = | Left
+         | Right

@@ -1,4 +1,4 @@
-module Make (Prototypes : IMAGE_PROTOTYPES.T) : sig
+module Make (Prototypes : CONTRACTS.PROTOIMAGES_STORAGE.T) : sig
     type t
     val make : ColorScheme.t -> t
 

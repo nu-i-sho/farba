@@ -20,18 +20,7 @@ module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
       )
                         
     let image_of_prototype color_of_char prototype =
-      lazy ( let module Prototype = (val prototype : PROTO) in
-             
-             let lines  = Lazy.force Prototype.matrix in
-             let width  = Array.length lines
-             and height = String.length lines.(0) in  
-             
-             let parse y x   = color_of_char lines.(y).[x] in
-             let parse_row y = Array.init height (parse y) in
-             let matrix      = Array.init width  parse_row in
-
-             Canvas.Image.make matrix
-           )
+      lazy ( Image.of_prototype color_of_char prototype )
       
     let make command_color_scheme call_stack_point_color_scheme =
       let commands_images =

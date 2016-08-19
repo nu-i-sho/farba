@@ -1,3 +1,4 @@
-type t = { tissue : Data.Statistics.OfTissue.t;
-             acts : Data.Statistics.OfActs.t
+open Data
+type t = { tissue : TissueStatistics.t;
+             acts : ActsStatistics.t
          }

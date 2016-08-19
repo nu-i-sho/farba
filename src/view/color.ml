@@ -6,4 +6,3 @@ let black  = 0x000000
 let red    = 0x000000
 let yellow = 0x000000
 let empty  = -1
-  

@@ -1,1 +1,1 @@
-val calculate_for : Solution.t -> Data.Statistics.OfCommands.t
+val calculate_for : Solution.t -> Data.CommandsStatistics.t

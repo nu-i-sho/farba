@@ -21,11 +21,11 @@ ocamlopt -for-pack Data -c commandsStatistics.ml
 ocamlopt -for-pack Data -c statistics.ml
 
 ocamlopt -pack -o data.cmx \
-actsStatistics.cmx callStackPoint.cmx cell.cmx command.cmx \
-commandsStatistics.cmx dotsOfDice.cmx fail.cmx hand.cmx \
-nucleus.cmx pigment.cmx relation.cmx runtimeMode.cmx \
-runtimePoint.cmx side.cmx statistics.cmx tissueItem.cmx \
-tissueStatistics.cmx
+dotsOfDice.cmx callStackPoint.cmx pigment.cmx hand.cmx side.cmx \
+nucleus.cmx cell.cmx relation.cmx command.cmx fail.cmx \
+runtimeMode.cmx runtimePoint.cmx tissueItem.cmx \
+tissueStatistics.cmx actsStatistics.cmx commandsStatistics.cmx \
+statistics.cmx
 
 mv data.cmx ../../bin/data.cmx
 mv data.cmi ../../bin/data.cmi

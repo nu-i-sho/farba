@@ -1,5 +1,7 @@
-type t = Data.Statistics.OfActs.t
-open Data.Statistics.OfActs
+type t = Data.ActsStatistics.t
+
+open Data
+open ActsStatistics
 
 let zero = {      dummy_moves = 0;
                  dummy_passes = 0;

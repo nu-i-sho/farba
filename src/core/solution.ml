@@ -1,5 +1,6 @@
-type t = {  code : Command.t array;
-           label : SolutionLabel.t
+open Data
+type t = { label : SolutionLabel.t;
+            code : Command.t array
          }
        
 let label o = o.label
@@ -14,7 +15,7 @@ module Loader = struct
     let load branch =
       lazy ( let channel =
                open_in ( ".farba/solutions/"
-                       ^ (DotsOfDice.to_string branch)
+                       ^ (DotsOfDiceExt.to_string branch)
                        ^ ".slns"
                        ) in
       
@@ -25,9 +26,8 @@ module Loader = struct
            )
       
     let root = 
-      DotsOfDice.all |> List.map load
-                     |> Array.of_list
-
+      DotsOfDiceExt.all |> List.map load
+                        |> Array.of_list
     let load label =
       let open SolutionLabel in
       let open LevelPath in
@@ -38,7 +38,7 @@ module Loader = struct
                         + ((index_of label.level.leaf) * 6)
                         +  (index_of label.id)) in
 
-      let parse i = Command.of_char code.[i] in
+      let parse i = CommandExt.of_char code.[i] in
       {  code = Array.init (String.length code) parse;
         label;
       }

@@ -1,9 +1,11 @@
 type t = Data.CallStackPoint.t list
-open Data.CallStackPoint.Value
-open Data.CallStackPoint
+
+open Data
+open CallStackPoint
+open Value
        
 let start =
-  [{ value = Single Data.DotsOfDice.O;
+  [{ value = Single DotsOfDice.O;
      index = 0
   }]
 
@@ -41,9 +43,9 @@ let split o =
   match List.hd o with
 
   | { value = Single a; index = i }
-    -> { value = Single (DotsOfDice.increment a);
+    -> { value = Single (DotsOfDiceExt.increment a);
          index = i
        } :: o
 
   | { value = Double _; _ }
-    -> failwith "cannot split splitted point"
+    -> failwith Fail.cannot_split

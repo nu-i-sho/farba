@@ -1,4 +1,6 @@
 open CONTRACTS
+open Data
+   
 module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
 
     module type PROTO = PROTOIMAGE.T
@@ -7,34 +9,10 @@ module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
                  points : Graphics.image lazy_t array;
              }
 
-    let dots_count = 6
-    let dots_index =
-      Data.DotsOfDice.(
-        function | OOOOOO -> 0
-                 | OOOOO -> 1
-                 | OOOO -> 2
-                 | OOO -> 3
-                 | OO -> 4
-                 | O -> 5
-      )
-
-    let command_index =
-      Data.( Command.(
-        function | Nope                       -> 0
-                 | Move                       -> 1
-                 | Pass                       -> 2
-                 | Turn Hand.Left             -> 3
-                 | Turn Hand.Right            -> 4
-                 | Replicate Relation.Direct  -> 5
-                 | Replicate Relation.Inverse -> 6
-                 | End                        -> 7
-                 | Declare x                  -> 8 + (dots_index x)
-                 | Call x                     -> 8 +  dots_count
-                                                   + (dots_index x)
-      ))
-      
-    let mode_index =
-      Data.RuntimeMode.(
+    let dots_index    = DotsOfDice.index_of 
+    let command_index = CommandExt.index_of
+    let mode_index    =
+      RuntimeMode.(
         function | Run
                  | RunNext -> 0
                  | GoTo _
@@ -136,6 +114,6 @@ module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
     module CallStackPoint = struct
         let get_for x y o = 
           Lazy.force o.points.(
-            (dots_index x) + (mode_index y) * dots_count)
+            (dots_index x) + (mode_index y) * DotsOfDice.count)
       end
   end

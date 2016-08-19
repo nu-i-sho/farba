@@ -5,6 +5,7 @@ type t = | OOOOOO
          | OO
          | O
 
+let count = 6
 let index_of =
   function | OOOOOO -> 5
            | OOOOO -> 4

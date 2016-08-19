@@ -1,3 +1,5 @@
+open Data
+
 type t = { height : int;
             width : int;
            weaver : int * int;

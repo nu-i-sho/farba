@@ -1,16 +1,15 @@
-type t = Data.Pigment.t
-open Data.Pigment
+open Data
+type t = Pigment.t
+open Pigment
 
 let opposite = 
-  function | White -> White
-           | Blue  -> Gray
-           | Gray  -> Blue
-
+   Data.Pigment.opposite
+  
 let of_char = 
   function | '0' -> White
            | '1' -> Blue
            | '2' -> Gray
-           |  _  -> failwith "invalid symbol" 
+           |  _  -> failwith Fail.invalid_symbol 
 
 let to_int = 
   function | White -> 0

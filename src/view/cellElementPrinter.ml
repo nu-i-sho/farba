@@ -3,8 +3,6 @@ type t = { canvas : Canvas.t;
            colors : TissueColorScheme.t;
            coords : float * float
          }
-
-module CScheme = TissueColorScheme
        
 let make canvas scale colors =
   { canvas; scale; colors; coords = 0.0, 0.0 }
@@ -21,17 +19,20 @@ let set_index (x, y) o =
 let set_color c o =
   { o with canvas = Canvas.set_color c o.canvas }
 
-let set_color_for_cancer o = o |> set_color CScheme.(o.colors.white)
-let set_color_for_clot   o = o |> set_color CScheme.(o.colors.clot)
-let set_color_for_virus  o = o |> set_color CScheme.(o.colors.virus)
-let set_color_for_line   o = o |> set_color CScheme.(o.colors.line)
-                           
+open TissueColorScheme
+
+let set_color_for_cancer o = o |> set_color o.colors.white
+let set_color_for_clot   o = o |> set_color o.colors.clot
+let set_color_for_virus  o = o |> set_color o.colors.virus
+let set_color_for_line   o = o |> set_color o.colors.line     
+
 let set_color_for_pigment p o =
-  o |> set_color CScheme.( Data.Pigment.(
+  o |> set_color Data.Pigment.(
                    match p with
                    | White -> o.colors.white
                    | Blue  -> o.colors.blue
-                   | Gray  -> o.colors.gray ))
+                   | Gray  -> o.colors.gray
+                 )
 let round num =
   let fractional, integral = modf num in
   (int_of_float integral) 

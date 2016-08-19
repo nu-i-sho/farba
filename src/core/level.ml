@@ -1,3 +1,5 @@
+open Data
+   
 type t = { active : int * int;
            height : int;
             width : int;
@@ -6,12 +8,12 @@ type t = { active : int * int;
              path : LevelPath.t
 	 }
 
-    let active o = o.active
-    let height o = o.height
-    let width  o = o.width
-    let flora  o = o.flora
-    let fauna  o = o.fauna
-    let path   o = o.path
+let active o = o.active
+let height o = o.height
+let width  o = o.width
+let flora  o = o.flora
+let fauna  o = o.fauna
+let path   o = o.path
                  
 module Loader = struct
     module TREE = LEVELS_SOURCE_TREE
@@ -24,38 +26,38 @@ module Loader = struct
 
         let parse_cytoplasm acc i =  
           let add = Index.Map.add in
-          Data.( function | '*' -> acc
-                          | 'O' -> acc |> add i Pigment.Gray
-	                  | '0' -> acc |> add i Pigment.Blue
-                          | ' ' -> acc |> add i Pigment.White
-	                  |  _  -> failwith "invalid char" )
+          function | '*' -> acc
+                   | 'O' -> acc |> add i Pigment.Gray
+	           | '0' -> acc |> add i Pigment.Blue
+                   | ' ' -> acc |> add i Pigment.White
+	           |  _  -> failwith Fail.invalid_symbol
 
         let parse_nucleus acc i = 
-          Data.( let add_nucleus pigment gaze = 
-	           Index.Map.add i Nucleus.({ pigment; gaze }) acc
-	         in
+          let add_nucleus pigment gaze = 
+	    Index.Map.add i Nucleus.({ pigment; gaze }) acc
+	  in
 	     
-	         let add_gray = add_nucleus Pigment.Gray
-	         and add_blue = add_nucleus Pigment.Blue in
+	  let add_gray = add_nucleus Pigment.Gray
+	  and add_blue = add_nucleus Pigment.Blue in
 
-	         function | '*'
-                          | ' ' -> acc
+	  function | '*'
+                   | ' ' -> acc
 
-	                  | 'a' -> add_gray Side.Up
-                          | 'b' -> add_gray Side.RightUp
-                          | 'c' -> add_gray Side.RightDown
-                          | 'd' -> add_gray Side.Down
-                          | 'e' -> add_gray Side.LeftDown
-                          | 'f' -> add_gray Side.LeftUp
+	           | 'a' -> add_gray Side.Up
+                   | 'b' -> add_gray Side.RightUp
+                   | 'c' -> add_gray Side.RightDown
+                   | 'd' -> add_gray Side.Down
+                   | 'e' -> add_gray Side.LeftDown
+                   | 'f' -> add_gray Side.LeftUp
 
-		          | 'A' -> add_blue Side.Up
-                          | 'B' -> add_blue Side.RightUp
-                          | 'C' -> add_blue Side.RightDown
-                          | 'D' -> add_blue Side.Down
-                          | 'E' -> add_blue Side.LeftDown
-                          | 'F' -> add_blue Side.LeftUp
-                                 
-                          |  _  -> failwith "invalid char")
+		   | 'A' -> add_blue Side.Up
+                   | 'B' -> add_blue Side.RightUp
+                   | 'C' -> add_blue Side.RightDown
+                   | 'D' -> add_blue Side.Down
+                   | 'E' -> add_blue Side.LeftDown
+                   | 'F' -> add_blue Side.LeftUp
+                          
+                   |  _  -> failwith Fail.invalid_symbol
 
         let load path =
           let root = (module LevelsSourceTree : TREE.ROOT.T) in
@@ -69,7 +71,7 @@ module Loader = struct
           and flora = Lazy.force Src.flora
           and index = 
 	    function | Some i -> i
-                     | None   -> failwith "invalid source" in
+                     | None   -> failwith Fail.invalid_source in
 
           { active = Src.active |> Lazy.force
                                 |> Matrix.of_string_list

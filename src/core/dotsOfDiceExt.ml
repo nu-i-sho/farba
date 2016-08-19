@@ -1,6 +1,10 @@
-type t = Data.DotsOfDice.t
-open Data.DotsOfDice
+open Data
+type t = DotsOfDice.t
+open DotsOfDice
 
+let index_of = Data.DotsOfDice.index_of  
+let compare  = Data.DotsOfDice.compare
+   
 let increment =
   function | OOOOOO -> O
            | OOOOO -> OOOOOO
@@ -16,15 +20,7 @@ let to_string =
            | OOO -> "OOO"
            | OO -> "OO"
            | O -> "O"
-
-let index_of =
-  function | OOOOOO -> 5
-           | OOOOO -> 4
-           | OOOO -> 3
-           | OOO -> 2
-           | OO -> 1
-           | O -> 0
-
+                
 let all = [ OOOOOO;
             OOOOO;
             OOOO;

@@ -1,4 +1,4 @@
-open Data.Statistics.OfCommands
+open Data.CommandsStatistics
 open Data.Command
 
 let zero = { replications = 0;  

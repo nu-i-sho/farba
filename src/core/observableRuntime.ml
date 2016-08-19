@@ -1,5 +1,7 @@
 module Make (Weaver : STATISTICABLE_WEAVER.T) = struct
-    module Subscribe (Observer : T.CALL_STACK_OBSERVER) = struct
+
+    open Contracts
+    module Subscribe (Observer : CALL_STACK_OBSERVER.T) = struct
         module Runtime = StatisticableRuntime.Make (Weaver)    
         type weaver_t = Weaver.t
         type t = { observer : Observer.t;

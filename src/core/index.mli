@@ -5,4 +5,4 @@ module Map : sig
     val set : key -> 'a -> 'a t -> 'a t 
   end
      
-val move : Side.t -> t -> t 
+val move : Data.Side.t -> t -> t 

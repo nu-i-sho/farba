@@ -16,10 +16,10 @@ let fauna  o = o.fauna
 let path   o = o.path
                  
 module Loader = struct
-    module TREE = LEVELS_SOURCE_TREE
+    module TREE = CONTRACTS.LEVELS_SOURCE_TREE
     module Make (LevelsSourceTree : TREE.ROOT.T) = struct
       
-        module NodeMap   = DotsOfDiceNodeMap
+        module NodeMap   = Tools.DotsOfDiceNodeMap
         module Root      = NodeMap.Make (TREE.BRANCH)
         module Branch    = NodeMap.Make (TREE.BRANCHLET)
         module Branchlet = NodeMap.Make (TREE.LEAF)

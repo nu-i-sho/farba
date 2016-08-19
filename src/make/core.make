@@ -2,15 +2,9 @@ echo "------- Core build started -------"
 
 cd ../core
 
-ocamlopt -for-pack Core -c MODULE.ml
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDiceExt.mli
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDiceExt.ml
 ocamlopt -I ../../bin -for-pack Core -c levelPath.ml
-ocamlopt -for-pack Core -c DOTS_OF_DICE_NODE.ml
-ocamlopt -for-pack Core -c LEVEL_SOURCE.ml
-ocamlopt -for-pack Core -c LEVELS_SOURCE_TREE.ml
-ocamlopt -I ../../bin -for-pack Core -c dotsOfDiceNodeMap.mli
-ocamlopt -I ../../bin -for-pack Core -c dotsOfDiceNodeMap.ml
 ocamlopt -I ../../bin -for-pack Core -c pigmentExt.mli
 ocamlopt -I ../../bin -for-pack Core -c pigmentExt.ml
 ocamlopt -I ../../bin -for-pack Core -c sideExt.mli
@@ -65,14 +59,12 @@ ocamlopt -I ../../bin -for-pack Core -c statisticableRuntime.ml
 ocamlopt -I ../../bin -for-pack Core -c observableRuntime.mli
 ocamlopt -I ../../bin -for-pack Core -c observableRuntime.ml
 
-ocamlopt -pack -o core.cmx \
-MODULE.cmx dotsOfDiceExt.cmx DOTS_OF_DICE_NODE.cmx \
-LEVEL_SOURCE.cmx LEVELS_SOURCE_TREE.cmx dotsOfDiceNodeMap.cmx \
-pigmentExt.cmx sideExt.cmx nucleusExt.cmx index.cmx intMap.cmx \
-matrix.cmx levelPath.cmx level.cmx tissue.cmx weaverAct.cmx \
-statused.cmx passStatus.cmx moveStatus.cmx weaverActsCounter.cmx \
-WEAVER.cmx weaverStatistics.cmx STATISTICABLE_WEAVER.cmx \
-weaver.cmx tissueCounter.cmx statisticableWeaver.cmx \
+ocamlopt -pack -o core.cmx dotsOfDiceExt.cmx pigmentExt.cmx \
+sideExt.cmx nucleusExt.cmx index.cmx intMap.cmx matrix.cmx \
+levelPath.cmx level.cmx tissue.cmx weaverAct.cmx statused.cmx \
+passStatus.cmx moveStatus.cmx weaverActsCounter.cmx WEAVER.cmx \
+weaverStatistics.cmx STATISTICABLE_WEAVER.cmx weaver.cmx \
+tissueCounter.cmx statisticableWeaver.cmx \
 tissueObservableWeaver.cmx callStack.cmx solutionLabel.cmx \
 commandExt.cmx solution.cmx tickStatus.cmx RUNTIME.cmx runtime.cmx \
 commandsCounter.cmx STATISTICABLE_RUNTIME.cmx \

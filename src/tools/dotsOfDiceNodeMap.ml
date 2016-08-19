@@ -1,3 +1,4 @@
+open CONTRACTS
 module Make (ITEM : MODULE.T) = struct
     module type E = ITEM.T
     module type T = DOTS_OF_DICE_NODE.MAKE (ITEM).T

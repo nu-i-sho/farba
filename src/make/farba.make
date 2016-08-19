@@ -3,6 +3,7 @@ echo ""
 
 ./data.make
 ./contracts.make
+./tools.make
 ./core.make
 ./images.make
 ./view.make

@@ -13,6 +13,8 @@ ocamlopt -for-pack View -c tissueColorScheme.mli
 ocamlopt -for-pack View -c tissueColorScheme.ml
 ocamlopt -for-pack View -c commandColorScheme.mli
 ocamlopt -I ../../bin -for-pack View -c commandColorScheme.ml
+ocamlopt -for-pack View -c callStackPointColorScheme.mli
+ocamlopt -I ../../bin -for-pack View -c callStackPointColorScheme.ml
 ocamlopt -for-pack View -c colorScheme.mli
 ocamlopt -for-pack View -c colorScheme.ml
 ocamlopt -I ../../bin -for-pack View -c imagesStorage.mli
@@ -27,7 +29,8 @@ ocamlopt -I ../../bin -for-pack View -c cellElementPrinter.ml
 
 ocamlopt -pack -o view.cmx \
 commandExt.cmx canvas.cmx color.cmx COLOR_SCHEME.cmx \
-tissueColorScheme.cmx commandColorScheme.cmx colorScheme.cmx \
+tissueColorScheme.cmx commandColorScheme.cmx \
+callStackPointColorScheme.cmx colorScheme.cmx \
 imagesStorage.cmx const.cmx scale.cmx pair.cmx \
 cellElementPrinter.cmx
 

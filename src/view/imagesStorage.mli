@@ -1,6 +1,8 @@
 module Make (Prototypes : CONTRACTS.PROTOIMAGES_STORAGE.T) : sig
     type t
-    val make : ColorScheme.t -> t
+    val make : CommandColorScheme.t
+            -> CallStackPointColorScheme.t
+            -> t
 
     module Command : sig
         val get_for : Data.Command.t -> t -> Graphics.image

@@ -1,5 +1,5 @@
-type t = private {  run : char -> Graphics.color;
-                   find : char -> Graphics.color
+type t = private {  run_map : char -> Graphics.color;
+                   find_map : char -> Graphics.color
                  }
 
 include COLOR_SCHEME.T with type t := t

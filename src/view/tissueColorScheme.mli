@@ -5,4 +5,6 @@ type t = private {  clot : Graphics.color;
                     blue : Graphics.color;
                     gray : Graphics.color
                  }
-val default : t
+
+include COLOR_SCHEME.T with type t := t
+

@@ -1,6 +1,7 @@
-module Make (Prototypes : IMAGE_PROTOTYPES.T) = struct
+open CONTRACTS
+module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
 
-    module type PROTO = IMAGE_PROTOTYPE.T
+    module type PROTO = PROTOIMAGE.T
                     
     type t = { commands : Graphics.image lazy_t array;
                  points : Graphics.image lazy_t array;

@@ -1,4 +1,4 @@
-module Subscribe (Observer : Contracts.TISSUE_OBSERVER.T) = struct
+module Subscribe (Observer : CONTRACTS.TISSUE_OBSERVER.T) = struct
     
     module Weaver = StatisticableWeaver
     type t = { observer : Observer.t;

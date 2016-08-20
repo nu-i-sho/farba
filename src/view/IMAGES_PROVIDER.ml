@@ -12,8 +12,4 @@ module type T = sig
                -> t
                -> result_t
       end
-         
-    val make : CommandColorScheme.t
-            -> CallStackPointColorScheme.t
-            -> t
   end

@@ -15,12 +15,6 @@ module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
         point_colors
       }
 
-    let index_of_mode =
-      RuntimeMode.(
-        function | Run    | RunNext -> 0
-                 | GoTo _ | Return  -> 1
-      )
-      
     module Command = struct
         module X54  = Prototypes.X54
 
@@ -63,11 +57,10 @@ module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
                              |> ProtoDotsMap.get dots
           and color_map =
             let open CallStackPointColorScheme in
-            match index_of_mode mode with
-            | 0 -> o.point_colors.run_map
-            | 1 -> o.point_colors.find_map
-            | _ -> failwith Fail.impossible_case in
-
+            match RuntimeModeExt.kind_of mode with
+            | RuntimeModeKind.Find -> o.point_colors.find_map
+            | RuntimeModeKind.Run  -> o.point_colors.run_map in
+          
           Image.of_prototype color_map prototype
       end
   end

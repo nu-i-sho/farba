@@ -5,17 +5,20 @@ type t = { height : int;
            weaver : int * int;
              clot : ((int * int) * Side.t) option;
 	    flora : Pigment.t Index.Map.t;
-            fauna : Nucleus.t Index.Map.t
+            fauna : Nucleus.t Index.Map.t;
+             init : t option
 	 }
 
 let load level =
-  { height = level |> Level.height;
-     width = level |> Level.width;
-    weaver = level |> Level.active;
-     flora = level |> Level.flora;
-     fauna = level |> Level.fauna;
-      clot = None
-  }
+  let state = { height = level |> Level.height;
+                 width = level |> Level.width;
+                weaver = level |> Level.active;
+                 flora = level |> Level.flora;
+                 fauna = level |> Level.fauna;
+                  clot = None;
+                  init = None
+              } in
+  { state with init = Some state }
 
 let height o = o.height
 let width  o = o.width
@@ -29,36 +32,54 @@ let with_weaver x o = { o with weaver = x }
 let with_clot i x o = { o with clot = Some (i, x) }
 
 let cell c n =
-  Data.Cell.({ cytoplasm = c;
-                 nucleus = n;
-             })
+  Cell.({ cytoplasm = c;
+            nucleus = n;
+       })
 
-let to_item x =
-  Data.TissueItem.(
-    match x with
-   (* (cytoplasm, nucleus), (clot, is_active) *)
-    |  _, ((Some gaze), _)             -> Clot gaze
-    | (None, None), _                  -> Out
-    | (None, (Some n)), _              -> Outed n
-    | ((Some c), None), _              -> Cytoplasm c
-    | ((Some c), (Some n)), (_, true)  -> Active (cell c n)
-    | ((Some c), (Some n)), (_, false) -> Static (cell c n)
+let to_item =
+  TissueItem.((* (cytoplasm, nucleus), (clot, is_active) *)
+    function |  _, ((Some gaze), _)             -> Clot gaze
+             | (None, None), _                  -> Out
+             | (None, (Some n)), _              -> Outed n
+             | ((Some c), None), _              -> Cytoplasm c
+             | ((Some c), (Some n)), (_, true)  -> Active (cell c n)
+             | ((Some c), (Some n)), (_, false) -> Static (cell c n)
   )
 
-let items o =
-  let h = o.height
-  and w = o.width in
-  let flora  = Matrix.optional h w o.flora
-  and fauna  = Matrix.optional h w o.fauna
-  and weaver = (Index.Map.singleton o.weaver true)
-               |> Matrix.of_map h w false
-  and clot   = match o.clot with
-               | None           -> Matrix.empty h w None
-               | Some (i, gaze) ->
-		  (Some gaze) |> Index.Map.singleton i
-                              |> Matrix.of_map h w None in
+let to_init_item =
+  InitTissueItem.((* (cytoplasm, nucleus), is_active *)
+    function | (None, _), _                -> Out
+             | ((Some c), None), _         -> Cytoplasm c
+             | ((Some c), (Some n)), true  -> Active (cell c n)
+             | ((Some c), (Some n)), false -> Static (cell c n)
+  )
 
-  let flora_fauna = Matrix.zip flora fauna
-  and clot_weaver = Matrix.zip clot weaver in
-  (Matrix.zip flora_fauna clot_weaver)
+let flora_matrix o =
+  Matrix.optional o.height o.width o.flora
+  
+let fauna_matrix o =
+  Matrix.optional o.height o.width o.fauna
+
+let weaver_matrix o =
+  (Index.Map.singleton o.weaver true)
+     |> Matrix.of_map o.height o.width false
+
+let clot_matrix o =
+  match o.clot with
+  | None           -> Matrix.empty o.height o.width None
+  | Some (i, gaze) -> (Some gaze)
+                         |> Index.Map.singleton i
+                         |> Matrix.of_map o.height o.width None
+let init_items o =
+  match o.init with
+  | None   ->  Matrix.empty 0 0 InitTissueItem.Out 
+  | Some o -> (Matrix.zip (Matrix.zip (flora_matrix  o)
+                                      (fauna_matrix  o))
+                                      (weaver_matrix o))
+                 |> Matrix.map to_init_item
+let items o =
+  (Matrix.zip (Matrix.zip (flora_matrix  o)
+                          (fauna_matrix  o))
+              (Matrix.zip (clot_matrix   o)
+                          (weaver_matrix o)))
      |> Matrix.map to_item

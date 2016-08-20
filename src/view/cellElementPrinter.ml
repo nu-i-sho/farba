@@ -7,7 +7,6 @@ type t = { canvas : Canvas.t;
 let make canvas scale colors =
   { canvas; scale; colors; coords = 0.0, 0.0 }
   
-
 let set_index (x, y) o =
   let y  = y * 2 + (compare 1 (x mod 2))
   and r1 = Scale.Hexagon.external_radius o.scale

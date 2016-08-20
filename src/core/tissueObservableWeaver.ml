@@ -14,7 +14,7 @@ module Subscribe (Observer : CONTRACTS.TISSUE_OBSERVER.T) = struct
                                     observer
 	           and set acc i v =
                      Observer.set i v acc in
-		   tissue |> Tissue.items
+		   tissue |> Tissue.init_items
                           |> Matrix.foldi set observer 
       }
 

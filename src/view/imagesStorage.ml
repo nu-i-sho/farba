@@ -27,7 +27,9 @@ module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
                      commands : Graphics.image CommandMap.t;
                        points : Graphics.image CSPointMap.t
              }
-         
+           
+    type result_t = (Image.t, t) StateUpdatableResult.t
+
     let make command_colors point_colors =
       { command_colors;
           point_colors;

@@ -2,22 +2,14 @@ module Decorate (Provider : IMAGES_PROVIDER.T
                               with type result_t = Image.t) = struct
     open Data
 
-    module CommandMap   = Map.Make (CommandExt)
-
-    let index_of_mode =
-      RuntimeMode.(
-        function | Run    | RunNext -> 0
-                 | GoTo _ | Return  -> 1
-      )
-      
+    module CommandMap = Map.Make (CommandExt)
     module CSPointMap =
       Map.Make (struct
-                    type t = DotsOfDice.t * RuntimeMode.t 
+                    type t = DotsOfDice.t * RuntimeModeKind.t 
                     let compare (d1, m1) (d2, m2) =
                       let res = DotsOfDice.compare d1 d2 in
                       if res <> 0 then res else
-                        compare (index_of_mode m1)
-                                (index_of_mode m2)
+                        RuntimeModeKind.compare m1 m2
                   end)
 
     type t = { commands : Graphics.image CommandMap.t;
@@ -48,7 +40,7 @@ module Decorate (Provider : IMAGES_PROVIDER.T
 
     module CallStackPoint = struct
         let rec get dots mode o =
-          let key = dots, mode in
+          let key = dots, RuntimeModeExt.kind_of mode in
           if CSPointMap.mem key o.points then
             StateUpdatableResult.(
               { result = CSPointMap.find key o.points;

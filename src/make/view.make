@@ -29,6 +29,8 @@ ocamlopt -I ../../bin -for-pack View -c imagesProvider.ml
 ocamlopt -I ../../bin -for-pack View -c imagesStorage.mli
 ocamlopt -I ../../bin -for-pack View -c imagesStorage.ml
 ocamlopt -for-pack View -c const.ml
+ocamlopt -I ../../bin -for-pack View -c sideExt.mli
+ocamlopt -I ../../bin -for-pack View -c sideExt.ml
 ocamlopt -I ../../bin -for-pack View -c scale.mli
 ocamlopt -I ../../bin -for-pack View -c scale.ml
 ocamlopt -for-pack View -c pair.mli
@@ -41,8 +43,8 @@ commandKind.cmx commandExt.cmx canvas.cmx color.cmx \
 COLOR_SCHEME.cmx tissueColorScheme.cmx commandColorScheme.cmx \
 callStackPointColorScheme.cmx image.cmx runtimeModeKind.cmx \
 runtimeModeExt.cmx stateUpdatableResult.cmx IMAGES_PROVIDER.cmx \
-imagesStorage.cmx imagesProvider.cmx const.cmx scale.cmx pair.cmx \
-cellElementPrinter.cmx
+imagesStorage.cmx imagesProvider.cmx const.cmx sideExt.cmx \
+scale.cmx pair.cmx cellElementPrinter.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

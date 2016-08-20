@@ -86,14 +86,6 @@ module Cytoplasm = struct
     let eyes_coords o = (0.0, 0.0), (0.0, 0.0)
   end
 
-let sector =
-  function | Data.Side.RightUp   -> 0.0
-           | Data.Side.Up        -> 1.0
-           | Data.Side.LeftUp    -> 2.0
-           | Data.Side.LeftDown  -> 3.0
-           | Data.Side.Down      -> 4.0
-           | Data.Side.RightDown -> 5.0
-
 let calc_coord f g radius angle sector =  
   (f (angle +. (Const.pi_div_3 *. sector))) *. (g radius)
 
@@ -108,8 +100,8 @@ module Nucleus = struct
     let radius      o = o.nucleus_r
     let eyes_radius o = o.nucleus_eyes_r
     let eyes_coords side o =
-      let eye_point =
-        circle_point (sector side) o.nucleus_eyes_line_r in
+      let eye_point = circle_point (SideExt.sector_of side)
+                                    o.nucleus_eyes_line_r in
       eye_point Const.pi_div_10,
       eye_point Const.pi_div_30_mul_7
   end
@@ -119,7 +111,7 @@ module Cancer = struct
       let r0 = o.nucleus_r *. 0.85
       and r1 = o.nucleus_r *. 0.8
       and r2 = o.nucleus_r *. 0.75
-      and point = circle_point (sector side) in
+      and point = circle_point (SideExt.sector_of side) in
       
       let p00 = point r0 Const.pi_div_15
       and p01 = point r0 Const.pi_div_15_mul_4

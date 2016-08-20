@@ -1,110 +1,106 @@
 open CONTRACTS
-open Data
-   
 module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
+    open Data
 
-    module type PROTO = PROTOIMAGE.T
-                    
-    type t = { commands : Graphics.image lazy_t array;
-                 points : Graphics.image lazy_t array;
-             }
+    module type DOTS    = DOTS_OF_DICE_NODE.MAKE (PROTOIMAGE).T
+    module ProtoDotsMap = Tools.DotsOfDiceNodeMap.Make (PROTOIMAGE)
+    module CommandMap   = Map.Make (CommandExt)
 
-    let dots_index    = DotsOfDice.index_of 
-    let command_index = CommandExt.index_of
-    let mode_index    =
+    let index_of_mode =
       RuntimeMode.(
-        function | Run
-                 | RunNext -> 0
-                 | GoTo _
-                 | Return  -> 1
+        function | Run    | RunNext -> 0
+                 | GoTo _ | Return  -> 1
       )
-                        
-    let image_of_prototype color_of_char prototype =
-      lazy ( Image.of_prototype color_of_char prototype )
       
-    let make command_color_scheme call_stack_point_color_scheme =
-      let commands_images =
-        let module ProtoAct = Prototypes.X54.Act in
-        let module ColorScheme = CommandColorScheme in
-        let module ProtoDots = Prototypes.X54.DotsOfDice in
-        let colors = command_color_scheme
-        and dots_of_dice_prototypes =
-          [ (module ProtoDots.OOOOOO : PROTO);
-            (module ProtoDots.OOOOO);
-            (module ProtoDots.OOOO);
-            (module ProtoDots.OOO);
-            (module ProtoDots.OO);
-            (module ProtoDots.O)
-          ]
-        in
-        [ ( let char_map = ColorScheme.(colors.act_map) in
-            [ (* 0 *) (module ProtoAct.Nope : PROTO);
-              (* 1 *) (module ProtoAct.Move);
-              (* 2 *) (module ProtoAct.Pass);
-              (* 3 *) (module ProtoAct.TurnLeft);
-              (* 4 *) (module ProtoAct.TurnRight);
-              (* 5 *) (module ProtoAct.ReplicateDirect); 
-              (* 6 *) (module ProtoAct.ReplicateInverse)
-            ] |> List.map (image_of_prototype char_map)
-          );
-          
-          ( let char_map = ColorScheme.(colors.end_map) in
-            [ (* 7 *) (module Prototypes.X54.End : PROTO)
-              |> image_of_prototype char_map
-            ]
-          );
+    module CSPointMap =
+      Map.Make (struct
+                    type t = DotsOfDice.t * RuntimeMode.t 
+                    let compare (d1, m1) (d2, m2) =
+                      let res = DotsOfDice.compare d1 d2 in
+                      if res <> 0 then res else
+                        compare (index_of_mode m1)
+                                (index_of_mode m2)
+                  end)
 
-          ( let char_map = ColorScheme.(colors.declare_map) in
-            (* 8 - 13 *) dots_of_dice_prototypes
-              |> List.map (image_of_prototype char_map)
-          );
-
-          ( let char_map = ColorScheme.(colors.call_map) in
-            (* 14 - 19 *) dots_of_dice_prototypes
-              |> List.map (image_of_prototype char_map)
-          )
-        ]
-        |> List.concat
-        |> Array.of_list
-        
-      and call_stack_points_images =
-        let module ColorScheme = CallStackPointColorScheme in
-        let module ProtoDots = Prototypes.X20.DotsOfDice in
-        let colors = call_stack_point_color_scheme
-        and dots_of_dice_prototypes =
-          [ (module ProtoDots.OOOOOO : PROTO);
-            (module ProtoDots.OOOOO);
-            (module ProtoDots.OOOO);
-            (module ProtoDots.OOO);
-            (module ProtoDots.OO);
-            (module ProtoDots.O)
-          ]
-        in
-        [ ( let char_map = ColorScheme.(colors.run_map) in
-            dots_of_dice_prototypes
-              |> List.map (image_of_prototype char_map)
-          );
-          
-          ( let char_map = ColorScheme.(colors.find_map) in
-            dots_of_dice_prototypes
-              |> List.map (image_of_prototype char_map)
-          );
-        ]
-        |> List.concat
-        |> Array.of_list
-      in
-      { commands = commands_images;
-          points = call_stack_points_images
+    type t = { command_colors : CommandColorScheme.t;
+                 point_colors : CallStackPointColorScheme.t;
+                     commands : Graphics.image CommandMap.t;
+                       points : Graphics.image CSPointMap.t
+             }
+         
+    let make command_colors point_colors =
+      { command_colors;
+          point_colors;
+              commands = CommandMap.empty;
+                points = CSPointMap.empty
       }
       
     module Command = struct
-        let get_for x o = 
-          Lazy.force o.commands.(command_index x) 
+        module X54  = Prototypes.X54
+
+        let rec get command o =
+          if CommandMap.mem command o.commands then
+            StateUpdatableResult.(
+              { result = CommandMap.find command o.commands;
+                 state = o
+              }) else
+
+            let prototype =
+              let open Command in
+              match command with
+              | Declare dots
+              | Call    dots    -> (module X54.DotsOfDice : DOTS)
+                                      |> ProtoDotsMap.get dots
+              | Nope            -> (module X54.Act.Nope)
+              | Move            -> (module X54.Act.Move)
+              | Pass            -> (module X54.Act.Pass)
+              | Turn Hand.Left  -> (module X54.Act.TurnLeft)
+              | Turn Hand.Right -> (module X54.Act.TurnRight)
+              | Replicate Relation.Direct
+                                -> (module X54.Act.ReplicateDirect)
+              | Replicate Relation.Inverse
+                                -> (module X54.Act.ReplicateInverse)
+              | End             -> (module X54.End)
+              
+            and color_map =
+              let open CommandColorScheme in
+              let open CommandKind in
+              
+              match CommandExt.kind_of command with
+              | Act     -> o.command_colors.act_map 
+              | Call    -> o.command_colors.call_map
+              | Declare -> o.command_colors.declare_map
+              | End     -> o.command_colors.end_map
+            in
+
+            let img = Image.of_prototype color_map prototype in
+            let commands = CommandMap.add command img o.commands in
+            get command { o with commands }
       end
 
     module CallStackPoint = struct
-        let get_for x y o = 
-          Lazy.force o.points.(
-            (dots_index x) + (mode_index y) * DotsOfDice.count)
+        module X20 = Prototypes.X20
+                 
+        let rec get dots mode o =
+          let key = dots, mode in
+          if CSPointMap.mem key o.points then
+            StateUpdatableResult.(
+              { result = CSPointMap.find key o.points;
+                 state = o
+              }) else
+
+          let prototype = (module X20.DotsOfDice : DOTS)
+                             |> ProtoDotsMap.get dots
+          and color_map =
+            let open CallStackPointColorScheme in
+            match index_of_mode mode with
+            | 0 -> o.point_colors.run_map
+            | 1 -> o.point_colors.find_map
+            | _ -> failwith Fail.impossible_case
+          in
+
+          let image = Image.of_prototype color_map prototype in
+          let points = CSPointMap.add key image o.points in
+          get dots mode { o with points }
       end
   end

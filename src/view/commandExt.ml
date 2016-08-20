@@ -3,6 +3,16 @@ type t = Data.Command.t
 open Data
 open Command
 module Dots = DotsOfDice
+
+let kind_of =
+  function | Nope
+           | Move
+           | Pass
+           | Turn _
+           | Replicate _ -> CommandKind.Act
+           | Call _      -> CommandKind.Call
+           | Declare _   -> CommandKind.Declare
+           | End         -> CommandKind.End
             
 let index_of =
   function | Nope                       -> 0

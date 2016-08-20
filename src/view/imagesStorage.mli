@@ -5,13 +5,15 @@ module Make (Prototypes : CONTRACTS.PROTOIMAGES_STORAGE.T) : sig
             -> t
 
     module Command : sig
-        val get_for : Data.Command.t -> t -> Graphics.image
+        val get : Data.Command.t
+               -> t
+               -> (Graphics.image, t) StateUpdatableResult.t
       end
 
     module CallStackPoint : sig
-        val get_for : Data.DotsOfDice.t
-                   -> Data.RuntimeMode.t
-                   -> t
-                   -> Graphics.image
+        val get : Data.DotsOfDice.t
+               -> Data.RuntimeMode.t
+               -> t
+               -> (Graphics.image, t) StateUpdatableResult.t
       end
   end

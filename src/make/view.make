@@ -19,7 +19,7 @@ ocamlopt -I ../../bin -for-pack View -c callStackPointColorScheme.ml
 ocamlopt -I ../../bin -for-pack View -c image.mli
 ocamlopt -I ../../bin -for-pack View -c image.ml
 ocamlopt -for-pack View -c stateUpdatableResult.ml
-ocamlopt -I ../../bin -for-pack View -c IMAGES_STORAGE.ml
+ocamlopt -I ../../bin -for-pack View -c IMAGES_PROVIDER.ml
 ocamlopt -I ../../bin -for-pack View -c imagesStorage.mli
 ocamlopt -I ../../bin -for-pack View -c imagesStorage.ml
 ocamlopt -for-pack View -c const.ml
@@ -34,7 +34,7 @@ ocamlopt -pack -o view.cmx \
 commandKind.cmx commandExt.cmx canvas.cmx color.cmx \
 COLOR_SCHEME.cmx tissueColorScheme.cmx commandColorScheme.cmx \
 callStackPointColorScheme.cmx image.cmx stateUpdatableResult.cmx \
-IMAGES_STORAGE.cmx imagesStorage.cmx const.cmx scale.cmx pair.cmx \
+IMAGES_PROVIDER.cmx imagesStorage.cmx const.cmx scale.cmx pair.cmx \
 cellElementPrinter.cmx
 
 mv view.cmx ../../bin/view.cmx

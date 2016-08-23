@@ -10,8 +10,8 @@ module Make (Weaver : STATISTICABLE_WEAVER.T) = struct
 
         let snap base =
           Data.RuntimePoint.(
-            { call_stack_top = Runtime.call_stack_top base;
-                        mode = Runtime.mode base
+            { crumb = Runtime.top_crumb base;
+               mode = Runtime.mode base
             })
                
         let make observer weaver solution =
@@ -23,20 +23,19 @@ module Make (Weaver : STATISTICABLE_WEAVER.T) = struct
             base
           }
           
-        let mode           o = o.base |> Runtime.mode 
-        let weaver         o = o.base |> Runtime.weaver
-        let solution       o = o.base |> Runtime.solution
-        let call_stack_top o = o.base |> Runtime.call_stack_top
-        let statistics     o = o.base |> Runtime.statistics
-
+        let statistics o = o.base |> Runtime.statistics  
+        let top_crumb  o = o.base |> Runtime.top_crumb
+        let solution   o = o.base |> Runtime.solution
+        let weaver     o = o.base |> Runtime.weaver
+        let mode       o = o.base |> Runtime.mode 
+        
         let tick o =
           let previous = snap o.base
           and base_result = Runtime.tick o.base in
           let current = snap Statused.(base_result.value) in
           let observer =
-            Observer.reset previous current o.observer
-          in
-
+            Observer.reset previous current o.observer in
+          
           Statused.(   
             { status = base_result.status;
                value = { observer; base = base_result.value }

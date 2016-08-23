@@ -1,3 +1,3 @@
-type t = { call_stack_top : CallStackPoint.t;
-                     mode : RuntimeMode.t
+type t = { crumb : Crumb.t;
+            mode : RuntimeMode.t
          }

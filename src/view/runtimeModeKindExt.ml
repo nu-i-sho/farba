@@ -1,6 +1,6 @@
-type t = | Find
-         | Run
-
+type t = Data.RuntimeModeKind.t
+open Data.RuntimeModeKind
+       
 let index_of =
   function | Find -> 0
            | Run  -> 1

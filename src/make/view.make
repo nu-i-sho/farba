@@ -2,7 +2,6 @@ echo "------- View build started -------"
 
 cd ../view
 
-ocamlopt -for-pack View -c commandKind.ml
 ocamlopt -I ../../bin -for-pack View -c commandExt.mli
 ocamlopt -I ../../bin -for-pack View -c commandExt.ml
 ocamlopt -for-pack View -c canvas.mli
@@ -42,8 +41,8 @@ ocamlopt -I ../../bin -for-pack View -c tissue.mli
 ocamlopt -I ../../bin -for-pack View -c tissue.ml
 
 ocamlopt -pack -o view.cmx \
-commandKind.cmx commandExt.cmx canvas.cmx color.cmx \
-COLOR_SCHEME.cmx tissueColorScheme.cmx commandColorScheme.cmx \
+commandExt.cmx canvas.cmx color.cmx COLOR_SCHEME.cmx \
+tissueColorScheme.cmx commandColorScheme.cmx \
 callStackPointColorScheme.cmx image.cmx runtimeModeKind.cmx \
 runtimeModeExt.cmx stateUpdatableResult.cmx IMAGES_PROVIDER.cmx \
 imagesStorage.cmx imagesProvider.cmx const.cmx sideExt.cmx \

@@ -40,7 +40,7 @@ module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
             let open CommandColorScheme in
             let open CommandKind in
               
-            match CommandExt.kind_of command with
+            match Command.kind_of command with
             | Act     -> o.command_colors.act_map 
             | Call    -> o.command_colors.call_map
             | Declare -> o.command_colors.declare_map

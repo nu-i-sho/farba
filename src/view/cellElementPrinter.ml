@@ -20,12 +20,12 @@ let set_color c o =
 
 open TissueColorScheme
 
-let set_color_for_cancer o = o |> set_color o.colors.white
-let set_color_for_clot   o = o |> set_color o.colors.clot
-let set_color_for_virus  o = o |> set_color o.colors.virus
-let set_color_for_line   o = o |> set_color o.colors.line     
+let set_cancer_color o = o |> set_color o.colors.white
+let set_clot_color   o = o |> set_color o.colors.clot
+let set_virus_color  o = o |> set_color o.colors.virus
+let set_line_color   o = o |> set_color o.colors.line     
 
-let set_color_for_pigment p o =
+let set_pigment_color p o =
   o |> set_color Data.Pigment.(
                    match p with
                    | White -> o.colors.white

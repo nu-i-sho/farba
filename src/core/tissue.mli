@@ -3,8 +3,8 @@ type t
 val load        : Level.t -> t
 val height      : t -> int
 val width       : t -> int
-val init_items  : t -> Data.InitTissueItem.t Matrix.t
-val items       : t -> Data.TissueItem.t Matrix.t
+val init_items  : t -> Data.TissueItemInit.t Matrix.t
+val items       : t -> TissueItem.t Matrix.t
 val fauna       : t -> Data.Nucleus.t Index.Map.t
 val flora       : t -> Data.Pigment.t Index.Map.t
 val weaver      : t -> (int * int)

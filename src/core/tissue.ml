@@ -47,7 +47,7 @@ let to_item =
   )
 
 let to_init_item =
-  InitTissueItem.((* (cytoplasm, nucleus), is_active *)
+  TissueItemInit.((* (cytoplasm, nucleus), is_active *)
     function | (None, _), _                -> Out
              | ((Some c), None), _         -> Cytoplasm c
              | ((Some c), (Some n)), true  -> Active (cell c n)
@@ -72,7 +72,7 @@ let clot_matrix o =
                          |> Matrix.of_map o.height o.width None
 let init_items o =
   match o.init with
-  | None   ->  Matrix.empty 0 0 InitTissueItem.Out 
+  | None   ->  Matrix.empty 0 0 TissueItemInit.Out 
   | Some o -> (Matrix.zip (Matrix.zip (flora_matrix  o)
                                       (fauna_matrix  o))
                                       (weaver_matrix o))

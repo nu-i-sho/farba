@@ -48,7 +48,7 @@ module Make (Weaver : WEAVER.T) = struct
                     
       match command index o with
         
-      | Command.Pass
+      | Command.Act Action.Pass
         -> let result = Weaver.pass o.weaver in
            Statused.(
              { status = status_of_pass result.status;
@@ -56,7 +56,7 @@ module Make (Weaver : WEAVER.T) = struct
                                  crumbs = Breadcrumbs.move o.crumbs
                         }})
       
-      | Command.Move
+      | Command.Act Action.Move
         -> let result = Weaver.move o.weaver in
            Statused.(
              { status = status_of_move result.status;
@@ -64,7 +64,7 @@ module Make (Weaver : WEAVER.T) = struct
                                  crumbs = Breadcrumbs.move o.crumbs
                         }})
 
-      | Command.Replicate relation
+      | Command.Act (Action.Replicate relation)
         -> let result = Weaver.replicate relation o.weaver in
            Statused.(
              { status = status_of_move result.status;
@@ -72,7 +72,7 @@ module Make (Weaver : WEAVER.T) = struct
                                  crumbs = Breadcrumbs.move o.crumbs
                         }})
            
-      | Command.Turn hand
+      | Command.Act (Action.Turn hand)
         -> success { o with weaver = Weaver.turn hand o.weaver;
                             crumbs = Breadcrumbs.move o.crumbs
                    }

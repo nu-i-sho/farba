@@ -2,6 +2,8 @@ echo "------- View build started -------"
 
 cd ../view
 
+ocamlopt -I ../../bin -for-pack View -c actionExt.mli
+ocamlopt -I ../../bin -for-pack View -c actionExt.ml
 ocamlopt -I ../../bin -for-pack View -c commandExt.mli
 ocamlopt -I ../../bin -for-pack View -c commandExt.ml
 ocamlopt -for-pack View -c canvas.mli

@@ -53,7 +53,7 @@ let print_nucleus is_active is_cancer x printer =
        
 let print_cell is_active x printer =
   printer |> print_cytoplasm x.cytoplasm
-          |> print_nucleus is_active (CellExt.is_cancer x) x.nucleus
+          |> print_nucleus is_active (Cell.is_cancer x) x.nucleus
           
 let init_item i init o =
   match o with
@@ -71,7 +71,7 @@ let init_item i init o =
 
 let draw_nucleus_fully cell printer =
   printer |> P.draw_nucleus
-          |> ( if CellExt.is_cancer cell then
+          |> ( if Cell.is_cancer cell then
                  P.draw_engry_eyes else
                  P.draw_open_eyes) cell.nucleus.gaze
          
@@ -85,7 +85,7 @@ let update_item i update o =
            match update with
            | Inject (_, current)
              -> printer |> P.set_index i
-                        |> print_nucleus (CellExt.is_cancer current)
+                        |> print_nucleus (Cell.is_cancer current)
                                           true current.nucleus 
            | Extract (_, current)
              -> printer |> P.set_index i
@@ -94,7 +94,7 @@ let update_item i update o =
            | Turn (previous, current)
              -> let prev, curr = previous.nucleus,
                                  current.nucleus in
-                if CellExt.is_cancer current then
+                if Cell.is_cancer current then
                   printer |> P.set_index i
                           |> P.set_pigment_color curr.pigment
                           |> P.draw_engry_eyes prev.gaze
@@ -128,7 +128,7 @@ let update_item i update o =
                         |> P.draw_clotted_eyes current
            
            | MoveOut current
-             -> let is_cancer = NucleusExt.is_cancer current in
+             -> let is_cancer = Nucleus.is_cancer current in
                 printer |> P.set_index i
                         |> print_nucleus true is_cancer current
          )

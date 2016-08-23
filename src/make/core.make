@@ -39,8 +39,6 @@ ocamlopt -I ../../bin -for-pack Core -c tissueCounter.mli
 ocamlopt -I ../../bin -for-pack Core -c tissueCounter.ml
 ocamlopt -for-pack Core -c statisticableWeaver.mli
 ocamlopt -I ../../bin -for-pack Core -c statisticableWeaver.ml
-ocamlopt -I ../../bin -for-pack Core -c tissueItemInitExt.mli
-ocamlopt -I ../../bin -for-pack Core -c tissueItemInitExt.ml
 ocamlopt -I ../../bin -for-pack Core -c tissueItemUpdateExt.mli
 ocamlopt -I ../../bin -for-pack Core -c tissueItemUpdateExt.ml
 ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.mli
@@ -70,11 +68,11 @@ levelPath.cmx level.cmx tissueItem.cmx tissue.cmx weaverAct.cmx \
 statused.cmx passStatus.cmx moveStatus.cmx weaverActsCounter.cmx \
 WEAVER.cmx weaverStatistics.cmx STATISTICABLE_WEAVER.cmx \
 weaver.cmx tissueCounter.cmx statisticableWeaver.cmx \
-tissueItemInitExt.cmx tissueItemUpdateExt.cmx \
-tissueObservableWeaver.cmx callStack.cmx solutionLabel.cmx \
-commandExt.cmx solution.cmx tickStatus.cmx RUNTIME.cmx runtime.cmx \
-commandsCounter.cmx STATISTICABLE_RUNTIME.cmx \
-statisticableRuntime.cmx observableRuntime.cmx
+tissueItemUpdateExt.cmx tissueObservableWeaver.cmx callStack.cmx \
+solutionLabel.cmx commandExt.cmx solution.cmx tickStatus.cmx \
+RUNTIME.cmx runtime.cmx commandsCounter.cmx \
+STATISTICABLE_RUNTIME.cmx statisticableRuntime.cmx \
+observableRuntime.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

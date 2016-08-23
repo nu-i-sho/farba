@@ -10,7 +10,8 @@ let start =
   }]
 
 let top = List.hd
-
+let to_array = Array.of_list
+  
 let move o =
   match List.hd o with
 

@@ -9,7 +9,7 @@ module Decorate (Provider : IMAGES_PROVIDER.T
                     let compare (d1, m1) (d2, m2) =
                       let res = DotsOfDice.compare d1 d2 in
                       if res <> 0 then res else
-                        RuntimeModeKind.compare m1 m2
+                        RuntimeModeKindExt.compare m1 m2
                   end)
 
     type t = { commands : Graphics.image CommandMap.t;
@@ -40,7 +40,7 @@ module Decorate (Provider : IMAGES_PROVIDER.T
 
     module CallStackPoint = struct
         let rec get dots mode o =
-          let key = dots, RuntimeModeExt.kind_of mode in
+          let key = dots, RuntimeMode.kind_of mode in
           if CSPointMap.mem key o.points then
             StateUpdatableResult.(
               { result = CSPointMap.find key o.points;

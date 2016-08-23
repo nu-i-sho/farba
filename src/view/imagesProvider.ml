@@ -57,7 +57,7 @@ module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
                              |> ProtoDotsMap.get dots
           and color_map =
             let open CallStackPointColorScheme in
-            match RuntimeModeExt.kind_of mode with
+            match RuntimeMode.kind_of mode with
             | RuntimeModeKind.Find -> o.point_colors.find_map
             | RuntimeModeKind.Run  -> o.point_colors.run_map in
           

@@ -50,8 +50,11 @@ ocamlopt -I ../../bin -for-pack Core -c commandExt.mli
 ocamlopt -I ../../bin -for-pack Core -c commandExt.ml
 ocamlopt -I ../../bin -for-pack Core -c solution.mli
 ocamlopt -I ../../bin -for-pack Core -c solution.ml
+ocamlopt -for-pack Core -c tickStatus.mli
 ocamlopt -for-pack Core -c tickStatus.ml
 ocamlopt -I ../../bin -for-pack Core -c RUNTIME.ml
+ocamlopt -I ../../bin -for-pack Core -c weaverCommander.mli
+ocamlopt -I ../../bin -for-pack Core -c weaverCommander.ml
 ocamlopt -for-pack Core -c runtime.mli
 ocamlopt -I ../../bin -for-pack Core -c runtime.ml
 ocamlopt -I ../../bin -for-pack Core -c commandsCounter.mli
@@ -70,7 +73,7 @@ WEAVER.cmx weaverStatistics.cmx STATISTICABLE_WEAVER.cmx \
 weaver.cmx tissueCounter.cmx statisticableWeaver.cmx \
 tissueItemUpdateExt.cmx tissueObservableWeaver.cmx breadcrumbs.cmx \
 solutionLabel.cmx commandExt.cmx solution.cmx tickStatus.cmx \
-RUNTIME.cmx runtime.cmx commandsCounter.cmx \
+RUNTIME.cmx weaverCommander.cmx runtime.cmx commandsCounter.cmx \
 STATISTICABLE_RUNTIME.cmx statisticableRuntime.cmx \
 observableRuntime.cmx
 

@@ -1,7 +1,7 @@
 module Make (Weaver : WEAVER.T) = struct
-
+    module Commander = WeaverCommander.Make (Weaver)
     open Data
-     
+       
     type weaver_t = Weaver.t
     type t = {   weaver : weaver_t;
                solution : Solution.t;
@@ -35,47 +35,15 @@ module Make (Weaver : WEAVER.T) = struct
                })
       
     let run index o =
-      let status_of_pass =
-        function | PassStatus.Success -> TickStatus.Success
-                 | PassStatus.Dummy   -> TickStatus.Dummy
-                    
-      and status_of_move =
-        function | MoveStatus.Success -> TickStatus.Success
-                 | MoveStatus.Dummy   -> TickStatus.Dummy
-                 | MoveStatus.Clot    -> TickStatus.TissueCloted
-                 | MoveStatus.Outed   -> TickStatus.OutOfTissue
-      in
-                    
       match command index o with
         
-      | Command.Act Action.Pass
-        -> let result = Weaver.pass o.weaver in
+      | Command.Act action
+        -> let result = Commander.do' action o.weaver in
            Statused.(
-             { status = status_of_pass result.status;
+             { status = result.status;
                 value = { o with weaver = result.value;
                                  crumbs = Breadcrumbs.move o.crumbs
                         }})
-      
-      | Command.Act Action.Move
-        -> let result = Weaver.move o.weaver in
-           Statused.(
-             { status = status_of_move result.status;
-                value = { o with weaver = result.value;
-                                 crumbs = Breadcrumbs.move o.crumbs
-                        }})
-
-      | Command.Act (Action.Replicate relation)
-        -> let result = Weaver.replicate relation o.weaver in
-           Statused.(
-             { status = status_of_move result.status;
-                value = { o with weaver = result.value;
-                                 crumbs = Breadcrumbs.move o.crumbs
-                        }})
-           
-      | Command.Act (Action.Turn hand)
-        -> success { o with weaver = Weaver.turn hand o.weaver;
-                            crumbs = Breadcrumbs.move o.crumbs
-                   }
 
       | Command.Call procedure
         -> success { o with crumbs = Breadcrumbs.split o.crumbs;

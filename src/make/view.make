@@ -2,6 +2,10 @@ echo "------- View build started -------"
 
 cd ../view
 
+ocamlopt -I ../../bin -for-pack View -c nucleusExt.mli
+ocamlopt -I ../../bin -for-pack View -c nucleusExt.ml
+ocamlopt -I ../../bin -for-pack View -c cellExt.mli
+ocamlopt -I ../../bin -for-pack View -c cellExt.ml
 ocamlopt -for-pack View -c commandKind.ml
 ocamlopt -I ../../bin -for-pack View -c commandExt.mli
 ocamlopt -I ../../bin -for-pack View -c commandExt.ml
@@ -37,14 +41,18 @@ ocamlopt -for-pack View -c pair.mli
 ocamlopt -for-pack View -c pair.ml
 ocamlopt -I ../../bin -for-pack View -c cellElementPrinter.mli
 ocamlopt -I ../../bin -for-pack View -c cellElementPrinter.ml
+ocamlopt -for-pack View -c tissueFrame.ml
+ocamlopt -I ../../bin -for-pack View -c tissue.mli
+ocamlopt -I ../../bin -for-pack View -c tissue.ml
 
 ocamlopt -pack -o view.cmx \
-commandKind.cmx commandExt.cmx canvas.cmx color.cmx \
-COLOR_SCHEME.cmx tissueColorScheme.cmx commandColorScheme.cmx \
-callStackPointColorScheme.cmx image.cmx runtimeModeKind.cmx \
-runtimeModeExt.cmx stateUpdatableResult.cmx IMAGES_PROVIDER.cmx \
-imagesStorage.cmx imagesProvider.cmx const.cmx sideExt.cmx \
-scale.cmx pair.cmx cellElementPrinter.cmx
+nucleusExt.cmx cellExt.cmx commandKind.cmx commandExt.cmx \
+canvas.cmx color.cmx COLOR_SCHEME.cmx tissueColorScheme.cmx \
+commandColorScheme.cmx callStackPointColorScheme.cmx image.cmx \
+runtimeModeKind.cmx runtimeModeExt.cmx stateUpdatableResult.cmx \
+IMAGES_PROVIDER.cmx imagesStorage.cmx imagesProvider.cmx \
+const.cmx sideExt.cmx scale.cmx pair.cmx cellElementPrinter.cmx \
+tissueFrame.cmx tissue.cmx
 
 mv view.cmx ../../bin/view.cmx
 mv view.cmi ../../bin/view.cmi

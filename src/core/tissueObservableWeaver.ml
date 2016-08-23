@@ -1,5 +1,6 @@
 module Subscribe (Observer : CONTRACTS.TISSUE_OBSERVER.T) = struct
-    
+
+    open Data
     module Weaver = StatisticableWeaver
     type t = { observer : Observer.t;
                    base : Weaver.t
@@ -13,7 +14,7 @@ module Subscribe (Observer : CONTRACTS.TISSUE_OBSERVER.T) = struct
                                    (Tissue.width  tissue)
                                     observer
 	           and set acc i v =
-                     Observer.set i v acc in
+                     Observer.init_item i v acc in
 		   tissue |> Tissue.init_items
                           |> Matrix.foldi set observer 
       }
@@ -28,24 +29,25 @@ module Subscribe (Observer : CONTRACTS.TISSUE_OBSERVER.T) = struct
                      |> Tissue.items
                      |> Matrix.get i
     let gaze o =
-      Data.Nucleus.((o |> tissue
-                       |> Tissue.fauna
-                       |> Index.Map.find (index o)).gaze)
+      Nucleus.((o |> tissue
+                  |> Tissue.fauna
+                  |> Index.Map.find (index o)).gaze)
+
     let turn hand o =
       let i = index o in
       let previous = item i o
       and base = Weaver.turn hand o.base
       and current = item i o in
-      let observer = 
-	Observer.reset i previous current o.observer 
+      let update = TissueItemUpdateExt.of_change previous current in
+      let observer = Observer.update_item i update o.observer 
       in
       { observer;
 	base
       }  
 
     type snap_t = 
-      { acceptor_previous : Data.TissueItem.t;
-           donor_previous : Data.TissueItem.t;
+      { acceptor_previous : TissueItem.t;
+           donor_previous : TissueItem.t;
                acceptor_i : int * int;
 	          donor_i : int * int
       }
@@ -60,13 +62,17 @@ module Subscribe (Observer : CONTRACTS.TISSUE_OBSERVER.T) = struct
       }      
 
     let next snap base o =
+      let donor_update =
+        TissueItemUpdateExt.of_change snap.donor_previous 
+	                             (item snap.donor_i o)
+      and acceptor_update =
+        TissueItemUpdateExt.of_change snap.acceptor_previous
+	                             (item snap.acceptor_i o) in
       let observer = 
-	o.observer |> Observer.reset snap.donor_i 
-				     snap.donor_previous 
-				     (item snap.donor_i o)
-                   |> Observer.reset snap.acceptor_i
-				     snap.acceptor_previous
-				     (item snap.acceptor_i o)
+	o.observer |> Observer.update_item snap.donor_i
+                                           donor_update
+                   |> Observer.update_item snap.acceptor_i
+                                           acceptor_update
       in { base; observer }
 
     let pass o = 

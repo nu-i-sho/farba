@@ -2,11 +2,7 @@ open Data
 module type T = sig
     type t
 
-    val init  : int -> int -> t -> t
-    val set   : (int * int) -> InitTissueItem.t -> t -> t
-    val reset : (int * int)
-             -> TissueItem.t
-             -> TissueItem.t
-             -> t
-             -> t
+    val init        : int -> int -> t -> t
+    val init_item   : (int * int) -> TissueItemInit.t -> t -> t
+    val update_item : (int * int) -> TissueItemUpdate.t -> t -> t
   end

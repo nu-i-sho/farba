@@ -16,35 +16,37 @@ module Make (Prototypes : PROTOIMAGES_STORAGE.T) = struct
       }
 
     module Command = struct
-        module X54  = Prototypes.X54
-
+        module X54 = Prototypes.X54
+        module Act = X54.Act
+                   
         let get command o =
           let prototype =
-            let open Command in
-            match command with
-            | Declare dots
-            | Call    dots    -> (module X54.DotsOfDice : DOTS)
-                                    |> ProtoDotsMap.get dots
-            | Nope            -> (module X54.Act.Nope)
-            | Move            -> (module X54.Act.Move)
-            | Pass            -> (module X54.Act.Pass)
-            | Turn Hand.Left  -> (module X54.Act.TurnLeft)
-            | Turn Hand.Right -> (module X54.Act.TurnRight)
-            | Replicate Relation.Direct
-                              -> (module X54.Act.ReplicateDirect)
-            | Replicate Relation.Inverse
-                              -> (module X54.Act.ReplicateInverse)
-            | End             -> (module X54.End)
-              
+            Command.( Action.( Hand.( Relation.(
+              match command with
+              | Declare dots
+              | Call    dots     -> (module X54.DotsOfDice : DOTS)
+                                       |> ProtoDotsMap.get dots
+              | Nope             -> (module Act.Nope)
+              | Act Move         -> (module Act.Move)
+              | Act Pass         -> (module Act.Pass)
+              | Act (Turn Left)  -> (module Act.TurnLeft)
+              | Act (Turn Right) -> (module Act.TurnRight)
+              | Act (Replicate Direct)
+                                 -> (module Act.ReplicateDirect)
+              | Act (Replicate Inverse)
+                                 -> (module Act.ReplicateInverse)
+              | End              -> (module X54.End)
+            ))))
+            
           and color_map =
-            let open CommandColorScheme in
-            let open CommandKind in
-              
-            match Command.kind_of command with
-            | Act     -> o.command_colors.act_map 
-            | Call    -> o.command_colors.call_map
-            | Declare -> o.command_colors.declare_map
-            | End     -> o.command_colors.end_map in
+            Command.( CommandColorScheme.(
+              match command with
+              | Act _
+              | Nope      -> o.command_colors.act_map 
+              | Call _    -> o.command_colors.call_map
+              | Declare _ -> o.command_colors.declare_map
+              | End       -> o.command_colors.end_map
+            )) in
           
           Image.of_prototype color_map prototype
       end

@@ -10,7 +10,7 @@ ocamlopt -for-pack Data -c side.ml
 ocamlopt -for-pack Data -c nucleus.ml
 ocamlopt -for-pack Data -c cell.ml
 ocamlopt -for-pack Data -c relation.ml
-ocamlopt -for-pack Data -c commandKind.ml
+ocamlopt -for-pack Data -c action.ml
 ocamlopt -for-pack Data -c command.ml
 ocamlopt -for-pack Data -c fail.ml
 ocamlopt -for-pack Data -c runtimeModeKind.ml
@@ -25,7 +25,7 @@ ocamlopt -for-pack Data -c statistics.ml
 
 ocamlopt -pack -o data.cmx \
 dotsOfDice.cmx crumb.cmx pigment.cmx hand.cmx side.cmx nucleus.cmx \
-cell.cmx relation.cmx commandKind.cmx command.cmx fail.cmx \
+cell.cmx relation.cmx action.cmx command.cmx fail.cmx \
 runtimeModeKind.cmx runtimeMode.cmx runtimePoint.cmx \
 tissueItemInit.cmx tissueItemUpdate.cmx tissueStatistics.cmx \
 actsStatistics.cmx commandsStatistics.cmx statistics.cmx

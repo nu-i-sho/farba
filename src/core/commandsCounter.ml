@@ -1,6 +1,7 @@
 open Data.CommandsStatistics
 open Data.Command
-
+open Data.Action
+   
 let zero = { replications = 0;  
                    passes = 0;  
                     turns = 0;  
@@ -17,16 +18,17 @@ let zero = { replications = 0;
          
 let calculate_for solution =
   let calc acc = 
-    function | Pass        -> { acc with passes = acc.passes + 1 }
-             | Move        -> { acc with moves = acc.moves   + 1 }
-             | Turn _      -> { acc with turns = acc.turns   + 1 }
-             | Replicate _ -> { acc with replications =
-                                           acc.replications  + 1 }
-             | Nope        -> { acc with nopes = acc.turns   + 1 } 
-             | Call _      -> { acc with calls = acc.calls   + 1 }
-             | Declare _   -> { acc with declarations =
-                                           acc.declarations  + 1 }
-             | End         -> { acc with ends = acc.ends     + 1 }
+    function | Act Pass     -> { acc with passes = acc.passes + 1 }
+             | Act Move     -> { acc with moves = acc.moves   + 1 }
+             | Act (Turn _) -> { acc with turns = acc.turns   + 1 }
+             | Act (Replicate _)
+                            -> { acc with replications =
+                                            acc.replications  + 1 }
+             | Nope         -> { acc with nopes = acc.turns   + 1 } 
+             | Call _       -> { acc with calls = acc.calls   + 1 }
+             | Declare _    -> { acc with declarations =
+                                            acc.declarations  + 1 }
+             | End          -> { acc with ends = acc.ends     + 1 }
   in
   
   let acc = Solution.fold calc zero solution in

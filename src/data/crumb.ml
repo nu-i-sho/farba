@@ -1,8 +1,8 @@
 module Value = struct
-    type t = | Double of DotsOfDice.t * DotsOfDice.t
-             | Single of DotsOfDice.t
+    type 'a t = | Double of 'a * 'a
+                | Single of 'a
   end
 
-type t = { value : Value.t;
-           index : int
-         }
+type 'a t = { value : 'a Value.t;
+              index : int
+            }

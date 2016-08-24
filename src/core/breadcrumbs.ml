@@ -1,6 +1,7 @@
-type t = Data.Crumb.t list
-
 open Data
+   
+type t = DotsOfDice.t Crumb.t list
+
 open Crumb
 open Value
        
@@ -10,8 +11,7 @@ let start =
   }]
 
 let top = List.hd
-let to_array = Array.of_list
-  
+        
 let move o =
   match List.hd o with
 

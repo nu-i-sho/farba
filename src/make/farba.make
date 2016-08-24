@@ -1,9 +1,7 @@
 echo "------- Build all started -------"
 echo ""
 
-./data.make
-./contracts.make
-./tools.make
+./shared.make
 ./core.make
 ./images.make
 ./view.make

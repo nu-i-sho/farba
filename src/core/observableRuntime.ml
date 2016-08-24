@@ -7,19 +7,14 @@ module Make (Weaver : STATISTICABLE_WEAVER.T) = struct
         type t = { observer : Observer.t;
                        base : Runtime.t
                  }
-
-        let snap base =
-          Data.RuntimePoint.(
-            { crumb = Runtime.top_crumb base;
-               mode = Runtime.mode base
-            })
                
         let make observer weaver solution =
           let commands = Solution.to_array solution 
           and base = Runtime.make weaver solution in
-          let observer =
-            Observer.init commands (snap base) observer in
-          { observer;
+          { observer = Observer.init commands
+                                    (Runtime.top_crumb base)
+                                    (Runtime.mode base)
+                                     observer;
             base
           }
           
@@ -30,15 +25,31 @@ module Make (Weaver : STATISTICABLE_WEAVER.T) = struct
         let mode       o = o.base |> Runtime.mode 
         
         let tick o =
-          let previous = snap o.base
-          and base_result = Runtime.tick o.base in
-          let current = snap Statused.(base_result.value) in
+          let previous = o.base
+          and result = Runtime.tick o.base in
+          let current = Statused.(result.value) in
+
           let observer =
-            Observer.reset previous current o.observer in
+            Observer.update_top_crumb
+              (Runtime.top_crumb previous)
+              (Runtime.top_crumb current)
+               o.observer
+          in
+          
+          let observer =
+            let previous_mode = Runtime.mode previous
+            and current_mode = Runtime.mode current in
+            if previous_mode = current_mode then
+              observer else
+              Observer.update_mode
+                previous_mode
+                current_mode
+                observer
+          in
           
           Statused.(   
-            { status = base_result.status;
-               value = { observer; base = base_result.value }
+            { status = result.status;
+               value = { observer; base = current }
             })
       end
   end

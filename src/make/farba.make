@@ -5,6 +5,7 @@ echo ""
 ./core.make
 ./images.make
 ./view.make
+./engine.make
 
 echo ""
 echo "------ Build all completed ------"

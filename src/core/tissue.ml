@@ -1,11 +1,12 @@
 open Data
-
+open Tools
+   
 type t = { height : int;
             width : int;
            weaver : int * int;
              clot : ((int * int) * Side.t) option;
-	    flora : Pigment.t Index.Map.t;
-            fauna : Nucleus.t Index.Map.t;
+	    flora : Pigment.t IntPointMap.t;
+            fauna : Nucleus.t IntPointMap.t;
              init : t option
 	 }
 
@@ -61,14 +62,14 @@ let fauna_matrix o =
   Matrix.optional o.height o.width o.fauna
 
 let weaver_matrix o =
-  (Index.Map.singleton o.weaver true)
+  (IntPointMap.singleton o.weaver true)
      |> Matrix.of_map o.height o.width false
 
 let clot_matrix o =
   match o.clot with
   | None           -> Matrix.empty o.height o.width None
   | Some (i, gaze) -> (Some gaze)
-                         |> Index.Map.singleton i
+                         |> IntPointMap.singleton i
                          |> Matrix.of_map o.height o.width None
 let init_items o =
   match o.init with

@@ -1,10 +1,11 @@
 open Data
+open Tools
    
 type t = { active : int * int;
            height : int;
             width : int;
-            flora : Pigment.t Index.Map.t;
-            fauna : Nucleus.t Index.Map.t;
+            flora : Pigment.t IntPointMap.t;
+            fauna : Nucleus.t IntPointMap.t;
              path : LevelPath.t
 	 }
 
@@ -19,22 +20,23 @@ module Loader = struct
     module TREE = CONTRACTS.LEVELS_SOURCE_TREE
     module Make (LevelsSourceTree : TREE.ROOT.T) = struct
       
-        module NodeMap   = Tools.DotsOfDiceNodeMap
+        module NodeMap   = DotsOfDiceNodeMap
         module Root      = NodeMap.Make (TREE.BRANCH)
         module Branch    = NodeMap.Make (TREE.BRANCHLET)
         module Branchlet = NodeMap.Make (TREE.LEAF)
 
-        let parse_cytoplasm acc i =  
-          let add = Index.Map.add in
-          function | '*' -> acc
-                   | 'O' -> acc |> add i Pigment.Gray
-	           | '0' -> acc |> add i Pigment.Blue
-                   | ' ' -> acc |> add i Pigment.White
-	           |  _  -> failwith Fail.invalid_symbol
-
+        let parse_cytoplasm acc i =
+          IntPointMap.(
+            function | '*' -> acc
+                     | 'O' -> acc |> add i Pigment.Gray
+	             | '0' -> acc |> add i Pigment.Blue
+                     | ' ' -> acc |> add i Pigment.White
+	             |  _  -> failwith Fail.invalid_symbol
+          )
+          
         let parse_nucleus acc i = 
           let add_nucleus pigment gaze = 
-	    Index.Map.add i Nucleus.({ pigment; gaze }) acc
+	    IntPointMap.add i Nucleus.({ pigment; gaze }) acc
 	  in
 	     
 	  let add_gray = add_nucleus Pigment.Gray
@@ -67,7 +69,7 @@ module Loader = struct
                        |> Branch.get path.branchlet
                        |> Branchlet.get path.leaf) : TREE.LEAF.T) in
 
-          let empty = Index.Map.empty
+          let empty = IntPointMap.empty
           and flora = Lazy.force Src.flora
           and index = 
 	    function | Some i -> i

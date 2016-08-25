@@ -1,6 +1,8 @@
 module Subscribe (Observer : CONTRACTS.TISSUE_OBSERVER.T) = struct
 
     open Data
+    open Tools
+       
     module Weaver = StatisticableWeaver
     type t = { observer : Observer.t;
                    base : Weaver.t
@@ -31,7 +33,7 @@ module Subscribe (Observer : CONTRACTS.TISSUE_OBSERVER.T) = struct
     let gaze o =
       Nucleus.((o |> tissue
                   |> Tissue.fauna
-                  |> Index.Map.find (index o)).gaze)
+                  |> IntPointMap.find (index o)).gaze)
 
     let turn hand o =
       let i = index o in

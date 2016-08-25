@@ -1,6 +1,7 @@
 type t = Tissue.t
 
 open Data
+open Tools
 open Nucleus
    
 let make tissue = tissue
@@ -10,10 +11,10 @@ let index = Tissue.weaver
 let turn hand o =
   let weaver  = o |> Tissue.weaver in
   let nucleus = o |> Tissue.fauna
-	          |> Index.Map.find weaver
+	          |> IntPointMap.find weaver
                   |> NucleusExt.turn hand in
   (o |> Tissue.fauna 
-     |> Index.Map.set weaver nucleus
+     |> IntPointMap.set weaver nucleus
      |> Tissue.with_fauna) o
 
 let move o =
@@ -22,14 +23,14 @@ let move o =
   and flora  = Tissue.flora  o
   and fauna  = Tissue.fauna  o in
  
-  match Index.Map.find weaver flora with
+  match IntPointMap.find weaver flora with
 
   | Pigment.White ->
        
-     let nucleus = Index.Map.find weaver fauna in
+     let nucleus = IntPointMap.find weaver fauna in
      let i = Index.move nucleus.gaze weaver in
 
-     if Index.Map.mem i fauna then 
+     if IntPointMap.mem i fauna then 
        let gaze' = SideExt.opposite nucleus.gaze in
        Statused.({ status = MoveStatus.Clot;
                     value = Tissue.with_clot i gaze' o
@@ -37,12 +38,12 @@ let move o =
 
        let move nucleus = (o |> Tissue.with_weaver i
                              |> Tissue.fauna
-                             |> Index.Map.set i nucleus
-                             |> Index.Map.remove weaver
+                             |> IntPointMap.set i nucleus
+                             |> IntPointMap.remove weaver
                              |> Tissue.with_fauna) o in
  
-       if Index.Map.mem i flora then
-	 let cytoplasm = Index.Map.find i flora in 
+       if IntPointMap.mem i flora then
+	 let cytoplasm = IntPointMap.find i flora in 
          Statused.({ status = MoveStatus.Success;
                       value = nucleus |> NucleusExt.inject cytoplasm
 	                              |> move
@@ -65,10 +66,10 @@ let pass o =
                  value = weaver
              }) in
   
-  let nucleus = Index.Map.find weaver fauna in
+  let nucleus = IntPointMap.find weaver fauna in
   let i = Index.move nucleus.gaze weaver in
-  if Index.Map.mem i fauna then
-    let acceptor = Index.Map.find i fauna in
+  if IntPointMap.mem i fauna then
+    let acceptor = IntPointMap.find i fauna in
     if acceptor.gaze = (SideExt.opposite nucleus.gaze) then
       Statused.({ status = PassStatus.Success;
                    value = Tissue.with_weaver i o
@@ -82,15 +83,15 @@ let replicate relation o =
   and flora  = Tissue.flora  o
   and fauna  = Tissue.fauna  o in
   
-  if Index.Map.find weaver flora = Pigment.White then
+  if IntPointMap.find weaver flora = Pigment.White then
     Statused.({ status = MoveStatus.Dummy;
                  value = o
              }) else 
 
-    let nucleus = Index.Map.find weaver fauna in
+    let nucleus = IntPointMap.find weaver fauna in
     let i = Index.move nucleus.gaze weaver in
       
-    if Index.Map.mem i fauna then
+    if IntPointMap.mem i fauna then
       let gaze' = SideExt.opposite nucleus.gaze in
       Statused.({ status = MoveStatus.Clot;
                    value = Tissue.with_clot i gaze' o
@@ -100,11 +101,11 @@ let replicate relation o =
       and set nucleus = 
 	(o |> Tissue.with_weaver i
 	   |> Tissue.fauna
-           |> Index.Map.set i nucleus
+           |> IntPointMap.set i nucleus
            |> Tissue.with_fauna) o in
         
-      if Index.Map.mem i flora then
-        let cytoplasm = Index.Map.find i flora in
+      if IntPointMap.mem i flora then
+        let cytoplasm = IntPointMap.find i flora in
 	Statused.({ status = MoveStatus.Success;
                      value = set (NucleusExt.inject cytoplasm child)
                  }) else

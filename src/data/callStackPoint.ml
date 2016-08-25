@@ -4,6 +4,5 @@ module Stage = struct
   end
              
 type t = { value : DotsOfDice.t Doubleable.t;
-           stage : Stage.t;
-           index : int
+           stage : Stage.t
          }

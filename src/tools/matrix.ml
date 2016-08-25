@@ -1,5 +1,5 @@
 type 'a t = { get_base : (int * int) -> 'a;
-              ovveride : 'a Index.Map.t;
+              ovveride : 'a IntPointMap.t;
                 height : int;
                  width : int
 	    }
@@ -14,23 +14,23 @@ let of_map height width default src =
 
 let optional height width src =
   let from_src i =
-    if Index.Map.mem i src then
-      Some (Index.Map.find i src) else
+    if IntPointMap.mem i src then
+      Some (IntPointMap.find i src) else
       None in
     
   { get_base = from_src;
-    ovveride = Index.Map.empty;
+    ovveride = IntPointMap.empty;
       height;
        width
   }
 
 let empty height width default =
-  of_map height width default Index.Map.empty 
+  of_map height width default IntPointMap.empty 
 
 let of_array src = 
   let from_array (x, y) = src.(y).(x) in
   { get_base = from_array;
-    ovveride = Index.Map.empty;
+    ovveride = IntPointMap.empty;
       height = Array.length src;
        width = Array.length src.(0)
   }
@@ -52,7 +52,7 @@ let of_string_list src =
                    |> String.length in
 
   { get_base = get_char;
-    ovveride = Index.Map.empty;
+    ovveride = IntPointMap.empty;
       height;
        width;
   }
@@ -60,7 +60,7 @@ let of_string_list src =
 let of_string_array src = 
   let get_char (x, y) = src.(y).[x] in
   { get_base = get_char;
-    ovveride = Index.Map.empty;
+    ovveride = IntPointMap.empty;
       height = Array.length src;
        width = String.length src.(0)
   }
@@ -71,17 +71,17 @@ let width  o = o.width
 let set i v o = 
   { o with ovveride = 
 	     match (v = o.get_base i), 
-		   (Index.Map.mem i o.ovveride) with
+		   (IntPointMap.mem i o.ovveride) with
 
-	     | false, false -> o.ovveride |> Index.Map.add i v
-	     | false, true  -> o.ovveride |> Index.Map.set i v
+	     | false, false -> o.ovveride |> IntPointMap.add i v
+	     | false, true  -> o.ovveride |> IntPointMap.set i v
 	     | true,  false -> o.ovveride
-	     | true,  true  -> o.ovveride |> Index.Map.remove i
+	     | true,  true  -> o.ovveride |> IntPointMap.remove i
   }
     
 let get i o = 
-  if Index.Map.mem i o.ovveride then
-    Index.Map.find i o.ovveride else
+  if IntPointMap.mem i o.ovveride then
+    IntPointMap.find i o.ovveride else
     o.get_base i
 
 let in_range (x, y) o =
@@ -94,7 +94,7 @@ let is_out i o =
 let map f o =  
  let mapped i = f (get i o) in
   { get_base = mapped;
-    ovveride = Index.Map.empty;
+    ovveride = IntPointMap.empty;
       height = height o;
        width = width o
   }
@@ -102,7 +102,7 @@ let map f o =
 let mapi f o =  
  let mapped i = f i (get i o) in
   { get_base = mapped;
-    ovveride = Index.Map.empty;
+    ovveride = IntPointMap.empty;
       height = height o;
        width = width o
   }
@@ -110,7 +110,7 @@ let mapi f o =
 let map2 f a b = 
   let mapped i = f (get i a) (get i b) in
   { get_base = mapped;
-    ovveride = Index.Map.empty;
+    ovveride = IntPointMap.empty;
       height = height a;
        width = width a
   }

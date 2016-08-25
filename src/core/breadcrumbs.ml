@@ -1,9 +1,9 @@
 open Data
    
-type t = DotsOfDice.t Crumb.t list
+type t = Crumb.t list
 
+open Doubleable
 open Crumb
-open Value
        
 let start =
   [{ value = Single DotsOfDice.O;

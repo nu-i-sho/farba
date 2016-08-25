@@ -3,6 +3,7 @@ module Stage = struct
              | Wait        
   end
              
-type t = { value : DotsOfDice.t;
-           stage : Stage.t
+type t = { value : DotsOfDice.t Doubleable.t;
+           stage : Stage.t;
+           index : int
          }

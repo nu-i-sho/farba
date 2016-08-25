@@ -71,11 +71,11 @@ module Make (Weaver : WEAVER.T) = struct
     let return o =
       let crumb_value = Crumb.((top_crumb o).value) in
       success { o with crumbs = Breadcrumbs.back o.crumbs;
-                         mode = let module V = Crumb.Value in
+                         mode = let module D = Doubleable in
                                 let module M = RuntimeMode in       
                                 match crumb_value with
-                                | V.Single _      -> M.Return
-                                | V.Double (_, _) -> M.RunNext
+                                | D.Single _      -> M.Return
+                                | D.Double (_, _) -> M.RunNext
               }
 
     let run_next o =

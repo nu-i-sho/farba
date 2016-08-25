@@ -9,12 +9,12 @@ ocamlopt -for-pack CONTRACTS -c LEVELS_SOURCE_TREE.ml
 ocamlopt -for-pack CONTRACTS -c PROTOIMAGE.ml
 ocamlopt -for-pack CONTRACTS -c PROTOIMAGES_STORAGE.ml
 ocamlopt -I ../../bin -for-pack CONTRACTS -c TISSUE_OBSERVER.ml
-ocamlopt -I ../../bin -for-pack CONTRACTS -c CALL_STACK_OBSERVER.ml
+ocamlopt -I ../../bin -for-pack CONTRACTS -c BREADCRUMBS_OBSERVER.ml
 
 ocamlopt -pack -o CONTRACTS.cmx \
 MODULE.cmx LEVEL_SOURCE.cmx DOTS_OF_DICE_NODE.cmx \
 LEVELS_SOURCE_TREE.cmx PROTOIMAGE.cmx PROTOIMAGES_STORAGE.cmx \
-TISSUE_OBSERVER.cmx CALL_STACK_OBSERVER.cmx
+TISSUE_OBSERVER.cmx BREADCRUMBS_OBSERVER.cmx 
 
 mv CONTRACTS.cmx ../../bin/CONTRACTS.cmx
 mv CONTRACTS.cmi ../../bin/CONTRACTS.cmi

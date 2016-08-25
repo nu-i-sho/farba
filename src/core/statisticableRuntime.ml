@@ -1,5 +1,7 @@
-module Make (Weaver : STATISTICABLE_WEAVER.T) = struct
-    include Runtime.Make (Weaver)
+module Make (Crumbs : BREADCRUMBS.T)
+            (Weaver : STATISTICABLE_WEAVER.T) = struct
+  
+    include Runtime.Make (Crumbs) (Weaver)
         
     let statistics o =
       Data.Statistics.(

@@ -2,6 +2,7 @@ echo "------- Data build started -------"
 
 cd ../data
 
+ocamlopt -for-pack Data -c doubleable.ml
 ocamlopt -for-pack Data -c dotsOfDice.ml
 ocamlopt -for-pack Data -c pigment.ml
 ocamlopt -for-pack Data -c hand.ml
@@ -24,11 +25,11 @@ ocamlopt -for-pack Data -c commandsStatistics.ml
 ocamlopt -for-pack Data -c statistics.ml
 
 ocamlopt -pack -o data.cmx \
-dotsOfDice.cmx pigment.cmx hand.cmx side.cmx nucleus.cmx cell.cmx \
-relation.cmx action.cmx command.cmx fail.cmx runtimeModeKind.cmx \
-runtimeMode.cmx crumb.cmx callStackPoint.cmx tissueItemInit.cmx \
-tissueItemUpdate.cmx tissueStatistics.cmx actsStatistics.cmx \
-commandsStatistics.cmx statistics.cmx
+doubleable.cmx dotsOfDice.cmx pigment.cmx hand.cmx side.cmx \
+nucleus.cmx cell.cmx relation.cmx action.cmx command.cmx fail.cmx \
+runtimeModeKind.cmx runtimeMode.cmx crumb.cmx callStackPoint.cmx \
+tissueItemInit.cmx tissueItemUpdate.cmx tissueStatistics.cmx \
+actsStatistics.cmx commandsStatistics.cmx statistics.cmx
 
 mv data.cmx ../../bin/data.cmx
 mv data.cmi ../../bin/data.cmi

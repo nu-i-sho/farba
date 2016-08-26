@@ -39,8 +39,6 @@ ocamlopt -I ../../bin -for-pack Core -c tissueItemUpdateExt.mli
 ocamlopt -I ../../bin -for-pack Core -c tissueItemUpdateExt.ml
 ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.mli
 ocamlopt -I ../../bin -for-pack Core -c tissueObservableWeaver.ml
-ocamlopt -I ../../bin -for-pack Core -c topCrumbUpdateExt.mli
-ocamlopt -I ../../bin -for-pack Core -c topCrumbUpdateExt.ml
 ocamlopt -I ../../bin -for-pack Core -c BREADCRUMBS.ml
 ocamlopt -I ../../bin -for-pack Core -c breadcrumbs.mli
 ocamlopt -I ../../bin -for-pack Core -c breadcrumbs.ml
@@ -68,12 +66,11 @@ sideExt.cmx nucleusExt.cmx index.cmx levelPath.cmx level.cmx \
 tissueItem.cmx tissue.cmx weaverAct.cmx statused.cmx \
 passStatus.cmx moveStatus.cmx weaverActsCounter.cmx WEAVER.cmx \
 weaverStatistics.cmx STATISTICABLE_WEAVER.cmx weaver.cmx \
-tissueCounter.cmx statisticableWeaver.cmx tissueItemUpdateExt.cmx \
-tissueObservableWeaver.cmx topCrumbUpdateExt.cmx BREADCRUMBS.cmx \
-breadcrumbs.cmx observableBreadcrumbs.cmx solutionLabel.cmx \
-commandExt.cmx solution.cmx tickStatus.cmx RUNTIME.cmx \
-weaverCommander.cmx runtime.cmx commandsCounter.cmx \
-statisticableRuntime.cmx
+tissueCounter.cmx statisticableWeaver.cmx \
+tissueObservableWeaver.cmx BREADCRUMBS.cmx breadcrumbs.cmx \
+observableBreadcrumbs.cmx solutionLabel.cmx commandExt.cmx \
+solution.cmx tickStatus.cmx RUNTIME.cmx weaverCommander.cmx \
+runtime.cmx commandsCounter.cmx statisticableRuntime.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

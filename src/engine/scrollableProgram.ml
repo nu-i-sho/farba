@@ -1,4 +1,3 @@
-open Data
 type t = { view_height : int;
             first_line : int;
                   base : Program.t;

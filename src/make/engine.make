@@ -6,11 +6,13 @@ ocamlopt -I ../../bin -for-pack Engine -c breadcrumbs.mli
 ocamlopt -I ../../bin -for-pack Engine -c breadcrumbs.ml
 ocamlopt -I ../../bin -for-pack Engine -c programPoint.ml
 ocamlopt -I ../../bin -for-pack Engine -c programLine.ml
+ocamlopt -for-pack Engine -c PROGRAM.ml
 ocamlopt -I ../../bin -for-pack Engine -c program.mli
 ocamlopt -I ../../bin -for-pack Engine -c program.ml
 
 ocamlopt -pack -o engine.cmx \
-breadcrumbs.cmx programPoint.cmx programLine.cmx
+breadcrumbs.cmx programPoint.cmx programLine.cmx PROGRAM.cmx \
+program.cmx
 
 mv engine.cmx ../../bin/engine.cmx
 mv engine.cmi ../../bin/engine.cmi

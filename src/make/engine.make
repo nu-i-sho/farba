@@ -4,9 +4,13 @@ cd ../engine
 
 ocamlopt -I ../../bin -for-pack Engine -c breadcrumbs.mli
 ocamlopt -I ../../bin -for-pack Engine -c breadcrumbs.ml
+ocamlopt -I ../../bin -for-pack Engine -c programPoint.ml
+ocamlopt -I ../../bin -for-pack Engine -c programLine.ml
+ocamlopt -I ../../bin -for-pack Engine -c program.mli
+ocamlopt -I ../../bin -for-pack Engine -c program.ml
 
 ocamlopt -pack -o engine.cmx \
-breadcrumbs.cmx
+breadcrumbs.cmx programPoint.cmx programLine.cmx
 
 mv engine.cmx ../../bin/engine.cmx
 mv engine.cmi ../../bin/engine.cmi

@@ -23,7 +23,7 @@ let down o =
   { o with first_line = min (o.first_line + 1)
                            ((lines_count o) - 1)
   } 
-
+  
 let view_line i o =
   if i >= o.view_height then
     ProgramLine.Empty else
@@ -31,14 +31,19 @@ let view_line i o =
 
 let line_of command o = (command / ((width o) + 1) * 2)
                         + (command mod ((width o) + 1))
-                      
-let with_crumbs x o =
-  let o = { o with base = Program.with_crumbs x o.base } in
+
+let to_center o =
   let top_crumb = Breadcrumbs.top_index (crumbs o) in
   let top_crumb_line = (top_crumb / ((width o) + 1) * 2)
                      + (top_crumb mod ((width o) + 1)) in
-  let centre_line    = (o.view_height / 2)
+  let center_line    = (o.view_height / 2)
                      + (o.view_height mod 2) in
-  let first_line = min (top_crumb_line + centre_line)
+  let first_line = min (top_crumb_line + center_line)
                        ((lines_count o) - 1) in
   { o with first_line }
+  
+let with_crumbs x o =
+  to_center { o with base = Program.with_crumbs x o.base }
+
+let resize view_height o =
+  to_center { o with view_height }

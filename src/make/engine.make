@@ -2,10 +2,11 @@ echo "------ Engine build started ------"
 
 cd ../engine
 
-ocamlopt -I ../../bin -for-pack Engine -c programPoint.ml
+ocamlopt -I ../../bin -for-pack Engine -c breadcrumbs.mli
+ocamlopt -I ../../bin -for-pack Engine -c breadcrumbs.ml
 
 ocamlopt -pack -o engine.cmx \
-programPoint.cmx
+breadcrumbs.cmx
 
 mv engine.cmx ../../bin/engine.cmx
 mv engine.cmi ../../bin/engine.cmi

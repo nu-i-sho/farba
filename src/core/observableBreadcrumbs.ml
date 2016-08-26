@@ -35,7 +35,7 @@ module Subscribe (Observer : BREADCRUMBS_OBSERVER.T) = struct
       and base = f o.base in
       let current = Breadcrumbs.top o.base in
       let observer =
-        Observer.update_top_crumb previous current o.observer in
+        Observer.update_top previous current o.observer in
       { observer;
         base
       }

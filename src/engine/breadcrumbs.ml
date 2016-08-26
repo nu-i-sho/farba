@@ -14,8 +14,19 @@ let init top mode _ =
                      mode;
                       top
                 })
+let top o =
+  let o = Initable.inited o in
+  Crumb.( CallStackPoint.(
+     { value = o.top.value;
+       stage = Stage.Active o.mode
+     }
+  ))
 
-let update_top_crumb previous current o =
+let top_index o =
+  let o = Initable.inited o in
+  Crumb.(o.top.index)
+  
+let update_top previous current o =
   let o = Initable.inited o in
   let values = 
     Crumb.( Doubleable.(

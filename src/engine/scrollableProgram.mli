@@ -6,3 +6,4 @@ val view_lines_count : t -> int
 val view_line : int -> t -> ProgramLine.t
 val up : t -> t
 val down : t -> t
+val resize : int -> t -> t

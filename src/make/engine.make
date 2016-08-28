@@ -9,6 +9,7 @@ ocamlopt -I ../../bin -for-pack Engine -c programLine.ml
 ocamlopt -for-pack Engine -c PROGRAM.ml
 ocamlopt -I ../../bin -for-pack Engine -c program.mli
 ocamlopt -I ../../bin -for-pack Engine -c program.ml
+ocamlopt -for-pack Engine -c SCROLLABLE_PROGRAM.ml
 ocamlopt -I ../../bin -for-pack Engine -c scrollableProgram.mli
 ocamlopt -for-pack Engine -c scrollableProgram.ml
 ocamlopt -for-pack Engine -c programStack.mli
@@ -16,7 +17,7 @@ ocamlopt -for-pack Engine -c programStack.ml
 
 ocamlopt -pack -o engine.cmx \
 breadcrumbs.cmx programPoint.cmx programLine.cmx PROGRAM.cmx \
-program.cmx scrollableProgram.cmx programStack.cmx
+program.cmx SCROLLABLE_PROGRAM.cmx scrollableProgram.cmx 
 
 mv engine.cmx ../../bin/engine.cmx
 mv engine.cmi ../../bin/engine.cmi

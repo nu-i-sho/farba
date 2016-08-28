@@ -34,16 +34,18 @@ let period o = (width o) + 1
 let line_of command o = (command / (period o) * 2)
                       + (command mod (period o))
 
-let with_crumbs x o =
-  let o = { o with base = Program.with_crumbs x o.base } in
+let focus o =
   let top_crumb = Breadcrumbs.top_index (crumbs o) in
   let top_crumb_line = (top_crumb / (period o) * 2)
                      + (top_crumb mod (period o))
   and center_line    = (o.lines_count / 2)
                      + (o.lines_count mod 2) in
-  let first_line = min (top_crumb_line + center_line)
+  let first_line = min (max 0 (top_crumb_line - center_line))
                        ((Program.lines_count o.base) - 1) in
   { o with first_line }
+                      
+let with_crumbs x o =
+  focus { o with base = Program.with_crumbs x o.base }
 
 let rec resize_up only lines_count o =
   let diff = o.lines_count - lines_count in
@@ -59,8 +61,7 @@ let rec resize_up only lines_count o =
 and resize_down only lines_count o =
   let max_lines_count =
     (Program.lines_count o.base) - o.first_line in
-  let o = { o with lines_count = min max_lines_count
-                                     lines_count
+  let o = { o with lines_count = min max_lines_count lines_count
           } in
   
   if not only && max_lines_count < lines_count then

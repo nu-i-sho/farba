@@ -25,6 +25,17 @@ let top o =
 let top_index o =
   let o = Initable.inited o in
   Crumb.(o.top.index)
+
+let exists_in_range from count o =
+
+  let o = Initable.inited o in
+  let last = from + count - 1 in
+  let in_range i = i >= from && i < last in
+
+  (in_range Crumb.(o.top.index)) ||
+    ( let in_range key _ = in_range key in
+      IntMap.exists in_range o.values
+    )
   
 let update_top previous current o =
   let o = Initable.inited o in

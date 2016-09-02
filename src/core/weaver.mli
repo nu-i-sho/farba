@@ -1,2 +1,2 @@
-include WEAVER.T
-val make : Tissue.t -> t
+include CORE.WEAVER.T
+val make : tissue_t -> t

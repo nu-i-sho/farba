@@ -11,5 +11,3 @@ type t = | Created
          | Passed of pass_t
          | Moved of move_t 
          | Replicated of move_t
-         
-         

@@ -1,5 +1,5 @@
 module Make (Crumbs : BREADCRUMBS.T)
-            (Weaver : CORE.WEAVER.T) = struct
+            (Weaver : CORE.STATISTICAL_WEAVER.T) = struct
   
     include Runtime.Make (Crumbs) (Weaver)
         

@@ -1,8 +1,9 @@
 module type WEAVER = sig
     module Core : sig
         module Tissue : CORE.TISSUE.T
-        module Weaver : CORE.WEAVER.T with type tissue_t = Tissue.t
         module Index  : CORE.INDEX.T
+        module Weaver : CORE.STATISTICAL_WEAVER.T
+               with type tissue_t = Tissue.t
       end
 
     module View : sig

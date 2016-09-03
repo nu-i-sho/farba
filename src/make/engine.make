@@ -15,11 +15,17 @@ ocamlopt -for-pack Engine -c scrollableProgram.ml
 ocamlopt -for-pack Engine -c stackableProgramLine.ml
 ocamlopt -I ../../bin -for-pack Engine -c stackableProgram.mli
 ocamlopt -I ../../bin -for-pack Engine -c stackableProgram.ml
+ocamlopt -I ../../bin -for-pack Engine -c tissueItemUpdateExt.mli
+ocamlopt -I ../../bin -for-pack Engine -c tissueItemUpdateExt.ml
+ocamlopt -I ../../bin -for-pack Engine -c DEPENDENCIES.ml
+ocamlopt -I ../../bin -for-pack Engine -c weaver.mli
+ocamlopt -I ../../bin -for-pack Engine -c weaver.ml
 
 ocamlopt -pack -o engine.cmx \
 breadcrumbs.cmx programPoint.cmx programLine.cmx PROGRAM.cmx \
 program.cmx SCROLLABLE_PROGRAM.cmx scrollableProgram.cmx \
-stackableProgramLine.cmx stackableProgram.cmx
+stackableProgramLine.cmx stackableProgram.cmx \
+tissueItemUpdateExt.cmx DEPENDENCIES.cmx weaver.cmx
 
 mv engine.cmx ../../bin/engine.cmx
 mv engine.cmi ../../bin/engine.cmi

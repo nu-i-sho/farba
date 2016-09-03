@@ -5,17 +5,11 @@ open Nucleus
 type tissue_t = Tissue.t
 type t = {  tissue : tissue_t;
              stage : WeaverStage.t;
-           counter : WeaverActsCounter.t
          }
 
-module Counter = WeaverActsCounter
-module Stage = WeaverStage
-module Act = WeaverAct
-
 let make tissue =
-  {  tissue;
-      stage = Stage.Created;
-    counter = Counter.zero
+  { tissue;
+     stage = WeaverStage.Created
   }
 
 let tissue o = o.tissue
@@ -26,11 +20,11 @@ let turn hand o =
   let nucleus = o.tissue |> Tissue.fauna
                          |> IntPointMap.find weaver
                          |> NucleusExt.turn hand in
-  {   stage = Stage.Turned;
-    counter = Counter.increment WeaverAct.Turn o.counter;
-     tissue = (o.tissue |> Tissue.fauna
-                        |> IntPointMap.set weaver nucleus
-                        |> Tissue.with_fauna) o.tissue
+
+  {  stage = WeaverStage.Turned;
+    tissue = (o.tissue |> Tissue.fauna
+                       |> IntPointMap.set weaver nucleus
+                       |> Tissue.with_fauna) o.tissue
   }
 
 let move o =
@@ -47,8 +41,7 @@ let move o =
 
      if IntPointMap.mem i fauna then 
        let gaze' = SideExt.opposite nucleus.gaze in
-       {   stage = Stage.(Moved ToClot);
-         counter = Counter.increment Act.Move o.counter;
+       {   stage = WeaverStage.(Moved ToClot);
           tissue = Tissue.with_clot i gaze' o.tissue
        } else
 
@@ -61,31 +54,24 @@ let move o =
  
        if IntPointMap.mem i flora then
          let cytoplasm = IntPointMap.find i flora in
-         {   stage = Stage.(Moved Success);
-           counter = Counter.increment Act.Move o.counter;
-            tissue = nucleus |> NucleusExt.inject cytoplasm
-	                     |> move
+         {  stage = WeaverStage.(Moved Success);
+           tissue = nucleus |> NucleusExt.inject cytoplasm
+	                    |> move
          } else
 
-         {   stage = Stage.(Moved Out);
-           counter = Counter.increment Act.Move o.counter;
-            tissue = move nucleus
+         {  stage = WeaverStage.(Moved Out);
+           tissue = move nucleus
          }
      
   | Pigment.Blue
   | Pigment.Gray  ->
-     { o with stage = Stage.(Moved Dummy);
-            counter = Counter.increment Act.DummyMove o.counter;
-     }
+     { o with stage = WeaverStage.(Moved Dummy) }
 
 let pass o =
   
   let weaver = o.tissue |> Tissue.weaver
   and fauna  = o.tissue |> Tissue.fauna
-  and dummy o =
-    { o with stage = Stage.(Passed Dummy);
-           counter = Counter.increment Act.DummyPass o.counter
-    } in
+  and dummy o = { o with stage = WeaverStage.(Passed Dummy) } in
 
   let nucleus = IntPointMap.find weaver fauna in
   let i = Index.move nucleus.gaze weaver in
@@ -93,9 +79,8 @@ let pass o =
   if IntPointMap.mem i fauna then
     let acceptor = IntPointMap.find i fauna in
     if acceptor.gaze = (SideExt.opposite nucleus.gaze) then
-      {   stage = Stage.(Passed Success);
-        counter = Counter.increment Act.Pass o.counter;
-         tissue = Tissue.with_weaver i o.tissue
+      {  stage = WeaverStage.(Passed Success);
+        tissue = Tissue.with_weaver i o.tissue
       }
     else dummy o
   else dummy o
@@ -107,8 +92,7 @@ let replicate relation o =
   and fauna  = o.tissue |> Tissue.fauna in
 
   if IntPointMap.find weaver flora = Pigment.White then
-    { o with stage = Stage.(Replicated Dummy);
-           counter = Counter.increment Act.DummyReplicate o.counter
+    { o with stage = WeaverStage.(Replicated Dummy)
     } else
 
     let nucleus = IntPointMap.find weaver fauna in
@@ -116,9 +100,8 @@ let replicate relation o =
 
     if IntPointMap.mem i fauna then
       let gaze' = SideExt.opposite nucleus.gaze in
-      {   stage = Stage.(Replicated ToClot);
-        counter = Counter.increment Act.Replicate o.counter;
-         tissue = Tissue.with_clot i gaze' o.tissue
+      {  stage = WeaverStage.(Replicated ToClot);
+        tissue = Tissue.with_clot i gaze' o.tissue
       } else
 
       let child = NucleusExt.replicate relation nucleus
@@ -130,21 +113,11 @@ let replicate relation o =
         
       if IntPointMap.mem i flora then
         let cytoplasm = IntPointMap.find i flora in
-        {   stage = Stage.(Replicated Success);
-          counter = Counter.increment Act.Replicate o.counter;
-           tissue = child |> NucleusExt.inject cytoplasm
-                          |> set
+        {  stage = WeaverStage.(Replicated Success);
+          tissue = child |> NucleusExt.inject cytoplasm
+                         |> set
         } else
 
-        {   stage = Stage.(Replicated Out);
-          counter = Counter.increment Act.Replicate o.counter;
-           tissue = set child
+        {  stage = WeaverStage.(Replicated Out);
+          tissue = set child
         }
-
-let statistics o =
-  let tissue = TissueCounter.calculate_for o.tissue
-  and acts = Counter.calculate o.counter in
-  WeaverStatistics.(
-    { tissue;
-      acts
-    })

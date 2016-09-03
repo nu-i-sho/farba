@@ -118,4 +118,6 @@ let update_item i update o =
       -> let is_cancer = Nucleus.is_cancer current in
          printer |> P.set_index i
                  |> print_nucleus true is_cancer current
+
+    | Dummy _ -> printer (* todo: implement *) 
   )

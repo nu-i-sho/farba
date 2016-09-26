@@ -1,3 +1,1 @@
-type t = { value : DotsOfDice.t Doubleable.t;
-           index : int
-         }
+type t = DotsOfDice.t Doubleable.t

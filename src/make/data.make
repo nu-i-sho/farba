@@ -18,6 +18,7 @@ ocamlopt -for-pack Data -c runtimeModeKind.ml
 ocamlopt -for-pack Data -c runtimeMode.ml
 ocamlopt -for-pack Data -c crumb.ml
 ocamlopt -for-pack Data -c activeCrumbStage.ml
+ocamlopt -for-pack Data -c crumbStage.ml
 ocamlopt -for-pack Data -c callStackPoint.ml
 ocamlopt -for-pack Data -c tissueItem.ml
 ocamlopt -for-pack Data -c tissueItemInit.ml
@@ -32,10 +33,10 @@ ocamlopt -pack -o data.cmx \
 doubleable.cmx dotsOfDice.cmx pigment.cmx hand.cmx side.cmx \
 nucleus.cmx cell.cmx relation.cmx action.cmx command.cmx \
 fail.cmx weaverStage.cmx runtimeModeKind.cmx runtimeMode.cmx \
-crumb.cmx activeCrumbStage.cmx callStackPoint.cmx tissueItem.cmx \
-tissueItemInit.cmx tissueItemUpdate.cmx tissueStatistics.cmx \
-actsStatistics.cmx commandsStatistics.cmx weaverStatistics.cmx \
-statistics.cmx
+crumb.cmx activeCrumbStage.cmx crumbStage.cmx callStackPoint.cmx \
+tissueItem.cmx tissueItemInit.cmx tissueItemUpdate.cmx \
+tissueStatistics.cmx actsStatistics.cmx commandsStatistics.cmx \
+weaverStatistics.cmx statistics.cmx
 
 mv data.cmx ../../bin/data.cmx
 mv data.cmi ../../bin/data.cmi

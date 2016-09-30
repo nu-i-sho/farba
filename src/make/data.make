@@ -29,6 +29,9 @@ ocamlopt -I ../../bin -for-pack Data -c programLine.ml
 ocamlopt -for-pack Data -c programActiveLine.ml
 ocamlopt -for-pack Data -c itemInit.ml
 ocamlopt -for-pack Data -c itemUpdate.ml
+ocamlopt -for-pack Data -c programLineKind.ml
+ocamlopt -for-pack Data -c programLineInit.ml
+ocamlopt -for-pack Data -c programLineUpdate.ml
 ocamlopt -for-pack Data -c callStackPoint.ml
 ocamlopt -for-pack Data -c tissueItem.ml
 ocamlopt -for-pack Data -c tissueItemInit.ml
@@ -47,6 +50,7 @@ crumb.cmx activeCrumbStage.cmx crumbStage.cmx stagedCrumb.cmx \
 crumbedCommand.cmx programCrumb.cmx programActiveCrumb.cmx \
 programItem.cmx programActiveItem.cmx programLine.cmx \
 programActiveLine.cmx itemInit.cmx itemUpdate.cmx \
+programLineKind.cmx programLineInit.cmx programLineUpdate.cmx \
 callStackPoint.cmx tissueItem.cmx tissueItemInit.cmx \
 tissueItemUpdate.cmx tissueStatistics.cmx actsStatistics.cmx \
 commandsStatistics.cmx weaverStatistics.cmx statistics.cmx

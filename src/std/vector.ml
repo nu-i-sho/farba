@@ -14,4 +14,3 @@ let try_get i o =
   if i < o.length then
     Some (get i o) else
     None
-

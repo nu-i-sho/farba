@@ -8,9 +8,9 @@ let make getter length =
   }
 
 let length o = o.length
-let get  i o = o.getter i
+let item i o = o.getter i
 
-let try_get i o =
-  if i < o.length then
-    Some (get i o) else
+let maybe_item i o =
+  if i < (length o) then
+    Some (item i o) else
     None

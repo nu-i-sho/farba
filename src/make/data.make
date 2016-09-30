@@ -23,6 +23,7 @@ ocamlopt -for-pack Data -c stagedCrumb.ml
 ocamlopt -for-pack Data -c crumbedCommand.ml
 ocamlopt -for-pack Data -c programCrumb.ml
 ocamlopt -for-pack Data -c programActiveCrumb.ml
+ocamlopt -for-pack Data -c programItem.ml
 ocamlopt -for-pack Data -c callStackPoint.ml
 ocamlopt -for-pack Data -c tissueItem.ml
 ocamlopt -for-pack Data -c tissueItemInit.ml
@@ -39,9 +40,10 @@ nucleus.cmx cell.cmx relation.cmx action.cmx command.cmx \
 fail.cmx weaverStage.cmx runtimeModeKind.cmx runtimeMode.cmx \
 crumb.cmx activeCrumbStage.cmx crumbStage.cmx stagedCrumb.cmx \
 crumbedCommand.cmx programCrumb.cmx programActiveCrumb.cmx \
-callStackPoint.cmx tissueItem.cmx tissueItemInit.cmx \
-tissueItemUpdate.cmx tissueStatistics.cmx actsStatistics.cmx \
-commandsStatistics.cmx weaverStatistics.cmx statistics.cmx
+programItem.cmx callStackPoint.cmx tissueItem.cmx \
+tissueItemInit.cmx tissueItemUpdate.cmx tissueStatistics.cmx \
+actsStatistics.cmx commandsStatistics.cmx weaverStatistics.cmx \
+statistics.cmx
 
 mv data.cmx ../../bin/data.cmx
 mv data.cmi ../../bin/data.cmi

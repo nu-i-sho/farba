@@ -1,8 +1,8 @@
 open Data.Shared
 open Data.Tissue
    
-module Pigment = Proto.Pigment
-include Proto.Nucleus
+module Pigment = Shared.Pigment
+include Shared.Nucleus
    
 let turn hand o =
   { o with gaze = Side.turn hand o.gaze

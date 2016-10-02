@@ -2,8 +2,8 @@ echo "Core build started"
 
 cd ../core
 
-ocamlopt -for-pack Core -c side.mli
-ocamlopt -for-pack Core -c side.ml
+ocamlopt -I ../../bin -for-pack Core -c side.mli
+ocamlopt -I ../../bin -for-pack Core -c side.ml
 ocamlopt -I ../../bin -for-pack Core -c nucleus.mli
 ocamlopt -I ../../bin -for-pack Core -c nucleus.ml
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.mli

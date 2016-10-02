@@ -10,9 +10,11 @@ ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.mli
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.ml
 ocamlopt -I ../../bin -for-pack Core -c crumbs.mli
 ocamlopt -I ../../bin -for-pack Core -c crumbs.ml
+ocamlopt -I ../../bin -for-pack Core -c level.mli
+ocamlopt -I ../../bin -for-pack Core -c level.ml
 
 ocamlopt -pack -o core.cmx \
-side.cmx nucleus.cmx dotsOfDice.cmx crumbs.cmx
+side.cmx nucleus.cmx dotsOfDice.cmx crumbs.cmx level.cmx
 
 mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi

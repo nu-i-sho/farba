@@ -4,9 +4,10 @@ cd ../CORE
 
 ocamlopt -I ../../bin -for-pack CORE -c TISSUE.ml
 ocamlopt -I ../../bin -for-pack CORE -c WEAVER.ml
+ocamlopt -I ../../bin -for-pack CORE -c STATISTICABLE_WEAVER.ml
 
 ocamlopt -pack -o CORE.cmx \
-TISSUE.cmx WEAVER.cmx
+TISSUE.cmx WEAVER.cmx STATISTICABLE_WEAVER.cmx
 
 mv CORE.cmx ../../bin/CORE.cmx
 mv CORE.cmi ../../bin/CORE.cmi

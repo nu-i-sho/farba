@@ -2,9 +2,9 @@ echo "Data build started"
 
 cd ../data
 
-ocamlopt -c baseData.ml
+ocamlopt -for-pack Data -c shared.ml
 
-ocamlopt baseData.cmx -o data.cmx data.ml
+ocamlopt shared.cmx -pack -o data.cmx
 
 mv data.cmx ../../bin/data.cmx
 mv data.cmi ../../bin/data.cmi

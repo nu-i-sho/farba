@@ -8,9 +8,11 @@ ocamlopt -I ../../bin -for-pack Core -c nucleus.mli
 ocamlopt -I ../../bin -for-pack Core -c nucleus.ml
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.mli
 ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.ml
+ocamlopt -I ../../bin -for-pack Core -c crumbs.mli
+ocamlopt -I ../../bin -for-pack Core -c crumbs.ml
 
 ocamlopt -pack -o core.cmx \
-side.cmx nucleus.cmx dotsOfDice.cmx
+side.cmx nucleus.cmx dotsOfDice.cmx crumbs.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

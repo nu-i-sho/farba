@@ -14,6 +14,8 @@ ocamlopt -I ../../bin -for-pack Core -c level.mli
 ocamlopt -I ../../bin -for-pack Core -c level.ml
 ocamlopt -I ../../bin -for-pack Core -c tissue.mli
 ocamlopt -I ../../bin -for-pack Core -c tissue.ml
+ocamlopt -I ../../bin -for-pack Core -c weaver.mli
+ocamlopt -I ../../bin -for-pack Core -c weaver.ml
 
 ocamlopt -pack -o core.cmx \
 side.cmx nucleus.cmx dotsOfDice.cmx crumbs.cmx level.cmx \

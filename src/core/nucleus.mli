@@ -1,7 +1,7 @@
 open Data.Shared
 open Data.Tissue
    
-type t = nucleus
+include module type of Proto.Nucleus
 
 val turn      : hand -> t -> t
 val inject    : cytoplasm -> t -> t

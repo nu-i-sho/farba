@@ -1,7 +1,6 @@
-echo "|----- Shared all started ------|"
-echo "|                               |"
+echo "Shared build started"
 
 ./utils.make
+./data.make
 
-echo "|                               |"
-echo "|---- Shared all completed -----|"
+echo "Shared build completed"

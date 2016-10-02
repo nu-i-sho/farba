@@ -1,4 +1,4 @@
-echo "|----- Utils build started -----|"
+echo "Utils build started"
 
 cd ../utils
 
@@ -16,4 +16,4 @@ find . -type f -iname \*.cmx -delete
 find . -type f -iname \*.cmi -delete
 find . -type f -iname \*.o   -delete
 
-echo "|---- Utils build completed ----|"
+echo "Utils build completed"

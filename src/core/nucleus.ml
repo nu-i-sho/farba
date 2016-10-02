@@ -1,7 +1,8 @@
 open Data.Shared
 open Data.Tissue
-open Proto
-   
+
+module Pigment = Proto.Pigment   
+
 type t = nucleus
 
 let turn hand o =

@@ -81,8 +81,3 @@ type 'a change =
   { previous : 'a;
      current : 'a
   }
-
-module ItemEvent = struct
-    type ('a, 'b) init   = ('a, 'b) indexed
-    type ('a, 'b) update = ('a change, 'b) indexed
-  end

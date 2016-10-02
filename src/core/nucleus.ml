@@ -1,5 +1,6 @@
 open Data.Shared
 open Data.Tissue
+open Proto
    
 type t = nucleus
 
@@ -16,6 +17,6 @@ let inject cytoplasm o =
 let replicate relation o =
   {    gaze = Side.opposite o.gaze;
     pigment = match relation with
-	      | Inverse -> Proto.Pigment.opposite o.pigment
+	      | Inverse -> Pigment.opposite o.pigment
 	      | Direct  -> o.pigment 
   }

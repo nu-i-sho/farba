@@ -10,9 +10,10 @@ ocamlopt -I ../../bin -for-pack Shared -c nucleus.mli
 ocamlopt -I ../../bin -for-pack Shared -c nucleus.ml
 ocamlopt -I ../../bin -for-pack Shared -c cell.mli
 ocamlopt -I ../../bin -for-pack Shared -c cell.ml
+ocamlopt -for-pack Shared -c fail.ml
 
 ocamlopt -pack -o shared.cmx \
-pigment.cmx dotsOfDice.cmx nucleus.cmx cell.cmx
+pigment.cmx dotsOfDice.cmx nucleus.cmx cell.cmx fail.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi

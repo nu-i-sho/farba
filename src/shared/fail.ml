@@ -1,0 +1,2 @@
+exception Inlegal_case of string
+exception Impossible_case

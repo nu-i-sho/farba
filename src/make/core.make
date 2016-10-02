@@ -12,9 +12,12 @@ ocamlopt -I ../../bin -for-pack Core -c crumbs.mli
 ocamlopt -I ../../bin -for-pack Core -c crumbs.ml
 ocamlopt -I ../../bin -for-pack Core -c level.mli
 ocamlopt -I ../../bin -for-pack Core -c level.ml
+ocamlopt -I ../../bin -for-pack Core -c tissue.mli
+ocamlopt -I ../../bin -for-pack Core -c tissue.ml
 
 ocamlopt -pack -o core.cmx \
-side.cmx nucleus.cmx dotsOfDice.cmx crumbs.cmx level.cmx
+side.cmx nucleus.cmx dotsOfDice.cmx crumbs.cmx level.cmx \
+tissue.cmx
 
 mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi

@@ -1,9 +1,5 @@
-echo "|------ Build all started ------|"
-echo "|                               |"
-echo "|                               |"
+echo "Build all started"
 
 ./shared.make
 
-echo "|                               |"
-echo "|                               |"
-echo "|----- Build all completed -----|"
+echo "Build all completed"

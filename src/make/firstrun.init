@@ -1,7 +1,6 @@
 chmod +x utils.make
 chmod +x data.make
-chmod +x proto.make
-chmod +x core.make
 chmod +x VIEW.make
 chmod +x shared.make
+chmod +x core.make
 chmod +x farba.make

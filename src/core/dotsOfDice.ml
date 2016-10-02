@@ -1,5 +1,5 @@
 open Data.Shared
-include Proto.DotsOfDice
+include Shared.DotsOfDice
    
 let succ =
   function | OOOOOO -> O

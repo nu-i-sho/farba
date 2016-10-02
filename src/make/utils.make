@@ -4,9 +4,11 @@ cd ../utils
 
 ocamlopt -for-pack Utils -c vector.mli
 ocamlopt -for-pack Utils -c vector.ml
+ocamlopt -for-pack Utils -c intPointMap.mli
+ocamlopt -for-pack Utils -c intPointMap.ml
 
 ocamlopt -pack -o utils.cmx \
-vector.cmx
+vector.cmx intPointMap.cmx
 
 mv utils.cmx ../../bin/utils.cmx
 mv utils.cmi ../../bin/utils.cmi

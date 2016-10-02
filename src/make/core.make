@@ -14,7 +14,7 @@ ocamlopt -I ../../bin -for-pack Core -c crumbs.ml
 ocamlopt -pack -o core.cmx \
 side.cmx nucleus.cmx dotsOfDice.cmx crumbs.cmx
 
-mv core.cmx ../../bin/core.cmx
+mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi
 mv core.o ../../bin/core.o
 
@@ -22,4 +22,4 @@ find . -type f -iname \*.cmx -delete
 find . -type f -iname \*.cmi -delete
 find . -type f -iname \*.o   -delete
 
-echo "Utils build completed"
+echo "Core build completed"

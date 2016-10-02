@@ -40,6 +40,12 @@ type command =
   | Nope
   | End
 
+type level_path =
+  {    branch : dots_of_dice;
+    branchlet : dots_of_dice;
+         leaf : dots_of_dice
+  }
+  
 type 'a doubleable =
   | Double of 'a * 'a
   | Single of 'a

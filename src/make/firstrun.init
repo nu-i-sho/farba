@@ -1,4 +1,5 @@
 chmod +x utils.make
 chmod +x data.make
+chmod +x VIEW.make
 chmod +x shared.make
 chmod +x farba.make

@@ -16,10 +16,12 @@ ocamlopt -I ../../bin -for-pack Core -c tissue.mli
 ocamlopt -I ../../bin -for-pack Core -c tissue.ml
 ocamlopt -I ../../bin -for-pack Core -c weaver.mli
 ocamlopt -I ../../bin -for-pack Core -c weaver.ml
+ocamlopt -I ../../bin -for-pack Core -c tissueCounter.mli
+ocamlopt -I ../../bin -for-pack Core -c tissueCounter.ml
 
 ocamlopt -pack -o core.cmx \
 side.cmx nucleus.cmx dotsOfDice.cmx crumbs.cmx level.cmx \
-tissue.cmx
+tissue.cmx weaver.cmx tissueCounter.cmx 
 
 mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi

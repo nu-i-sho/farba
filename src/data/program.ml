@@ -5,8 +5,8 @@ type crumb = Crumb.stage staged_crumb
 
 module Item = struct
     type t = crumb option crumbed_command
-    type init   = (t, (int * int)) ItemEvent.init
-    type update = (t, (int * int)) ItemEvent.update
+    type init   = (t, int * int) indexed
+    type update = (t change, int * int) indexed
   end
 
 type snake_line =
@@ -27,8 +27,8 @@ module Line = struct
         crumbed : bool;
       }
 
-    type init   = (kind, int) ItemEvent.init
-    type update = (kind, int) ItemEvent.update
+    type init   = (kind, int) indexed
+    type update = (kind change, int) indexed
                     
     type t = (snake_line, int, attribute) attributable 
   end

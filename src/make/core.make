@@ -6,9 +6,11 @@ ocamlopt -for-pack Core -c side.mli
 ocamlopt -for-pack Core -c side.ml
 ocamlopt -I ../../bin -for-pack Core -c nucleus.mli
 ocamlopt -I ../../bin -for-pack Core -c nucleus.ml
+ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.mli
+ocamlopt -I ../../bin -for-pack Core -c dotsOfDice.ml
 
 ocamlopt -pack -o core.cmx \
-side.cmx nucleus.cmx
+side.cmx nucleus.cmx dotsOfDice.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

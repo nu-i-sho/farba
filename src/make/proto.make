@@ -4,9 +4,11 @@ cd ../proto
 
 ocamlopt -I ../../bin -for-pack Proto -c pigment.mli
 ocamlopt -I ../../bin -for-pack Proto -c pigment.ml
+ocamlopt -I ../../bin -for-pack Proto -c dotsOfDice.mli
+ocamlopt -I ../../bin -for-pack Proto -c dotsOfDice.ml
 
 ocamlopt -pack -o proto.cmx \
-pigment.cmx
+pigment.cmx dotsOfDice.cmx
 
 mv proto.cmx ../../bin/proto.cmx
 mv proto.cmi ../../bin/proto.cmi

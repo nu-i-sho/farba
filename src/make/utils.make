@@ -6,9 +6,13 @@ ocamlopt -for-pack Utils -c vector.mli
 ocamlopt -for-pack Utils -c vector.ml
 ocamlopt -for-pack Utils -c intPointMap.mli
 ocamlopt -for-pack Utils -c intPointMap.ml
+ocamlopt -for-pack Utils -c intMap.mli
+ocamlopt -for-pack Utils -c intMap.ml
+ocamlopt -for-pack Utils -c matrix.mli
+ocamlopt -for-pack Utils -c matrix.ml
 
 ocamlopt -pack -o utils.cmx \
-vector.cmx intPointMap.cmx
+vector.cmx intPointMap.cmx intMap.cmx matrix.cmx
 
 mv utils.cmx ../../bin/utils.cmx
 mv utils.cmi ../../bin/utils.cmi

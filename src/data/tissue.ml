@@ -49,23 +49,19 @@ module Item = struct
   end
 
 module WeaverStage = struct
-    module StatusOf = struct
-        module Pass = struct
-            type t = | Dummy
-                     | Success
-          end
-                    
-        module Move = struct
-            type t = | Dummy
-                     | Success
-	             | ToClot
-	             | Out
-          end          
-      end
-  
+    type pass_status =
+      | Dummy
+      | Success
+                  
+    type move_status =
+      | Dummy
+      | Success
+      | ToClot
+      | Out
+      
     type t = | Created
              | Turned
-             | Passed of StatusOf.Pass.t
-             | Moved of StatusOf.Move.t 
-             | Replicated of StatusOf.Move.t
+             | Passed of pass_status
+             | Moved of move_status 
+             | Replicated of move_status
   end

@@ -1,7 +1,8 @@
 open Shared
 
 type cytoplasm = pigment
-               
+type clot = side
+
 type nucleus =
   { pigment : pigment;
        gaze : side
@@ -16,7 +17,7 @@ module Item = struct
     type t = | Cytoplasm of cytoplasm
              | Active of cell
              | Static of cell
-             | Clot of side
+             | Clot of clot
              | Outed of nucleus
              | Out
 
@@ -38,7 +39,7 @@ module Item = struct
                  | Turn of cell * cell
                  | VirusOut of cell * cell
                  | Infect of cell * cell
-                 | DoClot of cell * side
+                 | DoClot of cell * clot
                  | MoveOut of nucleus
                  | DummyAct of dummy_action
       end

@@ -1,6 +1,16 @@
 open Data.Shared
+open Shared.Fail
 type t = side
 
+let of_char = 
+  function | 'a' | 'A' -> Up
+           | 'b' | 'B' -> RightUp
+           | 'c' | 'C' -> RightDown
+           | 'd' | 'D' -> Down
+           | 'e' | 'E' -> LeftDown
+           | 'f' | 'F' -> LeftUp
+           |  _        -> raise (Inlegal_case "Core.Side.of_char")
+  
 let opposite = 
   function | Up        -> Down
            | LeftUp    -> RightDown

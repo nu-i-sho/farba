@@ -8,7 +8,7 @@ module Make (ITEM : MODULE.T) = struct
     type e = (module ITEM)
     type t = (module NODE)
     
-    let get dots (module Node : NODE) =
+    let item dots (module Node : NODE) =
       match dots with
       | OOOOOO -> (module Node.OOOOOO : ITEM)
       | OOOOO -> (module Node.OOOOO : ITEM)

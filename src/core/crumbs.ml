@@ -2,7 +2,7 @@ open Data.Shared
 open Shared.Fail
    
 type t = (int * Crumb.t) list
-
+ 
 let origin = [0, (Single O)]
 let item   = List.assoc
 
@@ -42,7 +42,7 @@ let split_top =
                 -> (i, (Single (DotsOfDice.succ a))) :: tl
 
            | (i, (Double _)) :: tl
-                -> raise (Inlegal_case "respliting")
+                -> raise (Inlegal_case "Core.Crumbs.split_top")
            | [] -> raise  Impossible_case
 
 let rec exists start count =

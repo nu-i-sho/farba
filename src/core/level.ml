@@ -2,92 +2,61 @@ open Data.Shared
 open Data.Tissue
 open Shared.Fail
 open Utils
+open LEVEL
    
-type t = { active : int * int;
-           height : int;
-            width : int;
-            flora : cytoplasm IntPointMap.t;
-            fauna : nucleus IntPointMap.t;
-             path : level_path
-	 }
+type flora = cytoplasm IntPointMap.t
+type fauna = nucleus IntPointMap.t
+            
+module type LEVEL  = SOURCE.T
+  with type flora := flora
+   and type fauna := fauna
+         
+type t = level_path * (module LEVEL)
 
-let active o = o.active
-let height o = o.height
-let width  o = o.width
-let flora  o = o.flora
-let fauna  o = o.fauna
-let path   o = o.path
+let active (_, (module Lvl : LEVEL)) = Lvl.active
+let height (_, (module Lvl : LEVEL)) = Lvl.height
+let width  (_, (module Lvl : LEVEL)) = Lvl.width
+let flora  (_, (module Lvl : LEVEL)) = Lvl.flora
+let fauna  (_, (module Lvl : LEVEL)) = Lvl.fauna
 
-module Loader = struct
-    module TREE = LEVELS.SOURCE_TREE
-    module Make (LevelsSourceTree : TREE.ROOT.T) = struct
-      
-        module NodeMap   = Shared.DotsOfDiceNodeMap
-        module Root      = NodeMap.Make (TREE.BRANCH)
-        module Branch    = NodeMap.Make (TREE.BRANCHLET)
-        module Branchlet = NodeMap.Make (TREE.LEAF)
+let path = fst
 
-        let parse_cytoplasm acc i =
-          function | ' ' -> acc
-                   | 'O' -> acc |> IntPointMap.add i Gray
-	           | '0' -> acc |> IntPointMap.add i Blue
-                   | '.' -> acc |> IntPointMap.add i White
-	           |  _  -> raise (Inlegal_case "invalid symbol")
-      
-        let parse_nucleus acc i = 
-          let add pigment gaze = 
-	    IntPointMap.add i { pigment; gaze } acc
-	  in
-	     
-	  function | '.'
-                   | ' ' -> acc
+module MakeLoader (Tree : SOURCE_TREE.ROOT.T) = struct
 
-	           | 'a' -> add Gray Up
-                   | 'b' -> add Gray RightUp
-                   | 'c' -> add Gray RightDown
-                   | 'd' -> add Gray Down
-                   | 'e' -> add Gray LeftDown
-                   | 'f' -> add Gray LeftUp
+  module TREE      = SOURCE_TREE
+  module NodeMap   = Shared.DotsOfDiceNodeMap
+  module Root      = NodeMap.Make (TREE.BRANCH)
+  module Branch    = NodeMap.Make (TREE.BRANCHLET)
+  module Branchlet = NodeMap.Make (TREE.LEAF)
+  module Acc       = IntPointMap
 
-		   | 'A' -> add Blue Up
-                   | 'B' -> add Blue RightUp
-                   | 'C' -> add Blue RightDown
-                   | 'D' -> add Blue Down
-                   | 'E' -> add Blue LeftDown
-                   | 'F' -> add Blue LeftUp
-                          
-                   |  _  -> raise (Inlegal_case "invalid symbol")
+  let load path =
 
-        let load path =
-          let root = (module LevelsSourceTree : TREE.ROOT.T) in
-          let module Src = 
-	    (val (root |> Root.get path.branch
-                       |> Branch.get path.branchlet
-                       |> Branchlet.get path.leaf) : TREE.LEAF.T) in
+    let load_cytoplasm acc i =
+      function | ' ' -> acc
+               |  x  -> acc |> Acc.add i (Cytoplasm.of_char x)
+    
+    and load_nucleus acc i =
+      function | '.'
+               | ' ' -> acc
+               |  x  -> acc |> Acc.add i (Nucleus.of_char x)
+    
+    and root = (module Tree : TREE.ROOT.T) in
+    let module Source = 
+      (val (root |> Root.item path.branch
+                 |> Branch.item path.branchlet
+                 |> Branchlet.item path.leaf) : TREE.LEAF.T) in
+    path, (module
+             (struct
+                  include Source
+                  let fauna =
+                    fauna |> Lazy.force
+                          |> Matrix.of_string_list
+                          |> Matrix.foldi load_nucleus Acc.empty
 
-          let empty = IntPointMap.empty
-          and flora = Lazy.force Src.flora
-          and index = 
-	    function | Some i -> i
-                     | None   ->
-                        raise (Inlegal_case "invalid_source") in
-
-          { active = Src.active |> Lazy.force
-                                |> Matrix.of_string_list
-	                        |> Matrix.index ((=)'X')
-                                |> index;
-
-	     fauna = Src.fauna |> Lazy.force
-                               |> Matrix.of_string_list
-                               |> Matrix.foldi parse_nucleus empty;
-
-             flora = flora |> Matrix.of_string_list
-                           |> Matrix.foldi parse_cytoplasm empty;
-
-	    height = flora |> List.length;
-             width = flora |> List.hd
-                           |> String.length;
-              path
-          }
-      end
+                  let flora =
+                    flora |> Lazy.force
+                          |> Matrix.of_string_list
+                          |> Matrix.foldi load_cytoplasm Acc.empty
+                end) : LEVEL)
   end

@@ -1,6 +1,7 @@
 open Data.Shared
 open Data.Tissue
 open Utils
+open LEVEL
 
 type t 
 
@@ -11,8 +12,6 @@ val flora  : t -> cytoplasm IntPointMap.t
 val fauna  : t -> nucleus IntPointMap.t
 val path   : t -> level_path
   
-module Loader : sig
-    module Make (Tree : LEVELS.SOURCE_TREE.ROOT.T) : sig
-        val load : level_path -> t
-      end
+module MakeLoader (Tree : SOURCE_TREE.ROOT.T) : sig
+    val load : level_path -> t
   end

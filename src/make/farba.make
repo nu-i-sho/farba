@@ -5,7 +5,7 @@ echo "Build all started"
 ./VIEW.make
 ./CORE.make
 ./SHARED.make
-./LEVELS.make
+./LEVEL.make
 ./shared.make
 ./core.make
 

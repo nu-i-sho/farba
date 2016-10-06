@@ -1,52 +1,79 @@
 open Data.Shared
 open Shared.Fail
-   
-type t = (int * Crumb.t) list
+
+type crumb = int * Crumb.t
+type t = crumb list * crumb
  
-let origin = [0, (Single O)]
-let item   = List.assoc
+let origin = [], (0, (Single O))
 
-let maybe_item i o =
-  if List.mem_assoc i o then
-    Some (List.assoc i o) else
-    None
-  
+let item i =
+  function | _, (j, x) when j = i
+                    -> x
+           | oth, _ -> List.assoc i oth
+
+let maybe_item i =
+  function | _, (j, x) when j = i
+                    -> Some x
+           | oth, _ -> if List.mem_assoc i oth then
+                         Some (List.assoc i oth) else
+                         None
 let top =
-  function | top :: _ -> top
-           | []       -> raise Impossible_case
-                       
+  function | [], top | (top :: _), _ -> top
+
 let succ =
-  function | (i, ((Single _) as x)) :: tl
-                -> ((succ i), x) :: tl              
+  function | [], (i, ((Single _) as x))
+             -> [], ((succ i), x)
 
-           | (i, Double (a, b)) :: tl
-                -> ((succ i), (Single b)) :: (i, (Single a)) :: tl
+           | ((i, ((Single _) as x)) :: oth), fst
+             -> (((succ i), x) :: oth), fst        
 
-           | [] -> raise Impossible_case           
+           | [], (i, Double (a, b))
+             -> [(succ i), (Single b)], (i, (Single a))
+              
+           | ((i, Double (a, b)) :: oth), fst
+             -> (((succ i), (Single b)) :: (i, (Single a)) :: oth),
+                fst
 
 let pred =
-  function | (i, (Single a)) :: (j, (Single b)) :: tl
+  function | [i, (Single a)], (j, (Single b))
                 when j = pred i
-                -> (j, (Double (a, b))) :: tl
+             -> [], (j, (Double (a, b)))
 
-           | (i, ((Single _) as x)) :: tl
-                -> ((pred i), x) :: tl
+           | ((i, (Single a)) :: (j, (Single b)) :: oth), fst
+                when j = pred i
+             -> ((j, (Double (a, b))) :: oth), fst
 
-           | (i, (Double (a, _))) :: tl
-             -> (i, (Single a)) :: tl
+           | [], (i, ((Single _) as x))
+             -> [], ((pred i), x)
 
-           | [] -> raise Impossible_case
+           | ((i, ((Single _) as x)) :: oth), fst
+             -> (((pred i), x) :: oth), fst
+
+           | [], (i, (Double (a, _)))
+             -> [], (i, (Single a))
+
+           | ((i, (Double (a, _))) :: oth), fst
+             -> ((i, (Single a)) :: oth), fst
 
 let split_top =
-  function | (i, (Single a)) :: tl
-                -> (i, (Single (DotsOfDice.succ a))) :: tl
+  function | [], (i, (Single a))
+             -> [], (i, (Single (DotsOfDice.succ a)))
 
-           | (i, (Double _)) :: tl
-                -> raise (Inlegal_case "Core.Crumbs.split_top")
-           | [] -> raise  Impossible_case
+           | ((i, (Single a)) :: oth), fst
+             -> ((i, (Single (DotsOfDice.succ a))) :: oth), fst
 
-let rec exists start count =
-  function | (i, _) :: tl when i = start -> true
-           | (i, _) :: _  when i > start -> i < (start + count)
-           | _ :: tl                     -> exists start count tl
-           | []                          -> false
+           | [], (i, (Double _))
+           | ((i, (Double _)) :: _), _
+             -> raise (Inlegal_case "Core.Crumbs.split_top")
+
+let exists from count =
+  let last = from + count in
+  function | _, (i, _) when i = from -> true
+           | _, (i, _) when i > from -> i < last
+           | oth, _               ->
+              let rec exists =
+                function | (i, _) :: _ when i = from -> true
+                         | (i, _) :: _ when i > from -> i < last
+                         | _ :: oth                  -> exists oth
+                         | []                        -> false in
+              exists oth 

@@ -24,10 +24,10 @@ let path = fst
 module MakeLoader (Tree : SOURCE_TREE.ROOT.T) = struct
 
   module TREE      = SOURCE_TREE
-  module NodeMap   = Shared.DotsOfDiceNodeMap
-  module Root      = NodeMap.Make (TREE.BRANCH)
-  module Branch    = NodeMap.Make (TREE.BRANCHLET)
-  module Branchlet = NodeMap.Make (TREE.LEAF)
+  module DotsNode  = Shared.DotsNodeMap
+  module Root      = DotsNode.Make (TREE.BRANCH)
+  module Branch    = DotsNode.Make (TREE.BRANCHLET)
+  module Branchlet = DotsNode.Make (TREE.LEAF)
   module Acc       = IntPointMap
 
   let load path =

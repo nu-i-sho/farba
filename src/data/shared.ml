@@ -1,4 +1,4 @@
-type dots_of_dice =
+type dots =
   | OOOOOO
   | OOOOO
   | OOOO
@@ -32,18 +32,18 @@ type action =
   | Turn of hand
   | Move
   | Pass
-
+  
 type command =
   | Act of action
-  | Call of dots_of_dice
-  | Declare of dots_of_dice
+  | Call of dots
+  | Declare of dots
   | Nope
   | End
-
+  
 type level_path =
-  {    branch : dots_of_dice;
-    branchlet : dots_of_dice;
-         leaf : dots_of_dice
+  {    branch : dots;
+    branchlet : dots;
+         leaf : dots
   }
   
 type 'a doubleable =
@@ -52,7 +52,7 @@ type 'a doubleable =
 
 module Crumb = struct
   
-    type t = dots_of_dice doubleable  
+    type t = dots doubleable  
     type active_stage =
       | Find
       | Run

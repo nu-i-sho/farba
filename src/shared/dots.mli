@@ -1,5 +1,5 @@
 open Data.Shared
-type t = dots_of_dice
+type t = dots
 
 val count   : int
 val index   : t -> int

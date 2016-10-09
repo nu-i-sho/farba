@@ -37,7 +37,12 @@ type action =
   | Turn of hand
   | Move
   | Pass
- 
+
+type arg =
+  | Act of action
+  | Call of dots
+  | Declare of dots
+  
 type command =
   | Act of action
   | Call of dots

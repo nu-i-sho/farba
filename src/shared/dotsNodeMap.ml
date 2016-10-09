@@ -3,7 +3,7 @@ open SHARED
 
 module Make (ITEM : MODULE.T) = struct
     module type ITEM = ITEM.T
-    module type NODE = DOTS_OF_DICE_NODE.MAKE (ITEM).T
+    module type NODE = DOTS_NODE.MAKE (ITEM).T
 
     type e = (module ITEM)
     type t = (module NODE)

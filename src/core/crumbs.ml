@@ -57,23 +57,25 @@ let pred =
 
 let split_top =
   function | [], (i, (Single a))
-             -> [], (i, (Single (DotsOfDice.succ a)))
+             -> [], (i, (Single (Dots.succ a)))
 
            | ((i, (Single a)) :: oth), fst
-             -> ((i, (Single (DotsOfDice.succ a))) :: oth), fst
+             -> ((i, (Single (Dots.succ a))) :: oth), fst
 
            | [], (i, (Double _))
            | ((i, (Double _)) :: _), _
-             -> raise (Inlegal_case "Core.Crumbs.split_top")
+             -> raise (Inlegal_case ( "Core.Crumbs.split_top: "
+                                    ^ "Trying to split splitted top"
+                                    ))
 
 let exists from count =
   let last = from + count in
   function | _, (i, _) when i = from -> true
            | _, (i, _) when i > from -> i < last
-           | oth, _               ->
+           | oth, _                  ->
               let rec exists =
                 function | (i, _) :: _ when i = from -> true
                          | (i, _) :: _ when i > from -> i < last
                          | _ :: oth                  -> exists oth
                          | []                        -> false in
-              exists oth 
+              exists oth

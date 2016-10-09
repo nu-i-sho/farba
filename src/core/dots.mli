@@ -1,4 +1,4 @@
-include module type of Shared.DotsOfDice
+include module type of Shared.Dots
 
 val succ      : t -> t
 val to_string : t -> string

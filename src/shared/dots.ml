@@ -1,5 +1,5 @@
 open Data.Shared
-type t = dots_of_dice
+type t = dots
 
 let count = 6
 let index =

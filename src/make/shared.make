@@ -13,12 +13,12 @@ ocamlopt -I ../../bin -for-pack Shared -c cell.ml
 ocamlopt -for-pack Shared -c fail.ml
 ocamlopt -I ../../bin -for-pack Shared -c dotsNodeMap.mli
 ocamlopt -I ../../bin -for-pack Shared -c dotsNodeMap.ml
-ocamlopt -I ../../bin -for-pack Shared -c index.mli
-ocamlopt -I ../../bin -for-pack Shared -c index.ml
+ocamlopt -I ../../bin -for-pack Shared -c coord.mli
+ocamlopt -I ../../bin -for-pack Shared -c coord.ml
 
 ocamlopt -pack -o shared.cmx \
 pigment.cmx dots.cmx nucleus.cmx cell.cmx fail.cmx dotsNodeMap.cmx \
-index.cmx
+coord.cmx
 
 mv shared.cmx ../../bin/shared.cmx
 mv shared.cmi ../../bin/shared.cmi

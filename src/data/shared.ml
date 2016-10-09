@@ -6,6 +6,11 @@ type dots =
   | OO
   | O
 
+type stics =
+  | III
+  | II
+  | I
+
 type pigment =
   | White
   | Blue

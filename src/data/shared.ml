@@ -6,7 +6,7 @@ type dots =
   | OO
   | O
 
-type stics =
+type sticks =
   | III
   | II
   | I
@@ -37,11 +37,12 @@ type action =
   | Turn of hand
   | Move
   | Pass
-  
+ 
 type command =
   | Act of action
   | Call of dots
   | Declare of dots
+  | Param of sticks
   | Nope
   | End
   

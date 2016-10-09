@@ -2,7 +2,7 @@ open Data.Shared
 open Data.Tissue
 open Utils
 
-module Index = Shared.Index
+module Coord = Shared.Coord
 
 type tissue = Tissue.t
 type t = { tissue : tissue;
@@ -39,7 +39,7 @@ let move o =
   | Blue
   | Gray  -> { o with stage = WeaverStage.(Moved Dummy) }
   | White -> let nucleus = IntPointMap.find weaver fauna in
-             let i = Index.move nucleus.gaze weaver in
+             let i = Coord.move nucleus.gaze weaver in
 
              if IntPointMap.mem i fauna then 
                let gaze' = Side.opposite nucleus.gaze in
@@ -58,7 +58,7 @@ let move o =
                  let cytoplasm = IntPointMap.find i flora in
                  {  stage = WeaverStage.(Moved Success);
                    tissue = nucleus |> Nucleus.inject cytoplasm
-	                           |> move
+	                            |> move
                  } else
 
                  {  stage = WeaverStage.(Moved Out);
@@ -72,7 +72,7 @@ let pass o =
   and dummy o = { o with stage = WeaverStage.(Passed Dummy) } in
 
   let nucleus = IntPointMap.find weaver fauna in
-  let i = Index.move nucleus.gaze weaver in
+  let i = Coord.move nucleus.gaze weaver in
 
   if IntPointMap.mem i fauna then
     let acceptor = IntPointMap.find i fauna in
@@ -94,7 +94,7 @@ let replicate relation o =
     } else
 
     let nucleus = IntPointMap.find weaver fauna in
-    let i = Index.move nucleus.gaze weaver in
+    let i = Coord.move nucleus.gaze weaver in
 
     if IntPointMap.mem i fauna then
       let gaze' = Side.opposite nucleus.gaze in

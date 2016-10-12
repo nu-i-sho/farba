@@ -1,2 +1,1 @@
-include Map.S with type key = int * int
-val put : key -> 'a -> 'a t -> 'a t 
+include PARSABLE_MAP.T with type key = int * int

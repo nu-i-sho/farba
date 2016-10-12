@@ -7,7 +7,7 @@ let parse parse_velue str =
     match str.[i], str_buff, key_buff with
 
     | '(',  _, _
-    | ',', "", None 
+    | ',', "", None
       -> parse (succ i) "" None acc
 
     | ',', _, None

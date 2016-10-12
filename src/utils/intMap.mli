@@ -1,1 +1,2 @@
-include Map.S with type key = int
+include MAP_EXT.T with type key = int
+val parse : (string -> 'a) -> string -> 'a t

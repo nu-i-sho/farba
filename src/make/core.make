@@ -10,8 +10,8 @@ ocamlopt -I ../../bin -for-pack Core -c nucleus.mli
 ocamlopt -I ../../bin -for-pack Core -c nucleus.ml
 ocamlopt -I ../../bin -for-pack Core -c dots.mli
 ocamlopt -I ../../bin -for-pack Core -c dots.ml
-ocamlopt -I ../../bin -for-pack Core -c crumbs.mli
-ocamlopt -I ../../bin -for-pack Core -c crumbs.ml
+ocamlopt -I ../../bin -for-pack Core -c energyCrumbs.mli
+ocamlopt -I ../../bin -for-pack Core -c energyCrumbs.ml
 ocamlopt -I ../../bin -for-pack Core -c level.mli
 ocamlopt -I ../../bin -for-pack Core -c level.ml
 ocamlopt -I ../../bin -for-pack Core -c tissue.mli
@@ -24,8 +24,8 @@ ocamlopt -I ../../bin -for-pack Core -c statisticableWeaver.mli
 ocamlopt -I ../../bin -for-pack Core -c statisticableWeaver.ml
 
 ocamlopt -pack -o core.cmx \
-side.cmx nucleus.cmx dots.cmx crumbs.cmx level.cmx tissue.cmx \
-weaver.cmx tissueCounter.cmx statisticableWeaver.cmx
+side.cmx nucleus.cmx dots.cmx energyCrumbs.cmx level.cmx \
+tissue.cmx weaver.cmx tissueCounter.cmx statisticableWeaver.cmx
 
 mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi

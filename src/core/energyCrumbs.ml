@@ -79,7 +79,13 @@ module Top = struct
                | [], (i, a)
                  -> [], (i, (Dots.succ a))
 
-    let jump i =
-      function | [], (j, x)         -> [], (i, x)
-               | (j, x) :: oth, fst -> (i, x) :: oth, fst  
+    let jump length =
+      function | [], (i, x)
+                 -> [], (i + length, x)
+               | (i, x) :: oth, fst
+                 -> (i + length, x) :: oth, fst
+
+    let return =
+      function | [], (_, x)    -> [], (0, x)
+               | _ :: oth, fst -> oth, fst
 end

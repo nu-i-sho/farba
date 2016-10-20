@@ -13,8 +13,9 @@ val exists     : int -> int -> t -> bool
 val update_top : (top -> top) -> t -> t
 
 module Top : sig
-    val succ  : top -> top
-    val pred  : top -> top
-    val split : top -> top
-    val jump  : int -> top -> top
+    val succ   : top -> top
+    val pred   : top -> top
+    val split  : top -> top
+    val jump   : int -> top -> top
+    val return : top -> top
   end

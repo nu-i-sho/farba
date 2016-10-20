@@ -1,3 +1,5 @@
+open Utils.Primitives
+
 type dots =
   | OOOOOO
   | OOOOO
@@ -56,14 +58,12 @@ type level_path =
     branchlet : dots;
          leaf : dots
   }
-  
-type 'a doubleable =
-  | Double of 'a * 'a
-  | Single of 'a
 
+type args = arg Tripleable.t 
+            
 module Crumb = struct
   
-    type t = dots doubleable  
+    type t = dots Doubleable.t  
     type active_stage =
       | Find
       | Run

@@ -2,7 +2,7 @@ echo "Data build started"
 
 cd ../data
 
-ocamlopt -for-pack Data -c shared.ml
+ocamlopt -I ../../bin -for-pack Data -c shared.ml
 ocamlopt -I ../../bin -for-pack Data -c program.ml
 ocamlopt -for-pack Data -c tissue.ml
 ocamlopt -for-pack Data -c statistics.ml

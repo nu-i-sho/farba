@@ -9,9 +9,9 @@ type t = e IntMap.t
 let item = IntMap.item
 let maybe_item = IntMap.maybe_item
 
-let parse =
-  let parse_loop str = Static (Dots.of_string str) in
-  IntMap.parse parse_loop
+let of_string =
+  let loop_of_string x = Static (Dots.of_string x) in
+  IntMap.of_string loop_of_string
   
 module Item = struct
     let iter i o =

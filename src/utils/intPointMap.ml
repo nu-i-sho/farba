@@ -6,9 +6,9 @@ include MapExt.Make (struct type t = int * int
 			        by_x
           	       end)
 
-let parse parse_velue str =
+let of_string velue_of_string src =
   let rec parse i str_buff x_buff y_buff acc =
-    match str.[i], str_buff, x_buff, y_buff with
+    match src.[i], str_buff, x_buff, y_buff with
 
     | '(',  _, _, _
     | ',', "", None, None
@@ -23,7 +23,7 @@ let parse parse_velue str =
          parse (succ i) "" x_buff (Some y) acc
 
     | ')', _, (Some x), (Some y)
-      -> let value = parse_velue str_buff in
+      -> let value = velue_of_string str_buff in
          parse (succ i) "" None None (add (x, y) value acc)
 
     | chr, _, _, _

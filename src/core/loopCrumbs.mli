@@ -6,7 +6,7 @@ type t
 
 val item       : int -> t -> e
 val maybe_item : int -> t -> e option
-val parse      : string -> t
+val of_string  : string -> t
 
 module Item : sig
     val iter : int -> t -> t

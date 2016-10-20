@@ -1,14 +1,20 @@
 open Data.Shared
+open Utils.Primitives
+
+type e = dots Doubleable.t
 type t
+type top
 
 val origin     : t
-val top        : t -> int * Crumb.t
-val item       : int -> t -> Crumb.t
-val maybe_item : int -> t -> Crumb.t option
+val top        : t -> int * e
+val item       : int -> t -> e
+val maybe_item : int -> t -> e option
 val exists     : int -> int -> t -> bool
+val update_top : (top -> top) -> t -> t
 
 module Top : sig
-    val succ  : t -> t
-    val pred  : t -> t
-    val split : t -> t
+    val succ  : top -> top
+    val pred  : top -> top
+    val split : top -> top
+    val jump  : int -> top -> top
   end

@@ -1,23 +1,27 @@
 open Data.Shared
+open Utils.Primitives
 open Shared.Fail
 
-type e = int * dots
-type t = e list * e
- 
+type e   = dots Doubleable.t
+type e'  = int * dots
+type t   = e' list * e'
+type top = t
+        
 let origin = [], (0, O)
 
 let maybe_item i (oth, ((_, c) as fst)) =
-  
-  let is_actual (j, _) = j = i in
-  match (List.filter is_actual oth),
-        (is_actual fst) with
+  Doubleable.(
+    let is_actual (j, _) = j = i in
+    match (List.filter is_actual oth),
+          (is_actual fst) with
 
-  | ((_, a) :: (_, b) :: _), _
-                  -> Some (Double (a, b))
-  | [_, a], true  -> Some (Double (a, c))
-  | [_, a], false -> Some (Single a)
-  | []    , true  -> Some (Single c)
-  | []    , false -> None
+    | ((_, a) :: (_, b) :: _), _
+                    -> Some (Double (a, b))
+    | [_, a], true  -> Some (Double (a, c))
+    | [_, a], false -> Some (Single a)
+    | []    , true  -> Some (Single c)
+    | []    , false -> None
+  )
                 
 let item i o =
   match maybe_item i o with
@@ -25,12 +29,14 @@ let item i o =
   | None      -> raise (Inlegal_case "Core.EnergyCrumbs.item")
 
 let top =
-  function | ((i, a) :: (j, b) :: _), _
-                            when i = j -> i, (Double (a, b))
-           | [i, a], (j, b) when i = j -> i, (Double (a, b))
-           | ((i, a) :: _), _
-           | [], (i, a)                -> i, (Single a)
-
+  Doubleable.(
+    function | ((i, a) :: (j, b) :: _), _
+                              when i = j -> i, (Double (a, b))
+             | [i, a], (j, b) when i = j -> i, (Double (a, b))
+             | ((i, a) :: _), _
+             | [], (i, a)                -> i, (Single a)
+  )
+                                            
 let exists from count =
   let last = from + count in
   function | _, (i, _) when i = from -> true
@@ -42,7 +48,9 @@ let exists from count =
                          | _ :: oth                  -> exists oth
                          | []                        -> false in
               exists oth
-                                        
+
+let update_top f o = f o
+       
 module Top = struct                                      
     let succ =
       function | [], (i, a)
@@ -70,4 +78,8 @@ module Top = struct
 
                | [], (i, a)
                  -> [], (i, (Dots.succ a))
-  end
+
+    let jump i =
+      function | [], (j, x)         -> [], (i, x)
+               | (j, x) :: oth, fst -> (i, x) :: oth, fst  
+end

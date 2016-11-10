@@ -23,5 +23,9 @@ val limit        : int -> t -> t
 val is_left_out  : t -> bool
 val is_right_out : t -> bool
 val is_out       : t -> bool
+
+val attach     : args -> t -> t
+val attachment : t -> args option
+val detach     : t -> t
   
 val crumbs : t -> Crumbs.t

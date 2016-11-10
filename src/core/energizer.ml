@@ -34,11 +34,13 @@ module Crumbs = struct
   end
 
 type t = { crumbs : Crumbs.t;
+             args : args option;
               max : int option
          }
 
 let origin =
   { crumbs = (0, O), [];
+      args = None;
        max = None
   }
                     
@@ -95,5 +97,16 @@ let pred o =
   { o with crumbs
   }
 
+let attach args o =
+  { o with args = Some args
+  }
+  
+let attachment o =
+  o.args
+
+let detach o =
+  { o with args= None;
+  }
+  
 let crumbs o =
   o.crumbs

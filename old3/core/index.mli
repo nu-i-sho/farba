@@ -1,0 +1,1 @@
+include CORE.INDEX.T

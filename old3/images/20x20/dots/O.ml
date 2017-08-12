@@ -1,0 +1,24 @@
+let matrix =
+  lazy ([| 
+       (*    01234567890123456789*) 
+       (*0*)"  HHHHHHHHHHHHHHHH  ";
+       (*1*)" HHHHHHHHHHHHHHHHHH ";
+       (*2*)"HHHHHHHHHHHHHHHHHHHH";
+       (*3*)"HHHHHHHHHHHHHHHHHHHH";
+       (*4*)"HHHHHHHHHHHHHHHHHHHH";
+       (*5*)"HHHHHHHHHHHHHHHHHHHH";
+       (*6*)"HHHHHHHHHHHHHHHHHHHH";
+       (*7*)"HHHHHHHHHHHHHHHHHHHH";
+       (*8*)"HHHHHHHH----HHHHHHHH";
+       (*9*)"HHHHHHHH----HHHHHHHH";
+       (*0*)"HHHHHHHH----HHHHHHHH";
+       (*1*)"HHHHHHHH----HHHHHHHH";
+       (*2*)"HHHHHHHHHHHHHHHHHHHH";
+       (*3*)"HHHHHHHHHHHHHHHHHHHH";
+       (*4*)"HHHHHHHHHHHHHHHHHHHH";
+       (*5*)"HHHHHHHHHHHHHHHHHHHH";
+       (*6*)"HHHHHHHHHHHHHHHHHHHH";
+       (*7*)"HHHHHHHHHHHHHHHHHHHH";
+       (*8*)" HHHHHHHHHHHHHHHHHH ";
+       (*9*)"  HHHHHHHHHHHHHHHH  ";
+       |])

@@ -1,9 +1,0 @@
-chmod +x utils.make
-chmod +x data.make
-chmod +x VIEW.make
-chmod +x CORE.make
-chmod +x SHARED.make
-chmod +x LEVEL.make
-chmod +x shared.make
-chmod +x core.make
-chmod +x farba.make

@@ -2,7 +2,8 @@ echo "Data build started"
 
 cd ../data
 
-ocamlopt -I ../../bin -for-pack Data -c common.ml
+ocamlopt -I ../../bin -for-pack Data -c \
+common.ml crumb.ml
 
 ocamlopt -pack -o data.cmx \
 common.cmx

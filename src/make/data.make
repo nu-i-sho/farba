@@ -3,10 +3,10 @@ echo "Data build started"
 cd ../data
 
 ocamlopt -I ../../bin -for-pack Data -c \
-common.ml crumb.ml
+common.ml die.ml
 
 ocamlopt -pack -o data.cmx \
-common.cmx
+common.cmx die.cmx
 
 mv data.cmx ../../bin/data.cmx
 mv data.cmi ../../bin/data.cmi

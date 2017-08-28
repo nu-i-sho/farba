@@ -4,9 +4,12 @@ cd ../utils
 
 ocamlopt -for-pack Utils -c dots.mli
 ocamlopt -for-pack Utils -c dots.ml
+ocamlopt -for-pack Utils -c MAPEXT.ml
+ocamlopt -for-pack Utils -c mapExt.mli
+ocamlopt -for-pack Utils -c mapExt.ml
 
 ocamlopt -pack -o utils.cmx \
-dots.cmx
+dots.cmx MAPEXT.cmx mapExt.cmx
 
 mv utils.cmx ../../bin/utils.cmx
 mv utils.cmi ../../bin/utils.cmi

@@ -7,9 +7,13 @@ ocamlopt -for-pack Utils -c dots.ml
 ocamlopt -for-pack Utils -c MAPEXT.ml
 ocamlopt -for-pack Utils -c mapExt.mli
 ocamlopt -for-pack Utils -c mapExt.ml
+ocamlopt -for-pack Utils -c intMap.mli
+ocamlopt -for-pack Utils -c intMap.ml
+ocamlopt -for-pack Utils -c listOne.mli
+ocamlopt -for-pack Utils -c -w -8 listOne.ml
 
 ocamlopt -pack -o utils.cmx \
-dots.cmx MAPEXT.cmx mapExt.cmx
+dots.cmx MAPEXT.cmx mapExt.cmx intMap.cmx listOne.cmx
 
 mv utils.cmx ../../bin/utils.cmx
 mv utils.cmi ../../bin/utils.cmi

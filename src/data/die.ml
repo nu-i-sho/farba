@@ -13,7 +13,7 @@ type energy =
   }
 
 type arg =
-  { commnad : command;
+  { command : command;
       param : Dots.t;
        mode : mode
   }

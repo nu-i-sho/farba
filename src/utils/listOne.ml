@@ -11,7 +11,10 @@ let tail o =
 let last = function
   | h, [] -> h
   | _, t  -> ListExt.last t
-  
+
+let map f (h, t) =
+  (f h), (List.map f t)
+           
 let assoc key ((k, v), t) =
   if key = k then v else
     List.assoc key t

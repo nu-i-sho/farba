@@ -5,6 +5,8 @@ type t = | OOOOOO
          | OO
          | O
 
+exception Overflow
+         
 let min = O
 let max = OOOOOO
 let all = [ OOOOOO;
@@ -38,12 +40,21 @@ let count =
 let compare x y =
   compare (to_index x) (to_index y)
 
-let succ o =
-  of_index (((to_index o) + 1) mod count) 
-  
-let pred =
+let neighbor move o =
+  try o |> to_index
+        |> move
+        |> of_index
+  with (Invalid_argument _) -> raise Overflow
+         
+let cycle_succ o =
+  of_index ((succ (to_index o)) mod count) 
+
+let succ = neighbor succ
+let pred = neighbor pred
+         
+let cycle_pred =
   function | O -> OOOOOO
-           | o -> of_index ((to_index o) - 1) 
+           | o -> pred o
 
 module Map = Map.Make (struct type t' = t
                               type t = t'

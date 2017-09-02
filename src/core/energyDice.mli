@@ -11,4 +11,11 @@ val dies      : int -> t -> Die.energy list
 val die       : int -> t -> Die.energy
 val maybe_die : int -> t -> Die.energy option
 
+val jump      : int -> t -> t
+val step      : t -> t
+val step_back : t -> t
+val back      : t -> t
+val succ      : t -> t
+val pred      : t -> t
+
 val with_top_mode : Die.mode -> t -> t

@@ -1,5 +1,4 @@
 open Utils
-open Data
    
 type t = { dies : (int * (Dots.t ListOne.t)) ListOne.t;
            mode : Die.mode;

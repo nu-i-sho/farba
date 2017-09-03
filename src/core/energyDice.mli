@@ -1,5 +1,3 @@
-open Data
-
 type t
 
 val origin    : t

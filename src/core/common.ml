@@ -1,5 +1,3 @@
-open Utils
-
 type pigment =
   | White
   | Blue

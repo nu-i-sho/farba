@@ -12,16 +12,21 @@ type energy =
           mode : mode
   }
 
-type arg =
-  { command : command;
-      param : Dots.t;
-       mode : mode
+type arg = command
+type args =
+  { items : arg Dots.Map.t;
+       id : int
   }
 
+type stash =
+  { value : command;
+    owner : int
+  }
+  
 type loop =
   | Wait of Dots.t
   | Work of {  origin : Dots.t;
-              current : Dots.t;
+              current : Dots.t
             }
 
 type any =

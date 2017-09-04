@@ -1,18 +1,25 @@
 open Utils
-   
-type t = { dies : (int * (Dots.t ListOne.t)) ListOne.t;
-           mode : Die.mode;
+
+type mode =
+  | Find of Dots.t
+  | Call 
+  | Back
+  | Stay
+
+type die = Dots.t
+type t = { dies : (int * (die ListOne.t)) ListOne.t;
+           mode : mode;
          }
 
 exception Out_of_range
        
 let origin =
   { dies = (0, (Dots.O, [])), [];
-    mode = Die.Stay;
+    mode = Stay;
   }
   
-let top_mode o = o.mode             
-let with_top_mode m o =
+let mode o = o.mode             
+let with_mode m o =
   { o with mode = m
   }
                
@@ -21,11 +28,9 @@ let top_index o =
          |> fst
 
 let top_die o =
-  Die.({       mode = o.mode;
-         generation = o.dies |> ListOne.head
-                             |> snd
-                             |> ListOne.head;
-       })
+  o.dies |> ListOne.head
+         |> snd
+         |> ListOne.head
 
 let to_stay_die dots =
   Die.({ generation = dots;
@@ -34,16 +39,13 @@ let to_stay_die dots =
   
 let top_dies o =
   let (_, (hh, ht)), _ = o.dies in
-  Die.({ generation = hh;
-               mode = o.mode;
-       }) :: (List.map to_stay_die ht)
+  hh :: ht
 
 let dies i o =
   if (top_index o) = i then
     top_dies o else
     if o.dies |> ListOne.mem_assoc i then
        o.dies |> ListOne.assoc i
-              |> ListOne.map to_stay_die 
               |> ListOne.to_list  else
       []
      
@@ -52,7 +54,6 @@ let die i o =
     top_die o else
     o.dies |> ListOne.assoc i
            |> ListOne.head
-           |> to_stay_die
   
 let maybe_die i o =
   match dies i o with

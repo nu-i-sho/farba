@@ -2,8 +2,8 @@ echo "Core build started"
 
 cd ../core
 
-ocamlopt -for-pack Core -c dots.mli
-ocamlopt -for-pack Core -c dots.ml
+ocamlopt -I ../../bin -for-pack Core -c dots.mli
+ocamlopt -I ../../bin -for-pack Core -c dots.ml
 ocamlopt -for-pack Core -c common.ml
 ocamlopt -for-pack Core -c die.ml
 ocamlopt -for-pack Core -c energyDice.mli

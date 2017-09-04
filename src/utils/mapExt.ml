@@ -1,7 +1,7 @@
 module Make (Key : Map.OrderedType) = struct
     include Map.Make (Key)
 
-    let put key value o =
+    let set key value o =
       if o |> mem key then
          o |> remove key
            |> add key value else 

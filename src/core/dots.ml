@@ -56,7 +56,7 @@ let cycle_pred =
   function | O -> OOOOOO
            | o -> pred o
 
-module Map = Map.Make (struct type t' = t
-                              type t = t'
-                              let compare = compare
-                       end)
+module Map = Utils.MapExt.Make (struct type t' = t
+                                       type t = t'
+                                       let compare = compare
+                                  end)

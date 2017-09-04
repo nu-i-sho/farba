@@ -19,5 +19,4 @@ val pred       : t -> t
 val cycle_succ : t -> t
 val cycle_pred : t -> t
 
-
-module Map   : Map.S with type key = t
+module Map : Utils.MAPEXT.T with type key = t

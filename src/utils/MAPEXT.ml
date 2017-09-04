@@ -1,7 +1,7 @@
 module type T = sig
     include Map.S
 
-    val put        : key -> 'a -> 'a t -> 'a t
-    val item       : key -> 'a t -> 'a
-    val maybe_item : key -> 'a t -> 'a option
+    val set        : key -> 'e -> 'e t -> 'e t
+    val item       : key -> 'e t -> 'e
+    val maybe_item : key -> 'e t -> 'e option
   end

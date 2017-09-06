@@ -8,9 +8,13 @@ ocamlopt -for-pack Core -c common.ml
 ocamlopt -for-pack Core -c die.ml
 ocamlopt -for-pack Core -c energyDice.mli
 ocamlopt -I ../../bin -for-pack Core -c energyDice.ml
+ocamlopt -I ../../bin -for-pack Core -c args.mli
+ocamlopt -I ../../bin -for-pack Core -c args.ml
+ocamlopt -I ../../bin -for-pack Core -c stash.mli
+ocamlopt -I ../../bin -for-pack Core -c stash.ml
 
 ocamlopt -pack -o core.cmx \
-dots.cmx common.cmx die.cmx energyDice.cmx
+dots.cmx common.cmx die.cmx energyDice.cmx args.cmx stash.cmx
 
 mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi

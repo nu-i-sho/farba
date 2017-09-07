@@ -14,6 +14,8 @@ ocamlopt -I ../../bin -for-pack Core -c stash.mli
 ocamlopt -I ../../bin -for-pack Core -c stash.ml
 ocamlopt -I ../../bin -for-pack Core -c loop.mli
 ocamlopt -I ../../bin -for-pack Core -c loop.ml
+ocamlopt -for-pack Core -c pigment.mli
+ocamlopt -for-pack Core -c pigment.ml
 
 ocamlopt -pack -o core.cmx \
 dots.cmx common.cmx die.cmx energyDice.cmx args.cmx stash.cmx \

@@ -12,9 +12,12 @@ ocamlopt -I ../../bin -for-pack Core -c args.mli
 ocamlopt -I ../../bin -for-pack Core -c args.ml
 ocamlopt -I ../../bin -for-pack Core -c stash.mli
 ocamlopt -I ../../bin -for-pack Core -c stash.ml
+ocamlopt -I ../../bin -for-pack Core -c loop.mli
+ocamlopt -I ../../bin -for-pack Core -c loop.ml
 
 ocamlopt -pack -o core.cmx \
-dots.cmx common.cmx die.cmx energyDice.cmx args.cmx stash.cmx
+dots.cmx common.cmx die.cmx energyDice.cmx args.cmx stash.cmx \
+loop.cmx
 
 mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi

@@ -16,10 +16,12 @@ ocamlopt -I ../../bin -for-pack Core -c loop.mli
 ocamlopt -I ../../bin -for-pack Core -c loop.ml
 ocamlopt -for-pack Core -c pigment.mli
 ocamlopt -for-pack Core -c pigment.ml
+ocamlopt -for-pack Core -c side.mli
+ocamlopt -for-pack Core -c side.ml
 
 ocamlopt -pack -o core.cmx \
 dots.cmx common.cmx die.cmx energyDice.cmx args.cmx stash.cmx \
-loop.cmx
+loop.cmx pigment.cmx side.cmx
 
 mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi

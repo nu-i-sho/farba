@@ -18,6 +18,8 @@ ocamlopt -for-pack Core -c pigment.mli
 ocamlopt -for-pack Core -c pigment.ml
 ocamlopt -for-pack Core -c side.mli
 ocamlopt -for-pack Core -c side.ml
+ocamlopt -for-pack Core -c nucleus.mli
+ocamlopt -for-pack Core -c nucleus.ml
 
 ocamlopt -pack -o core.cmx \
 dots.cmx common.cmx die.cmx energyDice.cmx args.cmx stash.cmx \

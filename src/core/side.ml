@@ -2,6 +2,15 @@ open Common
    
 type t = side
 
+let of_char =
+  function | '0' -> Up
+           | '1' -> LeftUp
+           | '2' -> RightUp
+           | '3' -> Down
+           | '4' -> LeftDown
+           | '5' -> RightDown
+           | ___ -> raise (Invalid_argument "Side.of_char")
+       
 let opposite = 
   function | Up        -> Down
            | LeftUp    -> RightDown

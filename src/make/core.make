@@ -20,10 +20,12 @@ ocamlopt -for-pack Core -c side.mli
 ocamlopt -for-pack Core -c side.ml
 ocamlopt -for-pack Core -c nucleus.mli
 ocamlopt -for-pack Core -c nucleus.ml
+ocamlopt -I ../../bin -for-pack Core -c tissue.mli
+ocamlopt -I ../../bin -for-pack Core -c tissue.ml
 
 ocamlopt -pack -o core.cmx \
 dots.cmx common.cmx die.cmx energyDice.cmx args.cmx stash.cmx \
-loop.cmx pigment.cmx side.cmx
+loop.cmx pigment.cmx side.cmx tissue.cmx
 
 mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi

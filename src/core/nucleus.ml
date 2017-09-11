@@ -9,6 +9,10 @@ let make pigment gaze =
   { pigment;
     gaze
   }
+
+let of_chars c1 c2 =
+  make (Pigment.of_char c1)
+       (Side.of_char c2)
   
 let pigment o = o.pigment
 let gaze    o = o.gaze

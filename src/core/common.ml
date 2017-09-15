@@ -35,3 +35,8 @@ type command =
   | Param of Dots.t
   | Nope
   | End
+
+type nucleus =
+  { pigment : pigment;
+       gaze : side
+  }

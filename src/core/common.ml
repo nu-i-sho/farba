@@ -33,8 +33,6 @@ type command =
   | Call of Dots.t
   | Declare of Dots.t
   | Param of Dots.t
-  | Nope
-  | End
 
 type nucleus =
   { pigment : pigment;

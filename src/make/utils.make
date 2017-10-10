@@ -2,7 +2,12 @@ echo "Utils build started"
 
 cd ../utils
 
+ocamlopt -for-pack Utils -c SEQUENTIAL.ml
 ocamlopt -for-pack Utils -c MAPEXT.ml
+ocamlopt -for-pack Utils -c std.mli
+ocamlopt -for-pack Utils -c std.ml
+ocamlopt -for-pack Utils -c pair.mli
+ocamlopt -for-pack Utils -c pair.ml
 ocamlopt -for-pack Utils -c mapExt.mli
 ocamlopt -for-pack Utils -c mapExt.ml
 ocamlopt -for-pack Utils -c intMap.mli
@@ -15,8 +20,8 @@ ocamlopt -for-pack Utils -c intPointMap.mli
 ocamlopt -for-pack Utils -c intPointMap.ml
 
 ocamlopt -pack -o utils.cmx \
-MAPEXT.cmx mapExt.cmx intMap.cmx listExt.cmx listOne.cmx \
-intPointMap.cmx
+SEQUENTIAL.cmx MAPEXT.cmx std.cmx pair.cmx mapExt.cmx intMap.cmx \
+listExt.cmx listOne.cmx intPointMap.cmx
 
 mv utils.cmx ../../bin/utils.cmx
 mv utils.cmi ../../bin/utils.cmi

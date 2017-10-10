@@ -5,18 +5,15 @@ type t = | OOOOOO
          | OO
          | O
 
-exception Overflow
-         
-val max        : t
-val min        : t
-val all        : t list
-val count      : int
-val to_index   : t -> int
-val of_index   : int -> t
-val compare    : t -> t -> int
-val succ       : t -> t
-val pred       : t -> t
-val cycle_succ : t -> t
-val cycle_pred : t -> t
+include Utils.SEQUENTIAL.T with type t := t
+include Map.OrderedType with type t := t 
 
-module Map : Utils.MAPEXT.T with type key = t
+module Map    : Utils.MAPEXT.T with type key = t
+module MapOpt : Utils.MAPEXT.T with type key = t option
+      
+val to_int : t -> int
+val of_int : int -> t
+val count  : int
+val max    : t
+val min    : t
+val all    : t list

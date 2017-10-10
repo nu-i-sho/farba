@@ -71,11 +71,11 @@ let in_range (x, y) o =
 let out_of_range i o = 
   not (in_range i o)
   
-let cytoplasm i o = Coord.Map.item i o.cyto
-let nucleus   i o = Coord.Map.item i o.nucleo
+let cytoplasm i o = Coord.Map.find i o.cyto
+let nucleus   i o = Coord.Map.find i o.nucleo
 
-let maybe_cytoplasm i o = Coord.Map.maybe_item i o.cyto
-let maybe_nucleus   i o = Coord.Map.maybe_item i o.nucleo
+let maybe_cytoplasm i o = Coord.Map.find_opt i o.cyto
+let maybe_nucleus   i o = Coord.Map.find_opt i o.nucleo
                   
 let set_nucleus i n o =
   { o with
@@ -88,5 +88,6 @@ let remove_nucleus i o =
   }
 
 let set_clot c o =
-  { o with clot = Some c
+  { o with
+    clot = Some c
   }

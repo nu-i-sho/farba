@@ -5,13 +5,12 @@ cd ../core
 ocamlopt -I ../../bin -for-pack Core -c dots.mli
 ocamlopt -I ../../bin -for-pack Core -c dots.ml
 ocamlopt -for-pack Core -c common.ml
-ocamlopt -for-pack Core -c die.ml
-ocamlopt -for-pack Core -c energyDice.mli
-ocamlopt -I ../../bin -for-pack Core -c energyDice.ml
+ocamlopt -I ../../bin -for-pack Core -c tape.mli
+ocamlopt -I ../../bin -for-pack Core -c -w -8 tape.ml
+ocamlopt -I ../../bin -for-pack Core -c energy.mli
+ocamlopt -I ../../bin -for-pack Core -c energy.ml
 ocamlopt -I ../../bin -for-pack Core -c args.mli
 ocamlopt -I ../../bin -for-pack Core -c args.ml
-ocamlopt -I ../../bin -for-pack Core -c stash.mli
-ocamlopt -I ../../bin -for-pack Core -c stash.ml
 ocamlopt -I ../../bin -for-pack Core -c loop.mli
 ocamlopt -I ../../bin -for-pack Core -c loop.ml
 ocamlopt -for-pack Core -c pigment.mli
@@ -23,11 +22,12 @@ ocamlopt -for-pack Core -c nucleus.ml
 ocamlopt -I ../../bin -for-pack Core -c tissue.mli
 ocamlopt -I ../../bin -for-pack Core -c tissue.ml
 ocamlopt -I ../../bin -for-pack Core -c cursor.mli
-ocamlopt -I ../../bin -for-pack Core -c cursor.ml 
+ocamlopt -I ../../bin -for-pack Core -c cursor.ml
 
 ocamlopt -pack -o core.cmx \
-dots.cmx common.cmx die.cmx energyDice.cmx args.cmx stash.cmx \
-loop.cmx pigment.cmx side.cmx tissue.cmx cursor.cmx
+dots.cmx common.cmx tape.cmx energy.cmx args.cmx loop.cmx pigment.cmx \
+side.cmx tissue.cmx cursor.cmx \
+
 
 mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi

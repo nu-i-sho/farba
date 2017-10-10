@@ -1,4 +1,4 @@
-type 'e t = 'e list
+type 'a t = 'a list
 
-val last       : 'e t -> 'e
-val maybe_last : 'e t -> 'e option
+val last     : 'a t -> 'a
+val last_opt : 'a t -> 'a option

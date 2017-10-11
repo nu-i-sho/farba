@@ -5,8 +5,8 @@ cd ../core
 ocamlopt -I ../../bin -for-pack Core -c dots.mli
 ocamlopt -I ../../bin -for-pack Core -c dots.ml
 ocamlopt -for-pack Core -c common.ml
-ocamlopt -I ../../bin -for-pack Core -c tape.mli
-ocamlopt -I ../../bin -for-pack Core -c -w -8 tape.ml
+ocamlopt -I ../../bin -for-pack Core -c src.mli
+ocamlopt -I ../../bin -for-pack Core -c -w -8 src.ml
 ocamlopt -I ../../bin -for-pack Core -c energy.mli
 ocamlopt -I ../../bin -for-pack Core -c energy.ml
 ocamlopt -I ../../bin -for-pack Core -c args.mli
@@ -25,7 +25,7 @@ ocamlopt -I ../../bin -for-pack Core -c cursor.mli
 ocamlopt -I ../../bin -for-pack Core -c cursor.ml
 
 ocamlopt -pack -o core.cmx \
-dots.cmx common.cmx tape.cmx energy.cmx args.cmx loop.cmx pigment.cmx \
+dots.cmx common.cmx src.cmx energy.cmx args.cmx loop.cmx pigment.cmx \
 side.cmx tissue.cmx cursor.cmx \
 
 

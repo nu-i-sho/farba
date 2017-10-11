@@ -22,7 +22,7 @@ type t = Item.t list
 
 let empty = []
 let length = List.length
-let commands = List.map Item.command
+let tape = List.map Item.command
 
 let select f o = 
   let unpack = function | i, (Some x) -> i, x 

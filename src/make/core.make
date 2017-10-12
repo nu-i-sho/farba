@@ -23,10 +23,12 @@ ocamlopt -I ../../bin -for-pack Core -c tissue.mli
 ocamlopt -I ../../bin -for-pack Core -c tissue.ml
 ocamlopt -I ../../bin -for-pack Core -c cursor.mli
 ocamlopt -I ../../bin -for-pack Core -c cursor.ml
+ocamlopt -for-pack Core -c solution.mli
+ocamlopt -for-pack Core -c solution.ml
 
 ocamlopt -pack -o core.cmx \
 dots.cmx common.cmx tape.cmx energy.cmx args.cmx loop.cmx \
-pigment.cmx side.cmx tissue.cmx cursor.cmx
+pigment.cmx side.cmx tissue.cmx cursor.cmx solution.cmx
 
 mv core.cmx ../../bin/core.cmxc
 mv core.cmi ../../bin/core.cmi

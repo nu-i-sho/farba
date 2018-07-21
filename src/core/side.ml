@@ -1,6 +1,9 @@
-open Common
-   
-type t = side
+type t = | Up
+         | LeftUp
+         | RightUp
+         | Down
+         | LeftDown
+         | RightDown
 
 let of_char =
   function | '0' -> Up
@@ -18,20 +21,23 @@ let opposite =
            | Down      -> Up
            | LeftDown  -> RightUp
            | RightDown -> LeftUp
+           
 let left = 
   function | Up        -> LeftUp
-	   | LeftUp    -> LeftDown
-	   | LeftDown  -> Down
-	   | Down      -> RightDown
-	   | RightDown -> RightUp
-	   | RightUp   -> Up
+	       | LeftUp    -> LeftDown
+	       | LeftDown  -> Down
+	       | Down      -> RightDown
+	       | RightDown -> RightUp
+	       | RightUp   -> Up
+           
 let right =
   function | Up        -> RightUp
            | RightUp   -> RightDown
-	   | RightDown -> Down
-	   | Down      -> LeftDown
-	   | LeftDown  -> LeftUp
-	   | LeftUp    -> Up                        
+	       | RightDown -> Down
+	       | Down      -> LeftDown
+	       | LeftDown  -> LeftUp
+	       | LeftUp    -> Up   
+           
 let turn = 
   function | Left  -> left 
            | Right -> right

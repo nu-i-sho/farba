@@ -62,20 +62,28 @@ let nucleus_at   i o = CMap.find i o.nucleo
 
 let maybe_cytoplasm_at i o = CMap.find_opt i o.cyto
 let maybe_nucleus_at   i o = CMap.find_opt i o.nucleo
-        
-let set item i o =
-  match item with
-  | Nucleus   x -> { o with nucleo = CMap.set i x o.nucleo }
-  | Cytoplasm x -> { o with cyto   = CMap.set i x o.cyto }
-  | Clot        -> { o with clot   = Some i }
-        
-let remove item i o =
-  match item with
-  | Nucleus   -> { o with nucleo = CMap.remove i o.nucleo }
-  | Cytoplasm -> { o with cyto   = CMap.remove i o.cyto }
-  | Clot      -> match clot_of o with
-                 | Some clot when (Coord.equels i clot) 
-                           -> { o with clot = None }
-                 | Some _  -> o
-                 | None    -> o
+
+type command = 
+   
+  | SetNucleus of Nucleus.t
+  | SetCytoplasm of Cytoplasm.t
+  | SetClot
+
+  | RemoveNucleus
+  | RemoveCytoplasm
+  | RemoveClot
+
+let change command i o =
+  match command with
+  | SetNucleus x    -> { o with nucleo = CMap.set i x o.nucleo }
+  | SetCytoplasm x  -> { o with cyto   = CMap.set i x o.cyto }
+  | SetClot         -> { o with clot   = Some i }
+  | RemoveNucleus   -> { o with nucleo = CMap.remove i o.nucleo }
+  | RemoveCytoplasm -> { o with cyto   = CMap.remove i o.cyto }
+  | RemoveClot      -> 
+      match clot_of o with
+      | Some clot when (Coord.equels i clot) 
+                    -> { o with clot = None }
+      | Some _      ->   o
+      | None        ->   o
 

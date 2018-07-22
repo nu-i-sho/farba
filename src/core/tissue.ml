@@ -74,8 +74,8 @@ let out_of_range i o =
 let cytoplasm i o = Coord.Map.find i o.cyto
 let nucleus   i o = Coord.Map.find i o.nucleo
 
-let maybe_cytoplasm i o = Coord.Map.find_opt i o.cyto
-let maybe_nucleus   i o = Coord.Map.find_opt i o.nucleo
+let cytoplasm_opt i o = Coord.Map.find_opt i o.cyto
+let nucleus_opt   i o = Coord.Map.find_opt i o.nucleo
                   
 let set_nucleus i n o =
   { o with

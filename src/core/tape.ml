@@ -17,12 +17,12 @@ module Item = struct
     let args o = o.args
     let loop o = o.loop
   end
-   
+            
 type t = Item.t list
 
 let empty = []
 let length = List.length
-let tape = List.map Item.command
+let commands = List.map Item.command
 
 let select f o = 
   let unpack = function | i, (Some x) -> i, x 

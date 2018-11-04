@@ -1,6 +1,9 @@
-open Common
-
-type t = side
+type t = | Up
+         | LeftUp
+         | RightUp
+         | Down
+         | LeftDown
+         | RightDown
 
 val of_char  : char -> t
 val opposite : t -> t

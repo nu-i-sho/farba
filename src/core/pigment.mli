@@ -2,5 +2,4 @@ type t = | White
          | Blue
          | Gray
 
-val opposite : t -> t
-val of_char  : char -> t
+include Sig.REVERSIBLE with type t := t

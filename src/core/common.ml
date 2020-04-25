@@ -3,10 +3,6 @@ type pigment =
   | Blue
   | Gray
 
-type hand =
-  | Left
-  | Right
-
 type side =
   | Up
   | LeftUp
@@ -15,26 +11,30 @@ type side =
   | LeftDown
   | RightDown
 
-type relation =
-  | Direct
-  | Inverse
-
-type nuture =
-  | Matter
-  | Spirit
-  
-type action =
-  | Replicate of relation
-  | Turn of hand
-  | Move of nuture
-  
-type command =
-  | Act of action
-  | Call of Dots.t
-  | Declare of Dots.t
-  | Param of Dots.t
-
 type nucleus =
   { pigment : pigment;
        gaze : side
+  }
+
+type hand    =     Left | Right
+type nature  =     Body | Mind
+type gene    = Dominant | Recessive
+type command =
+  | Turn of hand
+  | Move of nature
+  | Replicate of gene
+             
+type declaration =
+  | Procedure
+  | Parameter
+
+type statement =
+  | Do of command
+  | Call of procedure
+  | Declare of declaration
+
+ and procedure =
+  { name : Dots.t;
+    args : statement DotsMap.t;
+    loop : Dots.t option
   }

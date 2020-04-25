@@ -1,53 +1,56 @@
+open Utils
+
 module Ordered = struct
-    type t = | OOOOOO
-             | OOOOO
-             | OOOO
-             | OOO
-             | OO
-             | O
+  type t = | OOOOOO
+           | OOOOO
+           | OOOO
+           | OOO
+           | OO
+           | O
 
+  let compare a b =
+    match a, b with
+      
+    | OOOOOO, (OOOOO|OOOO|OOO|OO|O)
+    | OOOOO, (OOOO|OOO|OO|O)
+    | OOOO, (OOO|OO|O)
+    | OOO, (OO|O)
+    | OO, (O)        ->  1
 
-    let to_int =
-      function | OOOOOO -> 5
-               | OOOOO -> 4
-               | OOOO -> 3
-               | OOO -> 2
-               | OO -> 1
-               | O -> 0
+    | (OOOOO|OOOO|OOO|OO|O), OOOOOO
+    | (OOOO|OOO|OO|O), OOOOO
+    | (OOO|OO|O), OOOO
+    | (OO|O), OOO
+    | (O), OO         -> -1
+    | _               ->  0                                
 
-    let compare x y =
-      compare (to_int x)
-              (to_int y)
   end
 
+module Map    = MapExt.Make    (Ordered)
+module MapOpt = MapExt.MakeOpt (Ordered)
+
 include Ordered
-
-module Map    = Utils.MapExt.Make    (Ordered)
-module MapOpt = Utils.MapExt.MakeOpt (Ordered)
-      
-let of_int =
-  function | 0 -> O
-           | 1 -> OO
-           | 2 -> OOO
-           | 3 -> OOOO
-           | 4 -> OOOOO
-           | 5 -> OOOOOO
-           | _ -> raise (Invalid_argument "Dots.of_index")
-
+              
+let count = 6
 let min = O
 let max = OOOOOO
-let count =
-  max |> to_int
-      |> succ
 
-let succ o =
-  of_int ((succ (to_int o)) mod count) 
-     
-let pred =
-  function | O -> OOOOOO
-           | o -> o |> to_int
-                    |> pred
-                    |> of_int
+let succ = function
+  | O -> OO
+  | OO -> OOO
+  | OOO -> OOOO
+  | OOOO -> OOOOO
+  | OOOOO -> OOOOOO
+  | OOOOOO -> O
+          
+let pred = function
+  | OOOOOO -> OOOOO
+  | OOOOO -> OOOO
+  | OOOO -> OOO
+  | OOO -> OO
+  | OO -> O
+  | O -> OOOOOO
+
 let all =
   [ OOOOOO;
     OOOOO;
@@ -56,4 +59,3 @@ let all =
     OO;
     O
   ]
-         

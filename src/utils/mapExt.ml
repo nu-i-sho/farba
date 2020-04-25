@@ -14,11 +14,10 @@ module Make (Key : Map.OrderedType) = struct
     
 module MakeOpt (Key : Map.OrderedType) =
   Make (struct type t = Key.t option
-               let compare = function
-                 | Some x ->
-                    ( function | Some y -> Key.compare x y
-                               | None   -> 1 )
-                 | None   ->
-                    ( function | Some _ -> -1
-                               | None   -> 0 )
+               let compare a b =
+                 match a, b with
+                 | Some x, Some y ->  Key.compare x y
+                 | Some _, None   ->  1
+                 | None  , Some _ -> -1
+                 | None  , None   ->  0                    
         end)      

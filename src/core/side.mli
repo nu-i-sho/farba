@@ -5,6 +5,5 @@ type t = | Up
          | LeftDown
          | RightDown
 
-val of_char  : char -> t
-val opposite : t -> t
-val turn     : hand -> t -> t
+val rev  : t -> t
+val turn : Common.hand -> t -> t

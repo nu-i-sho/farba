@@ -6,4 +6,4 @@ type t = | Up
          | RightDown
 
 val rev  : t -> t
-val turn : Common.hand -> t -> t
+val turn : Hand.t -> t -> t

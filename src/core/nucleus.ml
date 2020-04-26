@@ -1,46 +1,39 @@
 type t = 
   { pigment : Pigment.t;
-       gaze : Side.p
+       gaze : Side.t
   }
 
 let make pigment gaze =
   { pigment;
     gaze
   }
+    
+let is_cancer o = 
+    match o.pigment with
+    | Pigment.(Blue | Gray) -> false
+    | Pigment.(   White   ) -> true
 
-let of_chars a b =
-  make (Pigment.of_char a)
-       (Side.of_char b)
-
-let pigment_of o = o.pigment
-let gaze_of    o = o.gaze
-              
-let is_cancer o =
-  match pigment_of o with
-  | Blue | Gray -> false
-  | White       -> true
-
-let turn direction o =
-  { o with gaze = 
-    (gaze_of o) |> Side.turn direction 
+let turn dir o =
+  let gaze = Side.turn dir o.gaze in
+  { o with gaze 
   }
 
 let inject cytoplasm o =
-  let pigment = pigment_of o in
-  let pigment = match pigment, cytoplasm with
-    | White, _   | _, White 
-    | Blue, Gray | Gray, Blue -> pigment
-    | Blue, Blue | Gray, Gray -> White 
-  in
+  let pigment = Pigment.(
+      match o.pigment, cytoplasm with
+      | White, _   | _, White 
+      | Blue, Gray | Gray, Blue -> o.pigment
+      | Blue, Blue | Gray, Gray -> White ) in
   { o with pigment
   }
 
-let replicate relation o =
-  let gaze = Side.opposite (gaze_of o)
-  and pigment = match relation with
-    | Inverse -> Pigment.opposite (pigment_of o)
-	| Direct  -> pigment_of o 
-  in
+let replicate gene o =
+  let gaze = Side.rev o.gaze
+  and pigment = 
+    ( match gene with
+      | Gene.Recessive -> Pigment.rev
+      | Gene.Dominant  -> Fun.id
+    ) o.pigment in
   { pigment;
     gaze
   }

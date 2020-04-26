@@ -1,21 +1,3 @@
-type pigment =
-  | White
-  | Blue
-  | Gray
-
-type side =
-  | Up
-  | LeftUp
-  | RightUp
-  | Down
-  | LeftDown
-  | RightDown
-
-type nucleus =
-  { pigment : pigment;
-       gaze : side
-  }
-
 type hand    =     Left | Right
 type nature  =     Body | Mind
 type gene    = Dominant | Recessive
@@ -25,8 +7,8 @@ type command =
   | Replicate of gene
              
 type declaration =
-  | Procedure
-  | Parameter
+  | Procedure of Dots.t
+  | Parameter of Dots.t
 
 type statement =
   | Do of command
@@ -35,6 +17,6 @@ type statement =
 
  and procedure =
   { name : Dots.t;
-    args : statement DotsMap.t;
+    args : statement Dots.Map.t;
     loop : Dots.t option
   }

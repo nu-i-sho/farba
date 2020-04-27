@@ -1,14 +1,49 @@
-open Common
+module Coord = struct
+  type t = int * int
+         
+  let move side (x, y) =
+    let dx, dy = Side.(
+        match x mod 2, side with
+          
+        | 0, Up        ->  0, -1  
+        | 0, LeftUp    -> -1, -1
+        | 0, RightUp   -> +1, -1
+        | 0, Down      ->  0, +1
+        | 0, LeftDown  -> -1,  0
+        | 0, RightDown -> +1,  0
+                             
+        | _, Up        ->  0, -1
+        | _, LeftUp    -> -1,  0
+        | _, RightUp   -> +1,  0
+        | _, Down      ->  0, +1 
+        | _, LeftDown  -> -1, +1
+        | _, RightDown -> +1, +1 ) in
+    
+    x + dx,
+    y + dy
 
-module CMap = Coord.Map
+  let compare a b =
+    match  compare (fst a) (fst b) with
+    | 0 -> compare (snd a) (snd b)
+    | o -> o
+             
+  end
 
-type t = { height : int;
-            width : int;
-           nucleo : Nucleus.t Coord.Map.t;
-             cyto : Pigment.t Coord.Map.t;
-             clot : Coord.t option
+             
+module CMap = Utils.MapExt.Make (Coord)
+             
+type t = {  nucleuses : Nucleus.t CMap.t;
+           cytoplasms : Pigment.t CMap.t;
+                 clot : Coord.t option
          }
-
+       
+let empty =
+  {  nucleuses = CMap.empty;
+    cytoplasms = CMap.empty;
+          clot = None
+  }
+  
+(*
 let load src =
   let rec load_line cyto nucleo line y i l =
     if i == l then cyto, nucleo else
@@ -40,50 +75,47 @@ let load src =
        CMap.empty
        0
        src
+*)
 
-let height_of o = o.height
-let width_of  o = o.width
-let clot_of   o = o.clot
-  
-let is_clotted o = 
-  match clot_f o with
+let is_in     i o = CMap.mem i o.cytoplasms
+let is_out_of i o = not (is_in i o)
+   
+let clot_opt o = o.clot
+let has_clot o = 
+  match o.clot with
   | Some _ -> true
   | None   -> false
+
+let clot o =
+  match o.clot with
+  | Some x -> x
+  | None   -> failwith "no clot"
+
+let set_clot  i o = { o with clot = Some i }
+let remove_clot o = { o with clot = None   }
   
-let is_in (x, y) o =
-  x < (width_of o) &&
-  y < (height_of o)
-  
-let is_out_of i o =
-  not (is_in i o)
+let cytoplasm     i o = CMap.find i o.cytoplasms
+let cytoplasm_opt i o = CMap.find_opt i o.cytoplasms
+                      
+let set_cytoplasm i x o =
+  let c = CMap.set i x o.cytoplasms in
+  { o with cytoplasms = c
+  }
 
-let cytoplasm_at i o = CMap.find i o.cyto
-let nucleus_at   i o = CMap.find i o.nucleo
-
-let maybe_cytoplasm_at i o = CMap.find_opt i o.cyto
-let maybe_nucleus_at   i o = CMap.find_opt i o.nucleo
-
-type command = 
+let remove_cytoplasm i o =
+  let c = CMap.remove i o.cytoplasms in
+  { o with cytoplasms = c
+  }
    
-  | SetNucleus of Nucleus.t
-  | SetCytoplasm of Cytoplasm.t
-  | SetClot
+let nucleus     i o = CMap.find i o.nucleuses
+let nucleus_opt i o = CMap.find_opt i o.nucleuses
 
-  | RemoveNucleus
-  | RemoveCytoplasm
-  | RemoveClot
-
-let change command i o =
-  match command with
-  | SetNucleus x    -> { o with nucleo = CMap.set i x o.nucleo }
-  | SetCytoplasm x  -> { o with cyto   = CMap.set i x o.cyto }
-  | SetClot         -> { o with clot   = Some i }
-  | RemoveNucleus   -> { o with nucleo = CMap.remove i o.nucleo }
-  | RemoveCytoplasm -> { o with cyto   = CMap.remove i o.cyto }
-  | RemoveClot      -> 
-      match clot_of o with
-      | Some clot when (Coord.equels i clot) 
-                    -> { o with clot = None }
-      | Some _      ->   o
-      | None        ->   o
-
+let set_nucleus i x o =
+  let n = CMap.set i x o.nucleuses in 
+  { o with nucleuses = n 
+  }
+ 
+let remove_nucleus i o =
+  let n = CMap.remove i o.nucleuses in
+  { o with nucleuses = n
+  }

@@ -1,102 +1,109 @@
-open Common
-
-type position =
-  | InTissue of Tissue.Coord.t
-  | OutOfTissue of
-      { nucleus : Nucleus.t;
-          coord : Tissue.Coord.t
-      }
+module Position = struct
+  type t = | InTissue of Tissue.Coord.t
+           | OutOfTissue of
+               { nucleus : Nucleus.t;
+                   coord : Tissue.Coord.t
+               }
+  end
     
-type t = { position : position;
+type t = { position : Position.t;
              tissue : Tissue.t
          }
       
 let make coord tissue =
-  { position = InTissue coord;
+  { position = Position.InTissue coord;
       tissue   
   }
 
-let tissue   o = o.tissue
+let tissue o = o.tissue
 let position o =
-  let (InTissue i | OutOfTissue { coord = i; _ }) =
-    o.position in
+  let ( Position.InTissue i
+      | Position.OutOfTissue { coord = i; _ }
+      ) = o.position in
   i
-  
-let is_in i o =
-  match o.position with
-  | InTissue j when j = i      -> true
-  | InTissue _ | OutOfTissue _ -> false
 
+let is_clotted o = Tissue.has_clot o.tissue
 let is_out_of_tissue o = 
   match o.position with
-  | OutOfTissue _ -> true
-  | InTissue _    -> false 
+  | Position.OutOfTissue _ -> true
+  | Position.InTissue    _ -> false 
 
-let tissue_is_cloted o =
-  match Tissue.clot o.tissue with
-  | Some _ -> true
-  | None   -> false
-
-let inject i nucleus tissue =
-  if Tissue.out_of_range i tissue then
-    { position = OutOfTissue { nucleus; coord = i };
-        tissue
+let set i nucleus o =
+  let t = o.tissue in
+  if Tissue.is_out_of i t then
+    let p = Position.(OutOfTissue { nucleus; coord = i }) in
+    { position = p;
+        tissue = t
     } else
-    ( match Tissue.maybe_nucleus i tissue with
-      | Some _ -> Tissue.set_clot i tissue
-      | None   -> let cytoplasm = Tissue.cytoplasm i tissue in
-                  let nucleus = Nucleus.inject cytoplasm nucleus in
-                  Tissue.set_nucleus i nucleus tissue
+    
+    ( match Tissue.nucleus_opt i t with
+      | Some _ -> Tissue.set_clot i t
+      | None   -> let c = Tissue.cytoplasm i t in
+                  let n = Nucleus.inject c nucleus in
+                  Tissue.set_nucleus i n t
     ) |> make i
      
 let turn hand o =
-  let i = position o in
-  let nucleus =
-    o.tissue |> Tissue.nucleus i
-             |> Nucleus.turn hand in
-  o.tissue |> Tissue.set_nucleus i nucleus
-           |> make i
-  
-let move o =
-  let x = tissue o and i = position o in
-  match Tissue.cytoplasm i x with
-  | Blue | Gray -> o
-  | White       -> let nucleus = Tissue.nucleus i x in
-                   let x = Tissue.remove_nucleus i x
-                   and j = Tissue.Coord.move nucleus.gaze i in
-                   inject j nucleus x
+  let t = o.tissue
+  and i = position o in
+  let n = t |> Tissue.nucleus i
+            |> Nucleus.turn hand in
+  t |> Tissue.set_nucleus i n
+    |> make i
 
-let replicate relation o =
-  let x = tissue o and i = position o in
-  match Tissue.cytoplasm i x with
-  | White       -> o
-  | Blue | Gray -> let parent = Tissue.nucleus i x in
-                   let j = Tissue.Coord.move parent.gaze i
-                   and child = Nucleus.replicate relation parent in   
-                   inject j child x
+let move o =
+  let i = position o
+  and t = o.tissue in
+  let n = Tissue.nucleus i t in
+  let j = Tissue.Coord.move n.gaze i in
+
+  let from_cyto, to_cyto =
+    (Tissue.cytoplasm i t),
+    (Tissue.cytoplasm j t) in
+
+  Pigment.(
+    match from_cyto , to_cyto  with
+    | (White, _)    |    (_, White) -> set j n
+    | (Blue | Gray) , (Blue | Gray) -> Fun.id
+  ) o
+  
+let replicate gene o =
+  let i = position o
+  and t = o.tissue in
+  let open Pigment in
+  
+  match Tissue.cytoplasm i t with
+  | White        -> o
+  | Blue | Gray  ->
+     let parent = Tissue.nucleus i t in
+     let j = Tissue.Coord.move parent.gaze i
+     and child  = Nucleus.replicate gene parent in   
+     set j child o
 
 let pass o =
-  let i = position o in
-  let donor = Tissue.nucleus i o.tissue in
+  let i = position o and t = o.tissue in
+  let donor = Tissue.nucleus i t in
   let j = Tissue.Coord.move donor.gaze i in
-  match Tissue.maybe_nucleus j o.tissue with
+  
+  match Tissue.nucleus_opt j t with
   | None           -> o
   | Some recipient ->
-     if (Side.opposite recipient.gaze) == donor.gaze then
-       { o with
-         position = InTissue j
-       } else
+     let face_to_face =
+       (Side.rev recipient.gaze) == donor.gaze in
+     if face_to_face then
+       make j t else
        o
 
-exception Tissue_is_clotted
+exception Clotted
 exception Out_of_tissue
         
-let act action o =
-  if tissue_is_cloted o then raise Tissue_is_clotted else
-  if is_out_of_tissue o then raise Out_of_tissue else
-    ( match action with
-      | Replicate relation -> replicate relation
-      | Turn hand          -> turn hand
-      | Move Matter        -> move
-      | Move Spirit        -> pass
-    ) o
+let perform command o =
+  if o |> is_clotted then raise Clotted else
+  if o |> is_out_of_tissue then raise Out_of_tissue else
+    Command.( Nature.(
+       match command with
+       | Replicate gene -> replicate gene
+       | Turn hand      -> turn hand
+       | Move Body      -> move
+       | Move Mind      -> pass
+    )) o

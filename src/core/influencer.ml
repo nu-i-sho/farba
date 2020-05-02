@@ -32,6 +32,13 @@ module Find : sig include STAGE
   let procedure = snd
   end
 
+type t = | Mark of Mark.t
+         | Call of Call.t
+         | Wait of Wait.t
+         | Back of Back.t
+         | Find of Find.t
+         | None
+                  
 let origin =
   Call.make Dots.min
 

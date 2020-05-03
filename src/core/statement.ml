@@ -1,5 +1,5 @@
 type ('param, 'loop) t =
   { command : 'param Command.t;
        args : Dots.t Command.t Dots.Map.t;
-       loop : 'loop
+       loop : 'loop Option.t
   }

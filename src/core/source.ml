@@ -1,3 +1,3 @@
-module Statement = struct
-  type t = (Dots.t, Dots.t) Statement.t
-  end
+type e = (Dots.t, Dots.t) Statement.t
+type t = e List.t
+

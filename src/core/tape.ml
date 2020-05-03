@@ -1,99 +1,106 @@
-open Common
-open Utils
-
-module Item = struct
-    type t = { command : command;
-                  args : command Dots.Map.t option;
-                  loop : Dots.t option
-             }
-
-    let of_command c =
-      { command = c;
-           args = None;
-           loop = None
-      }
-          
-    let command o = o.command
-    let args o = o.args
-    let loop o = o.loop
+module type COMMANDER = sig
+  type t
+  val perform : Action.t -> t -> t  
   end
-            
-type t = Item.t list
-
-let empty = []
-let length = List.length
-let commands = List.map Item.command
-
-let select f o = 
-  let unpack = function | i, (Some x) -> i, x 
-  and some   = function | _, (Some _) -> true
-                        | _,  None    -> false in                
-  o |> List.map f
-    |> List.mapi Pair.make 
-    |> List.filter some
-    |> List.map unpack 
-    |> IntMap.of_bindings
-
-let args  = select Item.args
-let loops = select Item.loop
-
-let partitioni i o =  
-  let is_before x = (fst x) < i in 
-  o |> List.mapi Pair.make
-    |> List.partition is_before
-    |> Pair.map (List.map snd)
   
-let remove_item i o =
-  let before, (_ :: after) = partitioni i o in  
-  List.append before after
-  
-let insert_command c i o =
-  let before, after = partitioni i o in
-  List.append before ((Item.of_command c) :: after)
+module Make (Commander : COMMANDER) = struct
+  module Param = struct
+    type t =
+      {   name : Dots.t;
+        values : Dots.t Command.t Dots.Map.t
+      }
 
-let change f i =
-  let f j x = if j = i then (f x) else x in 
-  List.mapi f
-  
-let set_command c =
-  let f x = Item.{ x with command = c } in 
-  change f
-  
-let set_loop l = 
-  let f x = Item.{ x with loop = l } in 
-  change f
-  
-let remove_loop = set_loop  None
-let set_loop l  = set_loop (Some l)
-         
-let remove_arg param =
-  let f x =
-    let args' = match Item.args x with
-                | None      -> None
-                | Some args ->
-                   let args = Dots.Map.remove param args in
-                   if Dots.Map.is_empty args then
-                     None else
-                     Some args in
-    Item.{ x with
-           args = args'
-         } in
-  change f
+    let empty name =
+      { values = Dots.Map.empty;
+        name;  
+      }
+    end
 
-let mem_arg i param o =
-  Item.( match List.nth i o with
-         | { args = Some args; _ } -> Dots.Map.mem param args
-         | { args = None; _      } -> false
-       )
+  module Loop = struct
+    type t =
+      { count : Dots.t;
+         iter : Dots.t
+      }
+      
+    let make count =
+      { count;
+        iter = count
+      }
+    end
+              
+  type ('statement, 'energy) e =
+    { statement : 'statement;
+         energy : 'energy
+    }
+  
+  module Prev = struct
+    module Energy = struct
+     type t  =
+       | Mark of Energy.Mark.t 
+       | Wait of Energy.Wait.t
+       | None
+      end
 
-let set_arg param command =
-  let f x =
-    let args' = Some (( match Item.args x with
-                        | None      -> Dots.Map.empty
-                        | Some args -> args
-                      ) |> Dots.Map.set param command
-                     ) in
-    Item.{ x with
-           args = args'
-         } in
-  change f      
+    type nonrec e = ((Param.t, Loop.t) Statement.t, Energy.t) e
+    type t = e List.t
+    end
+
+  module Next = struct
+    type nonrec e = (Param.t, Dots.t) Statement.t
+    type t = e List.t
+           
+    let of_src =
+      let convert src =
+        Statement.( Command.(
+          let command =
+            match src.command with
+            | (Do _ | Call _ | Procedure _)
+               as command   -> command
+            | (Parameter x) -> Parameter (Param.empty x) in
+          { src with command
+          }
+        )) in
+      List.map convert
+    end
+
+  module Current = struct
+    module Energy = struct
+      type t =
+        | Call of Energy.Call.t
+        | Back of Energy.Back.t
+        | Find of Energy.Find.t
+
+      let origin =
+        Call Energy.origin
+      end
+
+    type t = ((Param.t, Loop.t) Statement.t Option.t, Energy.t) e
+
+    let of_next x =
+      let loop = match Statement.(x.loop) with
+                 | Some l -> Some (Loop.make l)
+                 | None   -> None in
+      let x = Statement.{ x with loop } in
+      { statement = Some x;
+           energy = Energy.origin
+      }
+    end
+
+  type t =
+    { commander : Commander.t;
+           prev : Prev.t;
+        current : Current.t;
+           next : Next.t
+    }
+
+  let make commander src =
+    let next    = Next.of_src src in 
+    let current = Current.of_next (List.hd next) in
+    let next    = List.tl next in
+    { commander;
+      prev = [];
+      current;
+      next
+    }
+    
+  end

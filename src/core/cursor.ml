@@ -100,7 +100,7 @@ exception Out_of_tissue
 let perform command o =
   if o |> is_clotted then raise Clotted else
   if o |> is_out_of_tissue then raise Out_of_tissue else
-    Command.( Nature.(
+    Action.( Nature.(
        match command with
        | Replicate gene -> replicate gene
        | Turn hand      -> turn hand

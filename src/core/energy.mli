@@ -1,35 +1,20 @@
-open Utils
-
-module Die : sig
-    type t = private Dots.t
-    module Map    : MAPEXT.T with type key = t
-    module MapOpt : MAPEXT.T with type key = t option
+module type STAGE = sig
+  type t
+  val value : t -> Dots.t
   end
 
-module Dice : sig
-    module Mode : sig
-        type t =  private | Find of Dots.t
-                          | Call 
-                          | Return
-                          | Stay
-      end
-         
-    type t
-   
-    val origin    : t
-    val mode      : t -> Mode.t
-    val top_index : t -> int
-    val top_dies  : t -> Die.t list
-    val top_die   : t -> Die.t
-    val dies      : int -> t -> Die.t list
-    val die       : int -> t -> Die.t
-    val maybe_die : int -> t -> Die.t option
-      
-    val with_mode : Mode.t -> t -> t
-    val jump      : int -> t -> t
-    val step      : t -> t
-    val step_back : t -> t
-    val back      : t -> t
-    val succ      : t -> t
-    val pred      : t -> t
+module Mark : STAGE
+module Call : STAGE
+module Wait : STAGE
+module Back : STAGE
+module Find : sig
+  include STAGE
+  val procedure : t -> Dots.t
   end
+
+val origin : Call.t
+val find   : Dots.t -> Call.t -> Wait.t * Find.t
+val call   : Find.t -> Mark.t * Call.t
+val back   : Call.t -> Back.t
+val unmark : Mark.t -> Back.t -> Back.t
+val return : Wait.t -> Back.t -> Call.t

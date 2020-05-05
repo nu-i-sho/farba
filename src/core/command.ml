@@ -1,5 +1,5 @@
 type 'param t =
-  | Do of Action.t
+  | Perform of Action.t
   | Call of Dots.t
   | Procedure of Dots.t
   | Parameter of 'param

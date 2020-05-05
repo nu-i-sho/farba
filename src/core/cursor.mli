@@ -1,5 +1,5 @@
 type t
-
+   
 val make     : Tissue.Coord.t -> Tissue.t -> t
 val tissue   : t -> Tissue.t
 val position : t -> Tissue.Coord.t

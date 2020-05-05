@@ -7,27 +7,15 @@ module Make (Commander : COMMANDER) = struct
   module Param = struct
     type t =
       {   name : Dots.t;
-        values : Dots.t Command.t Dots.Map.t
+        values : Dots.t Command.t List.t
       }
 
     let empty name =
-      { values = Dots.Map.empty;
-        name;  
+      { values = [];
+          name  
       }
     end
-
-  module Loop = struct
-    type t =
-      { count : Dots.t;
-         iter : Dots.t
-      }
-      
-    let make count =
-      { count;
-        iter = count
-      }
-    end
-              
+        
   type ('statement, 'energy) e =
     { statement : 'statement;
          energy : 'energy
@@ -41,26 +29,22 @@ module Make (Commander : COMMANDER) = struct
        | None
       end
 
-    type nonrec e = ((Param.t, Loop.t) Statement.t, Energy.t) e
-    type t = e List.t
+    type t = ((Param.t, Loop.t) Statement.t, Energy.t) e
     end
 
   module Next = struct
-    type nonrec e = (Param.t, Dots.t) Statement.t
-    type t = e List.t
-           
-    let of_src =
-      let convert src =
-        Statement.( Command.(
-          let command =
-            match src.command with
-            | (Do _ | Call _ | Procedure _)
-               as command   -> command
-            | (Parameter x) -> Parameter (Param.empty x) in
-          { src with command
-          }
-        )) in
-      List.map convert
+    type t = (Param.t, Dots.t) Statement.t
+ 
+    let of_src x =
+      Statement.( Command.(
+        let command =
+          match x.command with
+          | (Perform _ | Call _ | Procedure _)
+              as command  -> command
+          | (Parameter p) -> Parameter (Param.empty p) in
+        { x with command
+        }
+      ))
     end
 
   module Current = struct
@@ -76,31 +60,53 @@ module Make (Commander : COMMANDER) = struct
 
     type t = ((Param.t, Loop.t) Statement.t Option.t, Energy.t) e
 
-    let of_next x =
-      let loop = match Statement.(x.loop) with
-                 | Some l -> Some (Loop.make l)
-                 | None   -> None in
-      let x = Statement.{ x with loop } in
-      { statement = Some x;
+    let origin =
+      { statement = None;
            energy = Energy.origin
       }
     end
 
   type t =
     { commander : Commander.t;
-           prev : Prev.t;
+           prev : Prev.t List.t;
         current : Current.t;
-           next : Next.t
+           next : Next.t List.t
     }
 
   let make commander src =
-    let next    = Next.of_src src in 
-    let current = Current.of_next (List.hd next) in
-    let next    = List.tl next in
     { commander;
-      prev = [];
-      current;
-      next
+         prev = [];
+      current = Current.origin;
+         next = List.map Next.of_src src
     }
-    
+
+  let step o =
+    let module Av = Availability in
+    let open Statement in
+    let open Param in
+    match o with
+    | { current =
+          {    energy = Current.Energy.Call _;
+            statement =
+              Some ({    loop = Some (Av.Enabled ((Loop.Active _) as loop));
+                      command = ( Command.Perform action
+                                | Command.Parameter
+                                    { values = (Command.Perform action) :: _;
+                                      _
+                                    }
+                                );
+                      _
+                    } as statement)
+          } as current;
+        _
+      } -> { o with
+             commander = Commander.perform action o.commander;
+               current =
+                 { current with
+                   statement =
+                     Some { statement with
+                            loop = Some (Av.Enabled (Loop.iter loop))
+                          }
+                 }
+           }
   end

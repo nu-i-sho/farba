@@ -1,17 +1,16 @@
 type t =
-  | Unactive of Dots.t
-  | Active of
+  | Inactive of Dots.t
+  | Active   of
       { i : Dots.t;
         n : Dots.t
       }
       
-let make n = Unactive n
-               
+let make n = Inactive n          
 let iter = function
-  | Unactive n -> Active { i = Dots.min; n }
+  | Inactive n -> Active { i = Dots.min; n }
   | Active   o ->
      if o.i = o.n then
-       Unactive o.n else
+       Inactive o.n else
        Active { o with
                 i = Dots.succ o.i
               }

@@ -2,51 +2,37 @@ module type COMMANDER = sig
   type t
   val perform : Action.t -> t -> t  
   end
-
-exception Impossible 
-                      
+                     
 module Make (Commander : COMMANDER) = struct
-  module Param = struct
-    type t =
-      {   name : Dots.t;
-        values : Dots.t Command.t list
-      }
-
-    let empty name =
-      { values = [];
-          name  
-      }
-    end
-        
-  type ('statement, 'energy) e =
-    { statement : 'statement;
-         energy : 'energy
-    }
-  
-  module Prev = struct
-    module Energy = struct
-     type t  =
-       | Mark of Energy.Mark.t 
-       | Wait of Energy.Wait.t
-       | None
+  module ParameterAttachment = struct
+    module ValuesStack = struct
+      type t = Source.Args.e list
       end
-
-    type t = ((Param.t, Loop.t) Statement.t, Energy.t) e
+                       
+    type 'current_value t =
+      Source.Loop.t  *
+      Source.Args.t  *
+      'current_value *
+      ValuesStack.t
     end
 
-  module Next = struct
-    type t = (Param.t, Dots.t) Statement.t
- 
-    let of_src x =
-      Statement.( Command.(
-        let command =
-          match x.command with
-          | (Perform _ | Call _ | Procedure _)
-              as command  -> command
-          | (Parameter p) -> Parameter (Param.empty p) in
-        { x with command
-        }
-      ))
+  module Args = struct
+    type t = Source.Args.t Switch.t option
+    end
+                             
+  module Prev = struct
+    open struct
+      type 'parameter_attachment t =
+        ((* | Perform   of Action.t * *)  Source.Loop.t,
+         (* | Call      of Dots.t   * *) (wait * Loop.t * Args.t),
+         (* | Parameter of Dots.t   * *)  'parameter_attachment,
+         (* | Procedure of Dots.t   * *)  mark
+        ) Statement.t
+      and wait = Energy.Wait.t option
+      and mark = Energy.Mark.t option
+      end
+      
+    type nonrec t = unit t ParameterAttachment.t t
     end
 
   module Current = struct
@@ -55,19 +41,40 @@ module Make (Commander : COMMANDER) = struct
         | Call of Energy.Call.t
         | Back of Energy.Back.t
         | Find of Energy.Find.t
-
-      let origin =
-        Call Energy.origin
       end
 
-    type t = ((Param.t, Loop.t) Statement.t option, Energy.t) e
-
-    let origin =
-      { statement = None;
-           energy = Energy.origin
-      }
+    open struct
+      type 'parameter_attachment t = 
+        ((* | Perform   of Action.t * *) (Energy.t * Loop.t),
+         (* | Call      of Dots.t   * *) (Energy.t * Loop.t * Args.t),
+         (* | Parameter of Dots.t   * *)  'parameter_attachment,
+         (* | Procedure of Dots.t   * *)  Energy.t
+        ) Statement.t
+      end
+                  
+    type nonrec t = Energy.t t ParameterAttachment.t t
     end
+           
+  module Next = struct
+    open struct
+      type 'parameter_attachment t = 
+        ((* | Perform   of Action.t * *)  Source.Loop.t,
+         (* | Call      of Dots.t   * *) (Source.Loop.t * Source.Args.t),
+         (* | Parameter of Dots.t   * *)  'parameter_attachment,
+         (* | Procedure of Dots.t   * *) unit
+        ) Statement.t
+       end
 
+    type nonrec t = unit t ParameterAttachment.t t
+       
+    let of_src =
+      Statement.( function
+        | (Perform _ | Call _ | Procedure _) as x -> x
+        |  Parameter (name, (loop, args))         ->
+           Parameter (name, (loop, args, (Parameter (name, ())), []))
+      )
+    end
+(*
   type t =
     { commander : Commander.t;
            prev : Prev.t list;
@@ -77,12 +84,63 @@ module Make (Commander : COMMANDER) = struct
 
   let make commander src =
     { commander;
-         prev = [];
-      current = Current.origin;
-         next = List.map Next.of_src src
+           prev = [];
+        current = Current.origin;
+           next = List.map Next.of_src src
     }
 
+  let action = function
+    | Command.Perform      x -> Some action
+    | Command.Procedure    _
+    | Command.Call         _ -> None
+    | Command.Parameter    x ->
+       match x.values with
+       | Command.Perform   x -> Some action
+       | Command.Procedure _
+       | Command.Call      _
+       | Command.Parameter _ -> None
+    
+  let commander' o =
+    match o.current.energy with
+    | Current.Energy.Call _ ->
+       ( match o.current.statement with
+         | Some {    loop = Some (Availability.Enabled (Loop.Active _));
+                  command = cmd;
+                  _
+                }
+         
+      
+    | {   current = Current.Energy.Call _;
+        statement =
+            Some {    loop = Some (Availability.Enabled (Loop.Active _));
+                   command = ( Command.Perform action
+                            | Command.Parameter
+                                    { values = (Command.Perform action) :: _; _
+                                    });
+        _
+      }
+    | { current = {  energy = Current.Energy.Call _; _ });
+           next = { command = ( Command.Perform action
+                              | Command.Parameter
+                                  { values = (Command.Perform action) :: _; _
+                                  });
+                    _
+                  };
+           _
+      }
+
+      
+  let next' o = ()
+  let current' o = ()
+  let prev' o = ()
+    
   let step o =
+    { commander = o |> commander';
+           prev = o |> prev';
+        current = o |> current';
+           next = o |> next'
+    }
+    
     let module Av = Availability in
     let open Statement in
     let open Param in
@@ -142,21 +200,26 @@ module Make (Commander : COMMANDER) = struct
            }
            
     (* 4 *) 
-    | { current = ({    energy = Current.Energy.Call e;
-                     statement = Some current_statement });
-           next = ({   command = ( Command.Procedure _
-                                 | Command.Parameter { values = []; _ });
+    | { current = ({  energy = Current.Energy.Call e; _ });
+           next = ({ command = ( Command.Procedure _
+                               | Command.Parameter { values = []; _ });
                      _
-                   } as next_statement) :: next_tail;
+                   } as next_statement) :: next;
            _
-      } -> { o with prev = {    energy = Prev.Energy.None;
-                             statement = current_statement
-                           } :: o.prev;
-                 current = {    energy = Current.Energy.Back (Energy.back e);
-                             statement = Some next_statement;
-                           };
-                    next = next_tail
+      } -> let prev    =
+             {    energy = Prev.Energy.None;
+               statement = o.current.statement
+             } :: o.prev;
+           and current =
+             {    energy = Current.Energy.Back (Energy.back e);
+               statement = Some next_statement;
+             } in
+           { o with
+             prev;
+             current;
+             next
            }
+           
     (* 5 *) 
     | { current = ({    energy = Current.Energy.Call e;
                      statement = None });
@@ -186,5 +249,5 @@ module Make (Commander : COMMANDER) = struct
                            };
                     next = next_tail
            }
-                     
+ *)                    
   end

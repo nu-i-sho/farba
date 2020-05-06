@@ -1,5 +1,9 @@
-type ('param, 'loop) t =
-  { command : 'param Command.t;
-       args : Dots.t Command.t Dots.Map.t;
-       loop : 'loop Availability.t option
-  }
+type ( 'perform_attachment,
+       'call_attachment,
+       'parameter_attachment,
+       'procedure_attachment
+     )
+       t = | Perform   of Action.t * 'perform_attachment
+           | Call      of Dots.t   * 'call_attachment
+           | Parameter of Dots.t   * 'parameter_attachment
+           | Procedure of Dots.t   * 'procedure_attachment

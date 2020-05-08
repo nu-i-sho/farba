@@ -10,10 +10,10 @@ module Make (Commander : COMMANDER) = struct
       end
                        
     type 'current_value t =
-      Source.Loop.t  *
-      Source.Args.t  *
-      'current_value *
-      ValuesStack.t
+      Source.Loop.t *
+      Source.Args.t *
+      ValuesStack.t *
+     'current_value
     end
 
   module Args = struct
@@ -23,10 +23,10 @@ module Make (Commander : COMMANDER) = struct
   module Prev = struct
     open struct
       type 'parameter_attachment t =
-        ((* | Perform   of Action.t * *)  Source.Loop.t,
-         (* | Call      of Dots.t   * *) (wait * Loop.t * Args.t),
-         (* | Parameter of Dots.t   * *)  'parameter_attachment,
-         (* | Procedure of Dots.t   * *)  mark
+        ((* | Perform   of ( Action.t * *)  Source.Loop.t           (* ) *),
+         (* | Call      of ( Dots.t   * *) (wait * Loop.t * Args.t) (* ) *),
+         (* | Parameter of ( Dots.t   * *) 'parameter_attachment    (* ) *),
+         (* | Procedure of ( Dots.t   * *)  mark                    (* ) *)
         ) Statement.t
       and wait = Energy.Wait.t option
       and mark = Energy.Mark.t option
@@ -45,10 +45,10 @@ module Make (Commander : COMMANDER) = struct
 
     open struct
       type 'parameter_attachment t = 
-        ((* | Perform   of Action.t * *) (Energy.t * Loop.t),
-         (* | Call      of Dots.t   * *) (Energy.t * Loop.t * Args.t),
-         (* | Parameter of Dots.t   * *)  'parameter_attachment,
-         (* | Procedure of Dots.t   * *)  Energy.t
+        ((* | Perform   of ( Action.t * *) (Energy.t * Loop.t)          (* ) *),
+         (* | Call      of ( Dots.t   * *) (Energy.t * Loop.t * Args.t) (* ) *),
+         (* | Parameter of ( Dots.t   * *) 'parameter_attachment        (* ) *),
+         (* | Procedure of ( Dots.t   * *)  Energy.t                    (* ) *)
         ) Statement.t
       end
                   
@@ -57,13 +57,14 @@ module Make (Commander : COMMANDER) = struct
            
   module Next = struct
     open struct
+      module S = Source
       type 'parameter_attachment t = 
-        ((* | Perform   of Action.t * *)  Source.Loop.t,
-         (* | Call      of Dots.t   * *) (Source.Loop.t * Source.Args.t),
-         (* | Parameter of Dots.t   * *)  'parameter_attachment,
-         (* | Procedure of Dots.t   * *) unit
+        ((* | Perform   of ( Action.t * *)  S.Loop.t             (* ) *),
+         (* | Call      of ( Dots.t   * *) (S.Loop.t * S.Args.t) (* ) *), 
+         (* | Parameter of ( Dots.t   * *) 'parameter_attachment (* ) *),
+         (* | Procedure of ( Dots.t   * *)  unit                 (* ) *)
         ) Statement.t
-       end
+      end
 
     type nonrec t = unit t ParameterAttachment.t t
        
@@ -71,9 +72,69 @@ module Make (Commander : COMMANDER) = struct
       Statement.( function
         | (Perform _ | Call _ | Procedure _) as x -> x
         |  Parameter (name, (loop, args))         ->
-           Parameter (name, (loop, args, (Parameter (name, ())), []))
+           Parameter (name, (loop, args, [], (Parameter (name, ()))))
       )
     end
+
+  type t =
+    { commander : Commander.t;
+           prev : Prev.t list;
+        current : Current.t option;
+           next : Next.t list
+    }
+
+  let make commander src =
+    { commander;
+           prev = [];
+        current = None;
+           next = List.map Next.of_src src
+    }
+
+  let performing_state_opt = function
+    | Statement.Perform   x -> Some x
+    | Statement.Procedure _
+    | Statement.Call      _ -> None
+    | Statement.Parameter x ->
+       match x with
+       | _,(_,_,_, (Statement.Perform   x)) -> Some x
+       | _,(_,_,_, (Statement.Procedure _))
+       | _,(_,_,_, (Statement.Call      _))
+       | _,(_,_,_, (Statement.Parameter _)) -> None
+
+  let performable_action_opt o =
+    let opt_bind o f = Option.bind f o in
+    let extract = function
+        | x, ((Current.Energy.Call _), (Loop.Active _))
+             -> Some x
+        | _  -> None in
+    o.current |> opt_bind performing_state_opt
+              |> opt_bind extract
+              |> ( function
+                   | (Some _) as x -> x
+                   |  None         ->
+                       let extract (x, _) = Some x in
+                       o.next |> List.hd_opt
+                              |> opt_bind performing_state_opt
+                              |> opt_bind extract
+                 )
+    
+  let commander' o =
+    ( match performable_action_opt o with
+      | Some x -> Commander.perform x
+      | None   -> Fun.id
+    ) o.commander
+    
+  let next'    o = o.next
+  let current' o = o.current
+  let prev'    o = o.prev
+    
+  let step o =
+    { commander = o |> commander';
+           prev = o |> prev';
+        current = o |> current';
+           next = o |> next'
+    }
+    
 (*
   type t =
     { commander : Commander.t;
@@ -128,11 +189,6 @@ module Make (Commander : COMMANDER) = struct
                   };
            _
       }
-
-      
-  let next' o = ()
-  let current' o = ()
-  let prev' o = ()
     
   let step o =
     { commander = o |> commander';

@@ -2,6 +2,8 @@ echo "Core build started"
 
 cd ../core
 
+ocamlopt -for-pack Core -c list.mli
+ocamlopt -for-pack Core -c list.ml
 ocamlopt -I ../../bin -for-pack Core -c dots.mli
 ocamlopt -I ../../bin -for-pack Core -c dots.ml
 ocamlopt -for-pack Core -c hand.ml
@@ -39,7 +41,7 @@ ocamlopt -for-pack Core -c tape.ml
 #ocamlopt -for-pack Core -c solution.ml
 
 ocamlopt -pack -o core.cmx \
-dots.cmx hand.cmx gene.cmx nature.cmx action.cmx loop.cmx switch.cmx \
+list.cmx dots.cmx hand.cmx gene.cmx nature.cmx action.cmx loop.cmx switch.cmx \
 statement.cmx source.cmx pigment.cmx side.cmx nucleus.cmx tissue.cmx \
 cursor.cmx energy.cmx tape.cmx
 

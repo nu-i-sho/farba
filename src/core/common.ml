@@ -13,7 +13,7 @@ type declaration =
 type statement =
   | Do of command
   | Call of procedure
-  | Declare of declaration
+  | Declare of declaration 
 
  and procedure =
   { name : Dots.t;

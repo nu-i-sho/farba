@@ -7,10 +7,10 @@ module Args = struct
   type t = e Dots.Map.t option
   end
               
-type e = ((* | Perform   of Action.t * *)  Loop.t,
-          (* | Call      of Dots.t   * *) (Loop.t * Args.t),
-          (* | Parameter of Dots.t   * *) (Loop.t * Args.t),
-          (* | Procedure of Dots.t   * *)  unit
+type e = ((* | Perform   of ( Action.t * *)  Loop.t           (* ) *),
+          (* | Call      of ( Dots.t   * *) (Loop.t * Args.t) (* ) *),
+          (* | Parameter of ( Dots.t   * *) (Loop.t * Args.t) (* ) *),
+          (* | Procedure of ( Dots.t   * *)  unit             (* ) *)
          ) Statement.t
 
 type t = e List.t

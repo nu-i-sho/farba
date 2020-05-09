@@ -41,18 +41,20 @@ module Make (Commander : COMMANDER) = struct
         | Call of Energy.Call.t
         | Back of Energy.Back.t
         | Find of Energy.Find.t
+
+      let origin = Call Energy.origin
       end
 
     open struct
       type 'parameter_attachment t = 
-        ((* | Perform   of ( Action.t * *) (Energy.t * Loop.t)          (* ) *),
-         (* | Call      of ( Dots.t   * *) (Energy.t * Loop.t * Args.t) (* ) *),
-         (* | Parameter of ( Dots.t   * *) 'parameter_attachment        (* ) *),
-         (* | Procedure of ( Dots.t   * *)  Energy.t                    (* ) *)
+        ((* | Perform   of ( Action.t * *) (Loop.t)              (* ) *),
+         (* | Call      of ( Dots.t   * *) (Loop.t * Args.t)     (* ) *),
+         (* | Parameter of ( Dots.t   * *) 'parameter_attachment (* ) *),
+         (* | Procedure of ( Dots.t   * *)  unit                 (* ) *)
         ) Statement.t
       end
                   
-    type nonrec t = Energy.t t ParameterAttachment.t t
+    type nonrec t = Energy.t * (unit t ParameterAttachment.t t option)
     end
            
   module Next = struct
@@ -79,14 +81,14 @@ module Make (Commander : COMMANDER) = struct
   type t =
     { commander : Commander.t;
            prev : Prev.t list;
-        current : Current.t option;
+        current : Current.t;
            next : Next.t list
     }
 
   let make commander src =
     { commander;
            prev = [];
-        current = None;
+        current = Current.Energy.origin, None;
            next = List.map Next.of_src src
     }
 
@@ -102,22 +104,18 @@ module Make (Commander : COMMANDER) = struct
        | _,(_,_,_, (Statement.Parameter _)) -> None
 
   let performable_action_opt o =
-    let opt_bind o f = Option.bind f o in
-    let extract = function
-        | x, ((Current.Energy.Call _), (Loop.Active _))
-             -> Some x
-        | _  -> None in
-    o.current |> opt_bind performing_state_opt
-              |> opt_bind extract
-              |> ( function
-                   | (Some _) as x -> x
-                   |  None         ->
-                       let extract (x, _) = Some x in
-                       o.next |> List.hd_opt
-                              |> opt_bind performing_state_opt
-                              |> opt_bind extract
-                 )
-    
+    let performing_state_opt x = Option.bind x performing_state_opt in
+    match o.current with
+    | (Current.Energy.Find _ | Current.Energy.Back _), _  -> None 
+    | (Current.Energy.Call _), statement                  ->
+       ( match performing_state_opt statement with
+         | Some (x,  Loop.Active _)                       -> Some x
+         | Some (_, (Loop.Inactive _ | Loop.None)) | None ->
+            o.next |> List.hd_opt
+                   |> performing_state_opt
+                   |> Option.map fst
+       )
+                     
   let commander' o =
     ( match performable_action_opt o with
       | Some x -> Commander.perform x

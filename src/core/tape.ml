@@ -104,7 +104,8 @@ module Make (Commander : COMMANDER) = struct
        | _,(_,_,_, (Statement.Parameter _)) -> None
 
   let performable_action_opt o =
-    let performing_state_opt x = Option.bind x performing_state_opt in
+    let performing_state_opt x =
+      Option.bind x performing_state_opt in
     match o.current with
     | (Current.Energy.Find _ | Current.Energy.Back _), _  -> None 
     | (Current.Energy.Call _), statement                  ->
@@ -122,8 +123,15 @@ module Make (Commander : COMMANDER) = struct
       | None   -> Fun.id
     ) o.commander
     
-  let next'    o = o.next
-  let current' o = o.current
+  let next' o = o.next              
+  let current' o =
+    match o.current with
+    | ((Current.Energy.Call _) as e), statement ->
+       ( match performing_state_opt statement with
+         | Some (action,  Loop.Active loop) ->
+            e, Some ( (Loop.iter loop)
+       )
+
   let prev'    o = o.prev
     
   let step o =

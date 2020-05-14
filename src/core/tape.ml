@@ -4,312 +4,115 @@ module type COMMANDER = sig
   end
                      
 module Make (Commander : COMMANDER) = struct
-  module ParameterAttachment = struct
-    module ValuesStack = struct
-      type t = Source.Args.e list
-      end
-                       
-    type 'current_value t =
-      Source.Loop.t *
-      Source.Args.t *
-      ValuesStack.t *
-     'current_value
+  
+  module Stage = struct
+    type t =
+      | Call of Energy.Call.t
+      | Back of Energy.Back.t
+      | Find of Energy.Find.t
     end
 
-  module Args = struct
-    type t = Source.Args.t Switch.t option
+  module Prev = struct
+    type t = 
+      | Perform of Action.t
+      | Call    of Dots.t * Energy.Wait.t option
+      | Declare of Dots.t * Energy.Mark.t option
+
+    let of_statement = function
+      | Statement.Perform x -> Perform x
+      | Statement.Call    x -> Call (x, None)
+      | Statement.Declare x -> Declare (x, None)
+    end
+
+  module Statement = struct
+    include Statement
+    let of_prev = function
+      | Prev.Perform x      -> Perform x
+      | Prev.Call (x, _)    -> Call x
+      | Prev.Declare (x, _) -> Declare x
     end
                              
-  module Prev = struct
-    open struct
-      type 'parameter_attachment t =
-        ((* | Perform   of ( Action.t * *)  Source.Loop.t           (* ) *),
-         (* | Call      of ( Dots.t   * *) (wait * Loop.t * Args.t) (* ) *),
-         (* | Parameter of ( Dots.t   * *) 'parameter_attachment    (* ) *),
-         (* | Procedure of ( Dots.t   * *)  mark                    (* ) *)
-        ) Statement.t
-      and wait = Energy.Wait.t option
-      and mark = Energy.Mark.t option
-      end
+  type t =
+    {   stage : Stage.t;
+         prev : Prev.t list;
+      current : Statement.t;
+         next : Statement.t list;
+       output : Commander.t;
+    }
+            
+  let make commander src =
+    {  energy = Stage.Call Energy.origin;
+         prev = [];
+      current = List.hd src;
+         next = List.tl src;
+       output = commander;
+    }
+
+  let call_step call o =
+    match o.current, o.next with
+    | ((Statement.Perform action) as p), (c :: n) ->
+       { o with  prev = p :: o.prev;
+              current = c;
+                 next = n;
+               output = Commander.perform action o.output;
+       }
+    | (Statement.Perform action), [] ->
+       { o with stage = Stage.Back (Energy.back call)
+               output = Commander.perform action o.output;     
+       }
+    | (Statement.Call procedure), (c :: n) ->
+       let wait, find = Energy.find procedure call in
+       { o with stage = Stage.Find find;
+                 prev = (Prev.Call (procedure, (Some wait))) :: o.prev;
+              current = c;
+                 next = n
+       }
+    | (Statement.Call procedure), [] ->
+       { o with stage = Stage.Back (Energy.back call)
+       }
+    | (Statement.Declare procedure), _ ->
+       { o with stage = Stage.Back (Energy.back call);
+                 prev = (Prev.Declare (procedure, None)) :: o.prev
+       }
+
+  let find_step find o =
+    match o.current, o.next with
+    | (Statement.Declare procedure), (c :: n)
+         when procedure = (Energy.Find.procedure find) ->
+       let mark, call = Energy.call find in
+       { o with stage = Stage.Call call;
+                 prev = (Prev.Declare (procedure, (Some mark))) :: o.prev;
+              current = c;
+                 next = n
+       }     
+    | (( Statement.Perform _
+       | Statement.Call    _
+       | Statement.Declare _
+       ) as p), (c :: n) ->
+       { o with  prev = (Prev.of_statement p) :: o.prev;
+              current = c;
+                 next = n;
+       }
+    | (( Statement.Perform _
+       | Statement.Call    _
+       | Statement.Declare _
+       ) as p), [] ->
+       { o with stage = Stage.Back (Energy.not_found find)
+       }
+
+
+  let back_step back o =
+    match o.current, o.prev with
+    | (Statement.Declare (procedure, (Some mark)), (c :: p) ->
+       { o with stage = Stage.Back (Energy.unmark mark back);
+                 prev = p;
+              current = Statement.of_prev c;
+                 next =    
       
-    type nonrec t = unit t ParameterAttachment.t t
-    end
-
-  module Current = struct
-    module Energy = struct
-      type t =
-        | Call of Energy.Call.t
-        | Back of Energy.Back.t
-        | Find of Energy.Find.t
-
-      let origin = Call Energy.origin
-      end
-
-    open struct
-      type 'parameter_attachment t = 
-        ((* | Perform   of ( Action.t * *) (Loop.t)              (* ) *),
-         (* | Call      of ( Dots.t   * *) (Loop.t * Args.t)     (* ) *),
-         (* | Parameter of ( Dots.t   * *) 'parameter_attachment (* ) *),
-         (* | Procedure of ( Dots.t   * *)  unit                 (* ) *)
-        ) Statement.t
-      end
-                  
-    type nonrec t = Energy.t * (unit t ParameterAttachment.t t option)
-    end
-           
-  module Next = struct
-    open struct
-      module S = Source
-      type 'parameter_attachment t = 
-        ((* | Perform   of ( Action.t * *)  S.Loop.t             (* ) *),
-         (* | Call      of ( Dots.t   * *) (S.Loop.t * S.Args.t) (* ) *), 
-         (* | Parameter of ( Dots.t   * *) 'parameter_attachment (* ) *),
-         (* | Procedure of ( Dots.t   * *)  unit                 (* ) *)
-        ) Statement.t
-      end
-
-    type nonrec t = unit t ParameterAttachment.t t
        
-    let of_src =
-      Statement.( function
-        | (Perform _ | Call _ | Procedure _) as x -> x
-        |  Parameter (name, (loop, args))         ->
-           Parameter (name, (loop, args, [], (Parameter (name, ()))))
-      )
-    end
-
-  type t =
-    { commander : Commander.t;
-           prev : Prev.t list;
-        current : Current.t;
-           next : Next.t list
-    }
-
-  let make commander src =
-    { commander;
-           prev = [];
-        current = Current.Energy.origin, None;
-           next = List.map Next.of_src src
-    }
-
-  let performing_state_opt = function
-    | Statement.Perform   x -> Some x
-    | Statement.Procedure _
-    | Statement.Call      _ -> None
-    | Statement.Parameter x ->
-       match x with
-       | _,(_,_,_, (Statement.Perform   x)) -> Some x
-       | _,(_,_,_, (Statement.Procedure _))
-       | _,(_,_,_, (Statement.Call      _))
-       | _,(_,_,_, (Statement.Parameter _)) -> None
-
-  let performable_action_opt o =
-    let performing_state_opt x =
-      Option.bind x performing_state_opt in
-    match o.current with
-    | (Current.Energy.Find _ | Current.Energy.Back _), _  -> None 
-    | (Current.Energy.Call _), statement                  ->
-       ( match performing_state_opt statement with
-         | Some (x,  Loop.Active _)                       -> Some x
-         | Some (_, (Loop.Inactive _ | Loop.None)) | None ->
-            o.next |> List.hd_opt
-                   |> performing_state_opt
-                   |> Option.map fst
-       )
-                     
-  let commander' o =
-    ( match performable_action_opt o with
-      | Some x -> Commander.perform x
-      | None   -> Fun.id
-    ) o.commander
-    
-  let next' o = o.next              
-  let current' o =
-    match o.current with
-    | ((Current.Energy.Call _) as e), statement ->
-       ( match performing_state_opt statement with
-         | Some (action,  Loop.Active loop) ->
-            e, Some ( (Loop.iter loop)
-       )
-
-  let prev'    o = o.prev
-    
   let step o =
-    { commander = o |> commander';
-           prev = o |> prev';
-        current = o |> current';
-           next = o |> next'
-    }
-    
-(*
-  type t =
-    { commander : Commander.t;
-           prev : Prev.t list;
-        current : Current.t;
-           next : Next.t list
-    }
-
-  let make commander src =
-    { commander;
-           prev = [];
-        current = Current.origin;
-           next = List.map Next.of_src src
-    }
-
-  let action = function
-    | Command.Perform      x -> Some action
-    | Command.Procedure    _
-    | Command.Call         _ -> None
-    | Command.Parameter    x ->
-       match x.values with
-       | Command.Perform   x -> Some action
-       | Command.Procedure _
-       | Command.Call      _
-       | Command.Parameter _ -> None
-    
-  let commander' o =
-    match o.current.energy with
-    | Current.Energy.Call _ ->
-       ( match o.current.statement with
-         | Some {    loop = Some (Availability.Enabled (Loop.Active _));
-                  command = cmd;
-                  _
-                }
-         
-      
-    | {   current = Current.Energy.Call _;
-        statement =
-            Some {    loop = Some (Availability.Enabled (Loop.Active _));
-                   command = ( Command.Perform action
-                            | Command.Parameter
-                                    { values = (Command.Perform action) :: _; _
-                                    });
-        _
-      }
-    | { current = {  energy = Current.Energy.Call _; _ });
-           next = { command = ( Command.Perform action
-                              | Command.Parameter
-                                  { values = (Command.Perform action) :: _; _
-                                  });
-                    _
-                  };
-           _
-      }
-    
-  let step o =
-    { commander = o |> commander';
-           prev = o |> prev';
-        current = o |> current';
-           next = o |> next'
-    }
-    
-    let module Av = Availability in
-    let open Statement in
-    let open Param in
-    match o with
-    (* 1 *)
-    | { current =
-          {    energy = Current.Energy.Call _;
-            statement =
-              Some ({    loop = Some (Av.Enabled ((Loop.Active _) as loop));
-                      command = ( Command.Perform action
-                                | Command.Parameter
-                                    { values = (Command.Perform action) :: _; _
-                                    });
-                      _
-                    } as statement)
-          };
-        _
-      } -> let commander = Commander.perform action o.commander 
-           and loop      = Some (Av.Enabled (Loop.iter loop)) in
-           let statement = Some { statement with loop } in
-           let current   = { o.current with statement } in
-           { o with
-             commander;
-             current
-           }      
-    (* 2 *)
-    | { current = ({  energy = Current.Energy.Call _; _ });
-           next = ({ command = ( Command.Perform action
-                               | Command.Parameter
-                                   { values = (Command.Perform action) :: _; _
-                               });
-                     _
-                   } as next_statement) :: next;
-           _ 
-      } -> let commander = Commander.perform action o.commander
-           and loop =
-             match next_statement.loop with
-             | None                 -> None
-             | Some (Av.Disabled _) -> raise Impossible
-             | Some (Av.Enabled  x) ->
-                let x = Loop.make x in
-                let x = Loop.iter x in
-                Some (Av.Enabled x) in
-      
-           let statement = Some { next_statement with loop } in
-           let current = { o.current with statement }
-           and prev = 
-             match o.current.statement with
-             | None   -> o.prev 
-             | Some x -> { statement = x;
-                              energy = Prev.Energy.None
-                         } :: o.prev in
-           { commander;
-             prev;
-             current;
-             next
-           }
-           
-    (* 4 *) 
-    | { current = ({  energy = Current.Energy.Call e; _ });
-           next = ({ command = ( Command.Procedure _
-                               | Command.Parameter { values = []; _ });
-                     _
-                   } as next_statement) :: next;
-           _
-      } -> let prev    =
-             {    energy = Prev.Energy.None;
-               statement = o.current.statement
-             } :: o.prev;
-           and current =
-             {    energy = Current.Energy.Back (Energy.back e);
-               statement = Some next_statement;
-             } in
-           { o with
-             prev;
-             current;
-             next
-           }
-           
-    (* 5 *) 
-    | { current = ({    energy = Current.Energy.Call e;
-                     statement = None });
-           next = ({   command = ( Command.Procedure _
-                                 | Command.Parameter { values = []; _ });
-                     _
-                   } as next_statement) :: next_tail;
-           _
-      } -> { o with prev = o.prev;
-                 current = {    energy = Current.Energy.Back (Energy.back e);
-                             statement = Some next_statement;
-                           };
-                    next = next_tail
-           }
-
-    | { current = ({  energy = Current.Energy.Call e; _ });
-           next = ({ command = ( Command.Procedure _
-                               | Command.Parameter { values = []; _ });
-                        loop = next_loop;
-                     _
-                   } as next_statement) :: next_tail;
-           _
-      } -> let current_loop = 
-           { o with prev = o.prev;
-                 current = {    energy = Current.Energy.Back (Energy.back e);
-                             statement = Some next_statement;
-                           };
-                    next = next_tail
-           }
- *)                    
+    match o.stage with
+    | Call call -> call_step call o
+    | Find find -> find_step find o
+    | Back back -> back_step back o
   end

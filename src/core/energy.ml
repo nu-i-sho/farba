@@ -51,7 +51,11 @@ let call find =
 let back call =
   (call |> Call.value
         |> Back.make)
-    
+
+let not_found find =
+  (find |> Find.value
+        |> Back.make)
+  
 let unmark mark back = back
 let return wait back =
   (wait |> Wait.value

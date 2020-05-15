@@ -12,94 +12,93 @@ module Make (Commander : COMMANDER) = struct
       | Find of Energy.Find.t
     end
 
-  module Prev = struct
+  module rec Prev : sig
     type t = 
       | Perform of Action.t
       | Call    of Dots.t * Energy.Wait.t option
       | Declare of Dots.t * Energy.Mark.t option
-
-    let of_statement = function
-      | Statement.Perform x -> Perform x
-      | Statement.Call    x -> Call (x, None)
-      | Statement.Declare x -> Declare (x, None)
+    end = Prev
+  and Next : module type of Statement = Next 
+           
+  module Prev = struct
+    include Prev
+    let of_next = function
+      | Next.Perform x -> Perform x
+      | Next.Call    x -> Call (x, None)
+      | Next.Declare x -> Declare (x, None)
     end
 
-  module Statement = struct
-    include Statement
+  module Next = struct
+    include Next
     let of_prev = function
-      | Prev.Perform x      -> Perform x
-      | Prev.Call (x, _)    -> Call x
+      | Prev.Perform  x     -> Perform x
+      | Prev.Call    (x, _) -> Call x
       | Prev.Declare (x, _) -> Declare x
     end
                              
   type t =
-    {   stage : Stage.t;
-         prev : Prev.t list;
-      current : Statement.t;
-         next : Statement.t list;
-       output : Commander.t;
+    {  stage : Stage.t;
+        prev : Prev.t list;
+        next : Next.t list;
+      output : Commander.t;
     }
             
   let make commander src =
-    {  energy = Stage.Call Energy.origin;
-         prev = [];
-      current = List.hd src;
-         next = List.tl src;
-       output = commander;
+    {  stage = Stage.Call Energy.origin;
+        prev = [];
+        next = src;
+      output = commander;
     }
 
+  let move o =
+    let prev =
+      o.next |> List.hd
+             |> Prev.of_next
+    and next =
+      o.next |> List.tl in
+    { o with
+      prev;
+      next 
+    }
+    
   let call_step call o =
-    match o.current, o.next with
-    | ((Statement.Perform action) as p), (c :: n) ->
-       { o with  prev = p :: o.prev;
-              current = c;
-                 next = n;
-               output = Commander.perform action o.output;
+    match o.next with
+    | Next.(Perform action) :: _ :: _ ->
+       { (move o) with
+         output = Commander.perform action o.output
        }
-    | (Statement.Perform action), [] ->
-       { o with stage = Stage.Back (Energy.back call)
-               output = Commander.perform action o.output;     
+    | Next.(Perform action) :: [] ->
+       { o with
+          stage = Stage.Back (Energy.back call);
+         output = Commander.perform action o.output    
        }
-    | (Statement.Call procedure), (c :: n) ->
+    | Next.(Call procedure) :: ((_ :: _) as t) ->
        let wait, find = Energy.find procedure call in
-       { o with stage = Stage.Find find;
-                 prev = (Prev.Call (procedure, (Some wait))) :: o.prev;
-              current = c;
-                 next = n
+       { o with
+          stage = Stage.Find find;
+           prev = Prev.(Call (procedure, (Some wait))) :: o.prev;
+           next = t
        }
-    | (Statement.Call procedure), [] ->
-       { o with stage = Stage.Back (Energy.back call)
-       }
-    | (Statement.Declare procedure), _ ->
-       { o with stage = Stage.Back (Energy.back call);
-                 prev = (Prev.Declare (procedure, None)) :: o.prev
+    | Next.((Call _) :: [] | (Declare _) :: _) ->
+       { o with
+          stage = Stage.Back (Energy.back call)
        }
 
   let find_step find o =
-    match o.current, o.next with
-    | (Statement.Declare procedure), (c :: n)
+    match o.next with
+    | Next.(Declare procedure) :: ((_ :: _) as t)
          when procedure = (Energy.Find.procedure find) ->
        let mark, call = Energy.call find in
-       { o with stage = Stage.Call call;
-                 prev = (Prev.Declare (procedure, (Some mark))) :: o.prev;
-              current = c;
-                 next = n
+       { o with
+          stage = Stage.Call call;
+           prev = Prev.(Declare (procedure, (Some mark))) :: o.prev;
+           next = t
        }     
-    | (( Statement.Perform _
-       | Statement.Call    _
-       | Statement.Declare _
-       ) as p), (c :: n) ->
-       { o with  prev = (Prev.of_statement p) :: o.prev;
-              current = c;
-                 next = n;
+    | Next.(Perform _ | Call _ | Declare _) :: _ :: _  -> move o
+    | Next.(Perform _ | Call _ | Declare _) :: []      -> 
+       { o with
+          stage = Stage.Back (Energy.not_found find)
        }
-    | (( Statement.Perform _
-       | Statement.Call    _
-       | Statement.Declare _
-       ) as p), [] ->
-       { o with stage = Stage.Back (Energy.not_found find)
-       }
-
 
   let back_step back o =
     match o.current, o.prev with

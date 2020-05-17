@@ -4,6 +4,7 @@ module type COMMANDER = sig
   end
 
 module Make (Commander : COMMANDER) : sig
-  (* type t *)
-  (*val make : Commander.t -> Source.t -> t*)
+  type t
+  val make : Commander.t -> Statement.t list -> t
+  val step : t -> t option
   end

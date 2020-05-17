@@ -1,3 +1,13 @@
+module type S = sig
+  include Map.S
+        
+  val set         : key -> 'a -> 'a t -> 'a t
+  val of_bindings : (key * 'a) list -> ('a t)
+  end
+
+module type OrderedType =
+  Map.OrderedType
+
 module Make (Key : Map.OrderedType) = struct
     include Map.Make (Key)
 
@@ -12,7 +22,7 @@ module Make (Key : Map.OrderedType) = struct
            |> of_seq
   end
     
-module MakeOpt (Key : Map.OrderedType) =
+module MakeOpt (Key : OrderedType) =
   Make (struct type t = Key.t option
                let compare a b =
                  match a, b with
@@ -22,15 +32,11 @@ module MakeOpt (Key : Map.OrderedType) =
                  | None  , None   ->  0                    
         end)
 
-module ForInt =
-  Make (struct type t = int
-               let compare = compare
-        end)
 
-module ForIntPoint =
-  Make (struct type t = int * int
+module MakePair (Fst : OrderedType) (Snd : OrderedType) =
+  Make (struct type t = Fst.t * Snd.t
                let compare a b =
-                 match  compare (fst a) (fst b) with
-                 | 0 -> compare (snd a) (snd b)
+                 match  Fst.compare (fst a) (fst b) with
+                 | 0 -> Snd.compare (snd a) (snd b)
                  | x -> x
         end)

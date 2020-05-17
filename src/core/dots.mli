@@ -5,8 +5,7 @@ type t = | OOOOOO
          | OO
          | O
 
-module Map    : Utils.MAPEXT.T with type key = t
-module MapOpt : Utils.MAPEXT.T with type key = t option
+include Map.OrderedType with type t := t
 
 val count : int
 val all : t list

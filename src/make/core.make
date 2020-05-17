@@ -2,8 +2,10 @@ echo "Core build started"
 
 cd ../core
 
-ocamlopt -I ../../bin -for-pack Core -c dots.mli
-ocamlopt -I ../../bin -for-pack Core -c dots.ml
+ocamlopt -for-pack Core -c map.mli
+ocamlopt -for-pack Core -c map.ml
+ocamlopt -for-pack Core -c dots.mli
+ocamlopt -for-pack Core -c dots.ml
 ocamlopt -for-pack Core -c hand.ml
 ocamlopt -for-pack Core -c gene.ml
 ocamlopt -for-pack Core -c nature.ml
@@ -14,10 +16,10 @@ ocamlopt -for-pack Core -c side.ml
 ocamlopt -for-pack Core -c nucleus.mli
 ocamlopt -for-pack Core -c nucleus.ml
 ocamlopt -for-pack Core -c action.ml
-ocamlopt -I ../../bin -for-pack Core -c tissue.mli
-ocamlopt -I ../../bin -for-pack Core -c tissue.ml
-ocamlopt -I ../../bin -for-pack Core -c cursor.mli
-ocamlopt -I ../../bin -for-pack Core -c cursor.ml
+ocamlopt -for-pack Core -c tissue.mli
+ocamlopt -for-pack Core -c tissue.ml
+ocamlopt -for-pack Core -c cursor.mli
+ocamlopt -for-pack Core -c cursor.ml
 ocamlopt -for-pack Core -c statement.ml
 ocamlopt -for-pack Core -c energy.mli
 ocamlopt -for-pack Core -c energy.ml
@@ -25,8 +27,8 @@ ocamlopt -for-pack Core -c tape.mli
 ocamlopt -for-pack Core -c tape.ml
 
 ocamlopt -pack -o core.cmx \
-dots.cmx hand.cmx gene.cmx nature.cmx pigment.cmx side.cmx nucleus.cmx \
-action.cmx tissue.cmx cursor.cmx statement.cmx energy.cmx \
+map.cmx dots.cmx hand.cmx gene.cmx nature.cmx pigment.cmx side.cmx \
+nucleus.cmx action.cmx tissue.cmx cursor.cmx statement.cmx energy.cmx \
 tape.cmx
 
 mv core.cmx ../../bin/core.cmx

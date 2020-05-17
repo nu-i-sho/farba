@@ -1,4 +1,5 @@
 module Coord = struct
+  module Map = Map.MakePair (Int) (Int)
   type t = int * int
          
   let move side (x, y) =
@@ -21,25 +22,16 @@ module Coord = struct
     
     x + dx,
     y + dy
-
-  let compare a b =
-    match  compare (fst a) (fst b) with
-    | 0 -> compare (snd a) (snd b)
-    | o -> o
-             
   end
 
-             
-module CMap = Utils.MapExt.Make (Coord)
-             
-type t = {  nucleuses : Nucleus.t CMap.t;
-           cytoplasms : Pigment.t CMap.t;
+type t = {  nucleuses : Nucleus.t Coord.Map.t;
+           cytoplasms : Pigment.t Coord.Map.t;
                  clot : Coord.t option
          }
        
 let empty =
-  {  nucleuses = CMap.empty;
-    cytoplasms = CMap.empty;
+  {  nucleuses = Coord.Map.empty;
+    cytoplasms = Coord.Map.empty;
           clot = None
   }
   
@@ -77,7 +69,7 @@ let load src =
        src
 *)
 
-let is_in     i o = CMap.mem i o.cytoplasms
+let is_in     i o = Coord.Map.mem i o.cytoplasms
 let is_out_of i o = not (is_in i o)
    
 let clot_opt o = o.clot
@@ -94,28 +86,28 @@ let clot o =
 let set_clot  i o = { o with clot = Some i }
 let remove_clot o = { o with clot = None   }
   
-let cytoplasm     i o = CMap.find i o.cytoplasms
-let cytoplasm_opt i o = CMap.find_opt i o.cytoplasms
+let cytoplasm     i o = Coord.Map.find i o.cytoplasms
+let cytoplasm_opt i o = Coord.Map.find_opt i o.cytoplasms
                       
 let set_cytoplasm i x o =
-  let c = CMap.set i x o.cytoplasms in
+  let c = Coord.Map.set i x o.cytoplasms in
   { o with cytoplasms = c
   }
 
 let remove_cytoplasm i o =
-  let c = CMap.remove i o.cytoplasms in
+  let c = Coord.Map.remove i o.cytoplasms in
   { o with cytoplasms = c
   }
    
-let nucleus     i o = CMap.find i o.nucleuses
-let nucleus_opt i o = CMap.find_opt i o.nucleuses
+let nucleus     i o = Coord.Map.find i o.nucleuses
+let nucleus_opt i o = Coord.Map.find_opt i o.nucleuses
 
 let set_nucleus i x o =
-  let n = CMap.set i x o.nucleuses in 
+  let n = Coord.Map.set i x o.nucleuses in 
   { o with nucleuses = n 
   }
  
 let remove_nucleus i o =
-  let n = CMap.remove i o.nucleuses in
+  let n = Coord.Map.remove i o.nucleuses in
   { o with nucleuses = n
   }

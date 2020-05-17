@@ -12,12 +12,12 @@ module Make (Commander : COMMANDER) = struct
       | Find of Energy.Find.t
     end
 
-  module rec PrevStatement : sig
+  module PrevStatement = struct
      type t = 
         | Perform of Action.t
         | Call    of Dots.t * Energy.Wait.t option
         | Declare of Dots.t * Energy.Mark.t option
-     end = PrevStatement
+     end
              
   module rec Prev : sig
     include module type of PrevStatement

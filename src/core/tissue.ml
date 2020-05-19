@@ -35,40 +35,6 @@ let empty =
           clot = None
   }
   
-(*
-let load src =
-  let rec load_line cyto nucleo line y i l =
-    if i == l then cyto, nucleo else
-      let j = succ i in
-      let k = succ j in
-      let cyto, nucleo = 
-        match line.[i] with
-        | ' ' -> cyto, nucleo
-        | chr -> let p = ((j / 3), y)
-                 and c = Pigment.of_char  line.[i]
-                 and n = Nucleus.of_chars line.[j] line.[k] in
-                 (cyto   |> set p (Cytoplasm c))
-                 (nucleo |> set p (Nucleus c) in
-      load_line cyto nucleo line y k l in
-  
-  let rec load cyto nucleo y = function
-    | h :: t -> let cyto, nucleo =
-                  load_line cyto nucleo h y 0 (String.length h) in
-                load cyto nucleo (succ y) t
-    | []     -> {   clot = None;
-                  height = src |> List.length;
-                   width = src |> List.map String.length
-                               |> List.fold_left max 0;
-                  nucleo;
-                    cyto
-                } in
-
-  load CMap.empty
-       CMap.empty
-       0
-       src
-*)
-
 let is_in     i o = Coord.Map.mem i o.cytoplasms
 let is_out_of i o = not (is_in i o)
    

@@ -3,7 +3,7 @@ type t
 module Coord : sig
   type t
   module Map : Map.S with type key = t
-  val move    : Side.t -> t -> t
+  val move   : Side.t -> t -> t
   end
 
 val empty          : t

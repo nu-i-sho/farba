@@ -18,7 +18,7 @@ module Head : sig
   module Link : sig          
     type t =
       | Start
-      | Cell of (int * Cell.t) 
+      | Cell of Cell.t 
       | End
     end
 

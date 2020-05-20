@@ -28,11 +28,13 @@ ocamlopt -for-pack Core -c energy.mli
 ocamlopt -for-pack Core -c energy.ml
 ocamlopt -for-pack Core -c tape.mli
 ocamlopt -for-pack Core -c tape.ml
+ocamlopt -for-pack Core -c processor.mli
+ocamlopt -for-pack Core -c processor.ml
 
 ocamlopt -pack -o core.cmx \
 list.cmx map.cmx dots.cmx hand.cmx gene.cmx nature.cmx pigment.cmx side.cmx \
 nucleus.cmx action.cmx tissue.cmx CURSOR.cmx cursor.cmx statement.cmx \
-energy.cmx tape.cmx
+energy.cmx tape.cmx processor.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

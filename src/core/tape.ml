@@ -38,7 +38,7 @@ module Head = struct
   module Link = struct          
     type t =
       | Start
-      | Cell of (int * Cell.t) 
+      | Cell of Cell.t 
       | End
     end
 
@@ -81,7 +81,7 @@ module Head = struct
 
   let stage o = o.stage
   let link  o =
-    match (celli o), o.stage with
+    match (cell o), o.stage with
     | (Some x), Stage.(Call _ | Find _ | Back _) -> Link.Cell x
     |  None,    Stage.(Call _ | Find _         ) -> Link.Start
     |  None,    Stage.(                  Back _) -> Link.End

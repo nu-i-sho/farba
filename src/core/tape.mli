@@ -1,8 +1,9 @@
 module Cell : sig
-  type t = 
-    | Perform of Command.t
-    | Call    of Dots.t * Energy.Wait.t option
-    | Declare of Dots.t * Energy.Mark.t option
+  type t =
+    ( Command.t,
+      Dots.t * Energy.Wait.t option,
+      Dots.t * Energy.Mark.t option
+    ) Statement.t
   end
 
 type t
@@ -32,10 +33,10 @@ module Head : sig
   val move         : t -> t
   end
 
-val start  : Statement.t list -> t
-val source : t -> Statement.t list
+val start  : Source.t -> t
+val source : t -> Source.t
 val cells  : t -> Cell.t list
 val cellsi : t -> (int * Cell.t) list
 val cell   : int -> t -> Cell.t
-val insert : int -> Statement.t -> t -> t
+val insert : int -> Source.e -> t -> t
 val remove : int -> t -> t

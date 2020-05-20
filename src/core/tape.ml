@@ -1,18 +1,23 @@
 module Cell = struct
-  type t = 
-    | Perform of Command.t
-    | Call    of Dots.t * Energy.Wait.t option
-    | Declare of Dots.t * Energy.Mark.t option
-
-  let of_statement = function
-    | Statement.Perform x -> Perform  x
-    | Statement.Call    x -> Call    (x, None)
-    | Statement.Declare x -> Declare (x, None)
-
-  let to_statement = function
-    | Perform  x     -> Statement.Perform x
-    | Call    (x, _) -> Statement.Call    x
-    | Declare (x, _) -> Statement.Declare x
+  type t =
+    ( Command.t,
+      Dots.t * Energy.Wait.t option,
+      Dots.t * Energy.Mark.t option
+    ) Statement.t
+ 
+  let of_src = 
+    Statement.( function
+      | Perform x -> Perform  x
+      | Call    x -> Call    (x, None)
+      | Declare x -> Declare (x, None)
+    )
+    
+  let to_src =
+    Statement.( function
+      | Perform  x     -> Perform x
+      | Call    (x, _) -> Call    x
+      | Declare (x, _) -> Declare x
+    )
   end
 
 module Stage = struct
@@ -67,16 +72,16 @@ module Head = struct
     
   let change_wait e o =
     match cell o with
-    | Some Cell.(Call (procedure, _))
-           -> change_cell Cell.(Call (procedure, e)) o
-    | Some Cell.(Perform _ | Declare _)
+    | Some Statement.(Call (procedure, _))
+           -> change_cell Statement.(Call (procedure, e)) o
+    | Some Statement.(Perform _ | Declare _)
     | None -> assert false
 
   let change_mark e o =
     match cell o with
-    | Some Cell.(Declare (procedure, _))
-           -> change_cell Cell.(Declare (procedure, e)) o
-    | Some Cell.(Perform _ | Call _)
+    | Some Statement.(Declare (procedure, _))
+           -> change_cell Statement.(Declare (procedure, e)) o
+    | Some Statement.(Perform _ | Call _)
     | None -> assert false
 
   let stage o = o.stage
@@ -115,7 +120,7 @@ module Head = struct
 let start source =
   let pair a b = a, b in
   let next =
-    source |> List.map Cell.of_statement
+    source |> List.map Cell.of_src
            |> List.mapi pair in
   { stage = Stage.Call Energy.origin;
      prev = [];
@@ -133,7 +138,7 @@ let cells o =
   
 let source o =
   o |> cells
-    |> List.map Cell.to_statement
+    |> List.map Cell.to_src
 
 let cell i o =
   ( match o.prev, o.next with
@@ -150,7 +155,7 @@ let insert i x o =
     | Some (j, _) when j = i    -> Head.containing_part o
     | Some (j, _) when j > i    -> Part.Next o.next
     | Some _ (* j < i *) | None -> Part.Prev o.prev
-  and cell = i, (Cell.of_statement x)
+  and cell = i, (Cell.of_src x)
   and succ (i, x) = (succ i), x in
   
   match into_part with

@@ -1,6 +1,6 @@
 module Cell = struct
   type t = 
-    | Perform of Action.t
+    | Perform of Command.t
     | Call    of Dots.t * Energy.Wait.t option
     | Declare of Dots.t * Energy.Mark.t option
 

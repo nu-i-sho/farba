@@ -17,7 +17,7 @@ ocamlopt -for-pack Core -c side.mli
 ocamlopt -for-pack Core -c side.ml
 ocamlopt -for-pack Core -c nucleus.mli
 ocamlopt -for-pack Core -c nucleus.ml
-ocamlopt -for-pack Core -c action.ml
+ocamlopt -for-pack Core -c command.ml
 ocamlopt -for-pack Core -c tissue.mli
 ocamlopt -for-pack Core -c tissue.ml
 ocamlopt -for-pack Core -c CURSOR.ml
@@ -33,7 +33,7 @@ ocamlopt -for-pack Core -c processor.ml
 
 ocamlopt -pack -o core.cmx \
 list.cmx map.cmx dots.cmx hand.cmx gene.cmx nature.cmx pigment.cmx side.cmx \
-nucleus.cmx action.cmx tissue.cmx CURSOR.cmx cursor.cmx statement.cmx \
+nucleus.cmx command.cmx tissue.cmx CURSOR.cmx cursor.cmx statement.cmx \
 energy.cmx tape.cmx processor.cmx
 
 mv core.cmx ../../bin/core.cmx

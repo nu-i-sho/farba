@@ -97,12 +97,11 @@ module Make (Tissue : module type of Tissue) = struct
         
   let perform command o =
     if o |> is_clotted then raise Clotted else
-      if o |> is_out_of_tissue then raise Out_of_tissue else
-        Action.( Nature.(
-          match command with
-          | Replicate gene -> replicate gene
-          | Turn hand      -> turn hand
-          | Move Body      -> move
-          | Move Mind      -> pass
-       )) o
+    if o |> is_out_of_tissue then raise Out_of_tissue else
+      ( match command with
+        | Command.Replicate gene   -> replicate gene
+        | Command.Turn hand        -> turn hand
+        | Command.Move Nature.Body -> move
+        | Command.Move Nature.Mind -> pass
+      ) o
   end

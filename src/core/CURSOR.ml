@@ -4,7 +4,7 @@ module type S = sig
   type t
    
   val make     : coord -> tissue -> t
-  val perform  : Action.t -> t -> t
+  val perform  : Command.t -> t -> t
   val tissue   : t -> tissue
   val position : t -> coord
     

@@ -21,7 +21,12 @@ module Make (Key : Map.OrderedType) = struct
       list |> List.to_seq
            |> of_seq
   end
-    
+
+module MakeDefault (Key : sig type t end) =
+  Make (struct type t = Key.t
+               let compare = compare
+        end)
+                                    
 module MakeOpt (Key : OrderedType) =
   Make (struct type t = Key.t option
                let compare a b =
@@ -31,7 +36,6 @@ module MakeOpt (Key : OrderedType) =
                  | None  , Some _ -> -1
                  | None  , None   ->  0                    
         end)
-
 
 module MakePair (Fst : OrderedType) (Snd : OrderedType) =
   Make (struct type t = Fst.t * Snd.t

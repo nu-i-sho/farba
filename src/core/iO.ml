@@ -1,6 +1,12 @@
+module type S = sig
+  type t
+  val load   : char Seq.t -> (t * char Seq.t) 
+  val to_seq : t -> char Seq.t
+  end
+
 module OfTissue (Tissue : module type of Tissue) = struct
 
-  module CharSet    = Sat.Make (Char)
+  module CharSet    = Set.Make (Char)
   module CharMap    = Map.Make (Char)
   module PigmentMap = Map.MakeDefault (Pigment)
   module SideMap    = Map.MakeDefault (Side)
@@ -61,38 +67,59 @@ module OfTissue (Tissue : module type of Tissue) = struct
   let cytoplasm_to_char =
     cytoplasms_draft
       |> List.map swap
-      |> CharMap.of_bindings
+      |> PigmentMap.of_bindings
   
-  let tissue_of_string str = 
-    let parse_hex_grid ~parse ~add ~src =
-      let n = String.length src in
-      let rec parse x y i acc =
-        if i = n then acc else
-          ( match src.[i] with
-            | '0' -> parse (succ x) y acc 
-            | ';' -> parse 0 (succ y) acc
-            | chr -> parse (succ x) y (add (x, y) (parse chr) acc)
-          ) (succ i) in
-      parse 0 0 0
+  let load seq = 
+    let load_hex_grid parse add =
+      let rec load x y (acc, next) =
+        match next () with
+        | Seq.Nil -> assert false
+        | Seq.Cons (v, next) ->
+           ( match v with
+             | '0' -> (acc, next) |> load (succ x) y
+             | ',' -> (acc, next) |> load 0 (succ y) 
+             | '.' -> (acc, next)
+             | chr -> let item = parse chr in
+                      let acc  = add (x, y) item acc in
+                      (acc, next) |> load (succ x) y
+           ) in load 0 0
+
     and parse_cytoplasm c = CharMap.find c char_to_cytoplasm
     and parse_nucleus   c =
-      Nucleus.{
-        pigment = CharsMap.find c chars_to_nucleus_pigment;
-           gaze = CharsMap.find c chars_to_nucleus_gaze
-      } in
+      Nucleus.make
+        (CharsMap.find c chars_to_nucleus_pigment)
+        (CharsMap.find c chars_to_nucleus_gaze) in
 
-    match String.split_on_char '.' str with
-    | cytoplasms_src :: nucleuses_src :: [] ->
-       Tissue.empty
-         |> parse_hex_grid ~src: cytoplasms_src
-                         ~parse: parse_cytoplasm
-                           ~add: Tissue.set_cytoplasm      
-         |> parse_hex_grid ~src: nucleuses_src
-                         ~parse: parse_nucleus
-                           ~add: Tissue.set_nucleus
-    | _ -> assert false
+    (Tissue.empty, seq)
+       |> load_hex_grid parse_cytoplasm Tissue.add_cytoplasm      
+       |> load_hex_grid parse_nucleus   Tissue.set_nucleus
 
-  let tissue_to_string tissue =
-    
-    
+  let to_seq tissue =
+    let cytoplasm_to_char x =
+      PigmentMap.find x cytoplasm_to_char 
+    and nucleus_to_char x =
+      CharSet.choose @@
+      CharSet.inter
+        (PigmentMap.find Nucleus.(x.pigment) nucleus_pigment_to_chars)
+        (SideMap.find    Nucleus.(x.gaze)    nucleus_gaze_to_chars)
+    and map f src =
+      let rec map x y next () =
+        match next () with
+        | Seq.Cons (((_, y'), _), _) when y' <> y ->
+           Seq.Cons (',', (map 0 (succ y) next))
+          
+        | Seq.Cons (((x', _), _), _) when x' <> x ->
+           Seq.Cons ('0', (map (succ x) y next))
+          
+        | Seq.Cons ((_, v), next) ->
+           Seq.Cons ((f v), (map (succ x) y next))
+          
+        | Seq.Nil ->
+           Seq.Cons ('.', Seq.empty) in
+      map 0 0 src in
+    Seq.append
+      (tissue |> Tissue.cytoplasms
+              |> map cytoplasm_to_char)
+      (tissue |> Tissue.nucleuses
+              |> map nucleus_to_char)
   end

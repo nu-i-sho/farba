@@ -2,13 +2,13 @@ module Coord = struct
   type t = int * int
          
   module Map =
-    Map.Make (struct
-        type t = int * int
-        let compare (x1, y1) (x2, y2) =
-          match  compare y1 y2 with
-          | 0 -> compare x1 x2
-          | x -> x
-      end
+    Map.Make (
+        struct type t = int * int
+               let compare (x1, y1) (x2, y2) =
+                 match  compare y1 y2 with
+                 | 0 -> compare x1 x2
+                 | x -> x
+               end)
   
   let move side (x, y) =
     let dx, dy =
@@ -66,7 +66,7 @@ let cytoplasm     i o = o.cytoplasms |> Coord.Map.find i
 let cytoplasm_opt i o = o.cytoplasms |> Coord.Map.find_opt i
 let cytoplasms      o = o.cytoplasms |> Coord.Map.to_seq
 
-let set_cytoplasm i x o =
+let add_cytoplasm i x o =
   let c = Coord.Map.set i x o.cytoplasms in
   { o with cytoplasms = c
   }

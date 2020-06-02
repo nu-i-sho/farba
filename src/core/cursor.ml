@@ -1,8 +1,8 @@
 module Make (Tissue : module type of Tissue) = struct
   module Position = struct
     type t =
-      | InTissue    of  Tissue.Coord.t
-      | OutOfTissue of (Tissue.Coord.t * Nucleus.t)
+      | InTissue    of  HexCoord.t
+      | OutOfTissue of (HexCoord.t * Nucleus.t)
     end
     
   type t =
@@ -53,7 +53,7 @@ module Make (Tissue : module type of Tissue) = struct
     let i = position o
     and t = o.tissue in
     let n = Tissue.nucleus i t in
-    let j = Tissue.Coord.move n.gaze i in
+    let j = HexCoord.move n.gaze i in
 
     let from_cyto, to_cyto =
       (Tissue.cytoplasm i t),
@@ -74,14 +74,14 @@ module Make (Tissue : module type of Tissue) = struct
     | White        -> o
     | Blue | Gray  ->
        let parent = Tissue.nucleus i t in
-       let j = Tissue.Coord.move parent.gaze i
+       let j = HexCoord.move parent.gaze i
        and child  = Nucleus.replicate gene parent in   
        set j child o
 
   let pass o =
     let i = position o and t = o.tissue in
     let donor = Tissue.nucleus i t in
-    let j = Tissue.Coord.move donor.gaze i in
+    let j = HexCoord.move donor.gaze i in
   
     match Tissue.nucleus_opt j t with
     | None           -> o

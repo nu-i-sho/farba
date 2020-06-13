@@ -27,7 +27,7 @@ module Make (Event : sig type t end) = struct
     ) 
     
   let register (type a)
-         ((module Observer) : (a observer)) id state
+         ((module Observer) : a observer) id state
       : a subscription =
       ( module struct
           include Observer
@@ -56,7 +56,7 @@ module Make (Event : sig type t end) = struct
         observers = (Pack subscription) :: o.observers
       }
     
-    let unsubscribe (type a) ((module X) : (a subscription)) o = 
+    let unsubscribe (type a) ((module X) : a subscription) o = 
       let rec unsubscribe: (e list) -> a * (e list) = function 
         | (Pack (module H)) :: t when X.id = H.id ->
             ( match X.Id with
@@ -67,7 +67,8 @@ module Make (Event : sig type t end) = struct
             let state, t = unsubscribe t in
             state, h :: t 
         | [] -> raise Not_found in
-      let state, observers = unsubscribe o.observers in
+      let state, observers =
+        unsubscribe o.observers in
       state, { o with observers }
   
     let send event o = 

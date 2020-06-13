@@ -18,6 +18,11 @@ let turn dir o =
   { o with gaze 
   }
 
+let rev_gaze o =
+  let gaze = Side.rev o.gaze in
+  { o with gaze 
+  }
+  
 let inject cytoplasm o =
   let pigment = Pigment.(
       match o.pigment, cytoplasm with

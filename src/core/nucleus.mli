@@ -6,5 +6,6 @@ type t = private
 val make      : Pigment.t -> Side.t -> t
 val is_cancer : t -> bool
 val turn      : Hand.t -> t -> t
+val rev_gaze  : t -> t
 val inject    : Pigment.t -> t -> t
 val replicate : Gene.t -> t -> t

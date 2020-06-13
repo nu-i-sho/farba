@@ -55,8 +55,9 @@ module Coord = struct
     src
 
   let unload (x, y) =
-    let unload_num v = v |> string_of_int
-                         |> String.to_seq in
+    let unload_num v =
+      v |> string_of_int
+        |> String.to_seq in
     (unload_num  x ) |> Seq.append
     (Seq.return ',') |> Seq.append
     (unload_num  y ) |> Seq.append

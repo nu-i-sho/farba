@@ -1,11 +1,8 @@
-type e = (Command.t, Dots.t, Dots.t) Statement.t
-type t = e list
+module Element = struct
+  type t = (Command.t, Dots.t, Dots.t) Statement.t
 
-let empty = []
-       
-let load =
-  let load_statement next =
-    match next () with
+  let load src =
+    match src () with
     | Seq.Cons ('C', next) ->
        let procedure, next = Dots.load next in
        (Statement.Call procedure), next
@@ -45,33 +42,38 @@ let load =
             assert false
        )
     | Seq.Cons _ | Seq.Nil ->
-       assert false in
-  
+       assert false 
+
+  let unload = function
+    | Statement.Call procedure    ->
+       Seq.append (Seq.return 'C') (Dots.unload procedure)
+    | Statement.Declare procedure ->
+       Seq.append (Seq.return 'D') (Dots.unload procedure)
+    | Statement.Perform command   ->
+       ( match command with 
+         | Command.Turn Hand.Left           -> "PTL"
+         | Command.Turn Hand.Right          -> "PTR"
+         | Command.Move Nature.Body         -> "PMB"
+         | Command.Move Nature.Mind         -> "PMM"
+         | Command.Replicate Gene.Dominant  -> "PRD"
+         | Command.Replicate Gene.Recessive -> "PRR"
+       ) |> String.to_seq    
+  end
+
+type t = Element.t list
+
+let empty = []
+       
+let load =
   let rec load acc next =
     match next () with
     | Seq.Cons ('.', next) -> (List.rev acc), next
     | Seq.Cons _           ->
-       let statement, next = load_statement next in  
-       load (statement :: acc) next
+       let e, next = Element.load next in  
+       load (e :: acc) next
     | Seq.Nil -> assert false in
   load []
 
 let rec unload = function
-  | h :: t -> 
-     ( match h with
-       | Statement.Perform command   ->
-          ( match command with 
-            | Command.Turn Hand.Left           -> "PTL"
-            | Command.Turn Hand.Right          -> "PTR"
-            | Command.Move Nature.Body         -> "PMB"
-            | Command.Move Nature.Mind         -> "PMM"
-            | Command.Replicate Gene.Dominant  -> "PRD"
-            | Command.Replicate Gene.Recessive -> "PRR"
-          ) |> String.to_seq
-       | Statement.Call procedure    ->
-          Seq.append (Seq.return 'C') (Dots.unload procedure)
-       | Statement.Declare procedure ->
-          Seq.append (Seq.return 'D') (Dots.unload procedure)
-     ) |> Seq.append (unload t)
-  | []     ->
-     Seq.return '.'
+  | h :: t -> Seq.append (Element.unload h) (unload t)
+  | []     -> Seq.return '.'

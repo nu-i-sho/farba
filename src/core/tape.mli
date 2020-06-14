@@ -38,5 +38,7 @@ val source : t -> Source.t
 val cells  : t -> Cell.t list
 val cellsi : t -> (int * Cell.t) list
 val cell   : int -> t -> Cell.t
-val insert : int -> Source.e -> t -> t
+val insert : int -> Source.Element.t -> t -> t
 val remove : int -> t -> t
+
+include IO.S with type t := t

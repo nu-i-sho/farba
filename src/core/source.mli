@@ -1,6 +1,9 @@
-type e = (Command.t, Dots.t, Dots.t) Statement.t
-type t = e list
+module Element : sig
+  type t = (Command.t, Dots.t, Dots.t) Statement.t
+  include IO.S with type t := t
+  end
+
+type t = Element.t list
 
 val empty  : t
-val load   : char Seq.t -> t * char Seq.t
-val unload : t -> char Seq.t
+include IO.S with type t := t

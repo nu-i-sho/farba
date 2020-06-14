@@ -31,5 +31,4 @@ val set_clot       : Coord.t -> t -> t
 val remove_clot    : t -> t
 val set_cursor     : Coord.t -> t -> t
 
-val load           : char Seq.t -> t * char Seq.t
-val unload         : t -> char Seq.t
+include IO.S with type t := t

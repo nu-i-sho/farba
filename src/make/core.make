@@ -8,6 +8,9 @@ ocamlopt -for-pack Core -c map.mli
 ocamlopt -for-pack Core -c map.ml
 ocamlopt -for-pack Core -c seq.mli
 ocamlopt -for-pack Core -c seq.ml
+ocamlopt -for-pack Core -c IO.ml
+ocamlopt -for-pack Core -c int.mli
+ocamlopt -for-pack Core -c int.ml
 ocamlopt -for-pack Core -c dots.mli
 ocamlopt -for-pack Core -c dots.ml
 ocamlopt -for-pack Core -c hand.ml
@@ -38,8 +41,8 @@ ocamlopt -for-pack Core -c subject.mli
 ocamlopt -for-pack Core -c subject.ml
 
 ocamlopt -pack -o core.cmx \
-list.cmx map.cmx seq.cmx dots.cmx hand.cmx gene.cmx nature.cmx pigment.cmx \
-side.cmx nucleus.cmx command.cmx tissue.cmx cursor.cmx energy.cmx \
+list.cmx map.cmx seq.cmx IO.cmx int.cmx dots.cmx hand.cmx gene.cmx nature.cmx \
+pigment.cmx side.cmx nucleus.cmx command.cmx tissue.cmx cursor.cmx energy.cmx \
 source.cmx statement.cmx tape.cmx processor.cmx OBSERV.cmx subject.cmx
 
 mv core.cmx ../../bin/core.cmx

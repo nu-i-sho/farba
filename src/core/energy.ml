@@ -1,6 +1,7 @@
 module type STAGE = sig
   type t
-  val value : t -> Dots.t
+  include IO.S with type t := t
+  val value  : t -> Dots.t
   end
 
 module type DIE = sig
@@ -12,6 +13,13 @@ module Die : DIE = struct
   type t = Dots.t
   let make value = value
   let value o = o
+
+  let load src =
+    let x, src = Dots.load src in
+    (make x), src 
+
+  let unload =
+    Dots.unload 
   end
 
 module Mark : DIE = struct include Die end
@@ -30,6 +38,18 @@ module Find : sig include STAGE
     
   let value = fst 
   let procedure = snd
+
+  let load src =
+    let procedure, next = Dots.load src  in
+    let value, next     = Dots.load next in
+    (make procedure value), next
+
+  let unload o =
+    Seq.append
+      (o |> procedure
+         |> Dots.unload)
+      (o |> value
+         |> Dots.unload)
   end
                   
 let origin =

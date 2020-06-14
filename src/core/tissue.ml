@@ -38,29 +38,17 @@ module Coord = struct
     x + dx,
     y + dy
 
-  let load src =
-    let rec load_num end_mark next acc =
-      match next () with
-      | Seq.Nil            -> assert false
-      | Seq.Cons (v, next) ->
-         if v = end_mark then
-           (acc |> List.rev
-                |> List.to_seq
-                |> String.of_seq
-                |> int_of_string), next else
-           load_num end_mark next (v :: acc) in
-    let x, src = load_num ',' src [] in
-    let y, src = load_num ',' src [] in
-    (x, y),
-    src
-
+  let load src  =
+    let x, next = src  |> Int.load     in
+    let next    = next |> Seq.skip ',' in
+    let y, next = next |> Int.load     in
+    let next    = next |> Seq.skip '.' in
+    (x, y), next
+    
   let unload (x, y) =
-    let unload_num v =
-      v |> string_of_int
-        |> String.to_seq in
-    (unload_num  x ) |> Seq.append
+    (Int.unload  x ) |> Seq.append
     (Seq.return ',') |> Seq.append
-    (unload_num  y ) |> Seq.append
+    (Int.unload  y ) |> Seq.append
     (Seq.return '.')
   end
              

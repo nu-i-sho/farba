@@ -5,9 +5,9 @@ type t = { cursor : Cursor.t;
              tape : Tape.t
          }
         
-let make tissue tape =
-  { cursor = Cursor.make tissue;
-    tape
+let make tissue source =
+  { cursor = tissue |> Cursor.make;
+      tape = source |> Tape.start
   }
 
 let call_step call o =
@@ -68,3 +68,21 @@ let step o =
   | Stage.Call call -> Some (call_step call o)
   | Stage.Find find -> Some (find_step find o)
   | Stage.Back back -> back_step back o
+
+let load src =
+  let tissue, src = Tissue.load  src in
+  let         src = Seq.skip '.' src in
+  let tape,   src = Tape.load    src in
+  let         src = Seq.skip '.' src in
+  assert  (src () = Seq.Nil);          
+  { cursor = Cursor.make tissue;
+    tape
+  },
+  src          
+
+let unload o =
+  (o.cursor |> Cursor.tissue
+            |> Tissue.unload) |> Seq.append
+       ('.' |> Seq.return   ) |> Seq.append
+    (o.tape |> Tape.unload  ) |> Seq.append
+       ('.' |> Seq.return   )

@@ -285,18 +285,16 @@ let remove i o =
 let load src =
   let stage, src = Stage.load src in
   let src = Seq.skip ',' src in
-  let rec load_cells end_mark acc src =
+  let rec load_cells acc src =
     match src () with
-    | Seq.Nil            -> assert false
-    | Seq.Cons (x, src') ->
-       if x = end_mark then
-         List.rev acc, src' else
-         let cell, src' = Cell.load src in
-         load_cells end_mark (cell :: acc) src' in
+    | Seq.Nil             -> assert false
+    | Seq.Cons (',', src) -> List.rev acc, src
+    | Seq.Cons ( x , src) -> let cell, src = Cell.load src in
+                             load_cells (cell :: acc) src in
   let celli i cell = i, cell in
-  let prev, src = load_cells ',' [] src in
+  let prev, src = load_cells [] src in
   let prev = List.rev (List.mapi celli prev) in
-  let next, src = load_cells '.' [] src in
+  let next, src = load_cells [] src in
   let top_prev_i =
     match prev with
     | (i, _) :: _ -> i
@@ -310,15 +308,15 @@ let unload o =
     x |> List.to_seq
       |> Seq.map snd
       |> Seq.map Cell.unload
-      |> Seq.fold_left Seq.append Seq.empty in
+      |> Seq.fold_left Seq.append Seq.empty
+  and separated block = [ block; Seq.return ',' ] in  
 
   [ Stage.unload o.stage;
-    Seq.return ',';
     unload_cells o.prev;
-    Seq.return ',';
-    unload_cells o.next;
-    Seq.return '.'
+    unload_cells o.next
 
-  ] |> List.fold_left Seq.append Seq.empty
+  ] |> List.map separated
+    |> List.concat 
+    |> List.fold_left Seq.append Seq.empty
     
-    
+

@@ -40,16 +40,14 @@ module Coord = struct
 
   let load src  =
     let x, next = src  |> Int.load     in
-    let next    = next |> Seq.skip ',' in
+    let next    = next |> Seq.skip ';' in
     let y, next = next |> Int.load     in
-    let next    = next |> Seq.skip '.' in
     (x, y), next
     
   let unload (x, y) =
     (Int.unload  x ) |> Seq.append
-    (Seq.return ',') |> Seq.append
-    (Int.unload  y ) |> Seq.append
-    (Seq.return '.')
+    (Seq.return ';') |> Seq.append
+    (Int.unload  y )
   end
              
 type t =
@@ -178,11 +176,11 @@ let load src =
     let rec load x y (acc, next) =
       match next () with
       | Seq.Nil -> assert false
-      | Seq.Cons (v, next) ->
+      | Seq.Cons (v, next') ->
          ( match v with
-           | '0' -> (acc, next) |> load (succ x) y
-           | ',' -> (acc, next) |> load 0 (succ y) 
-           | '.' -> (acc, next)
+           | '0' -> (acc, next') |> load (succ x) y
+           | ';' -> (acc, next') |> load 0 (succ y) 
+           | ',' -> (acc, next )
            | chr -> let item = parse chr in
                     let acc  = Coord.Map.add (x, y) item acc in
                     (acc, next) |> load (succ x) y
@@ -196,9 +194,13 @@ let load src =
       (CharsMap.find c chars_to_nucleus_gaze) in
   
   let cytoplasms, src = src |> load_hex_grid parse_cytoplasm in
+  let             src = src |> Seq.skip ',' in
   let nucleuses,  src = src |> load_hex_grid parse_nucleus in
-  let clot,       src = src |> Coord.load in
-  let cursor,     src = src |> Coord.load in
+  let             src = src |> Seq.skip ',' in
+  let clot,       src = src |> Coord.load   in
+  let             src = src |> Seq.skip ',' in
+  let cursor,     src = src |> Coord.load   in
+  let             src = src |> Seq.skip ',' in
   
   { cytoplasms;
     nucleuses;
@@ -220,7 +222,7 @@ let unload o =
     let rec map x y next () =
       match next () with
       | Seq.Cons (((_, y'), _), _) when y' <> y ->
-         Seq.Cons (',', (map 0 (succ y) next))
+         Seq.Cons (';', (map 0 (succ y) next))
         
       | Seq.Cons (((x', _), _), _) when x' <> x ->
          Seq.Cons ('0', (map (succ x) y next))
@@ -228,17 +230,25 @@ let unload o =
       | Seq.Cons ((_, v), next) ->
          Seq.Cons ((f v), (map (succ x) y next))
         
-      | Seq.Nil ->
-         Seq.Cons ('.', Seq.empty) in
+      | Seq.Nil -> Seq.Nil in
     map 0 0 src in
   
   (o.cytoplasms |> Coord.Map.to_seq
                 |> map cytoplasm_to_char
                )|> Seq.append
+           (',' |> Seq.return
+               )|> Seq.append
    (o.nucleuses |> Coord.Map.to_seq
                 |> map nucleus_to_char
                )|> Seq.append
+           (',' |> Seq.return
+               )|> Seq.append
         (o.clot |> Coord.unload
                )|> Seq.append
+           (',' |> Seq.return
+               )|> Seq.append
       (o.cursor |> Coord.unload
+               )|> Seq.append
+           (',' |> Seq.return
                )
+           

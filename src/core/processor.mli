@@ -1,4 +1,6 @@
 type t
    
-val make : Tissue.t -> Tape.t -> t
+include IO.S with type t := t
+
+val make : Tissue.t -> Source.t -> t
 val step : t -> t option

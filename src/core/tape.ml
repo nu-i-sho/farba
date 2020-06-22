@@ -308,15 +308,11 @@ let unload o =
     x |> List.to_seq
       |> Seq.map snd
       |> Seq.map Cell.unload
-      |> Seq.fold_left Seq.append Seq.empty
-  and separated block = [ block; Seq.return ',' ] in  
-
+      |> Seq.fold_left Seq.append Seq.empty in
+  
   [ Stage.unload o.stage;
     unload_cells o.prev;
     unload_cells o.next
 
-  ] |> List.map separated
-    |> List.concat 
-    |> List.fold_left Seq.append Seq.empty
-    
-
+  ] |> List.map ((Fun.flip Seq.append) (Seq.return ','))
+    |> List.fold_left Seq.append Seq.empty 

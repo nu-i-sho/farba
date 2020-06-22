@@ -183,7 +183,7 @@ let load src =
            | ',' -> (acc, next )
            | chr -> let item = parse chr in
                     let acc  = Coord.Map.add (x, y) item acc in
-                    (acc, next) |> load (succ x) y
+                    (acc, next') |> load (succ x) y
          ) in
     load 0 0 (Coord.Map.empty, src) 
 
@@ -233,22 +233,12 @@ let unload o =
       | Seq.Nil -> Seq.Nil in
     map 0 0 src in
   
-  (o.cytoplasms |> Coord.Map.to_seq
-                |> map cytoplasm_to_char
-               )|> Seq.append
-           (',' |> Seq.return
-               )|> Seq.append
-   (o.nucleuses |> Coord.Map.to_seq
-                |> map nucleus_to_char
-               )|> Seq.append
-           (',' |> Seq.return
-               )|> Seq.append
-        (o.clot |> Coord.unload
-               )|> Seq.append
-           (',' |> Seq.return
-               )|> Seq.append
-      (o.cursor |> Coord.unload
-               )|> Seq.append
-           (',' |> Seq.return
-               )
-           
+  [ o.cytoplasms |> Coord.Map.to_seq
+                 |> map cytoplasm_to_char;
+     o.nucleuses |> Coord.Map.to_seq
+                 |> map nucleus_to_char;
+          o.clot |> Coord.unload;
+        o.cursor |> Coord.unload;
+
+  ] |> List.map ((Fun.flip Seq.append) (Seq.return ','))
+    |> List.fold_left Seq.append Seq.empty 

@@ -67,8 +67,8 @@ let empty = []
 let load =
   let rec load acc next =
     match next () with
-    | Seq.Cons ('.', next) -> (List.rev acc), next
-    | Seq.Cons _           ->
+    | Seq.Cons ('.', _) -> (List.rev acc), next
+    | Seq.Cons _        ->
        let e, next = Element.load next in  
        load (e :: acc) next
     | Seq.Nil -> assert false in
@@ -76,4 +76,4 @@ let load =
 
 let rec unload = function
   | h :: t -> Seq.append (Element.unload h) (unload t)
-  | []     -> Seq.return '.'
+  | []     -> Seq.empty

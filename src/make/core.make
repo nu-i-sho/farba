@@ -39,11 +39,14 @@ ocamlopt -for-pack Core -c processor.ml
 ocamlopt -for-pack Core -c OBSERV.ml
 ocamlopt -for-pack Core -c subject.mli
 ocamlopt -for-pack Core -c subject.ml
+ocamlopt -for-pack Core -c program.mli
+ocamlopt -for-pack Core -c program.ml
 
 ocamlopt -pack -o core.cmx \
 list.cmx map.cmx seq.cmx IO.cmx int.cmx dots.cmx hand.cmx gene.cmx nature.cmx \
 pigment.cmx side.cmx nucleus.cmx command.cmx tissue.cmx cursor.cmx energy.cmx \
-source.cmx statement.cmx tape.cmx processor.cmx OBSERV.cmx subject.cmx
+source.cmx statement.cmx tape.cmx processor.cmx OBSERV.cmx subject.cmx \
+program.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

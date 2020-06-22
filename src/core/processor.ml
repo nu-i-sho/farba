@@ -83,6 +83,6 @@ let load src =
 let unload o =
   (o.cursor |> Cursor.tissue
             |> Tissue.unload) |> Seq.append
-       ('.' |> Seq.return   ) |> Seq.append
-    (o.tape |> Tape.unload  ) |> Seq.append
-       ('.' |> Seq.return   )
+  (     '.' |> Seq.return   ) |> Seq.append
+  (  o.tape |> Tape.unload  ) |> Seq.append
+  (     '.' |> Seq.return   )

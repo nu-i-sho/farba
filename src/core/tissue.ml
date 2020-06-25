@@ -11,8 +11,9 @@ module Coord = struct
           | n -> n
         end
     )
-         
-  let none    = Int.max_int, Int.max_int
+
+  let zero = 0, 0
+  let none = Int.max_int, Int.max_int
   let is_none = (=) none  
   
   let move side (x, y) =
@@ -242,3 +243,29 @@ let unload o =
 
   ] |> List.map ((Fun.flip Seq.append) (Seq.return ','))
     |> List.fold_left Seq.append Seq.empty 
+
+module Builder = struct
+  type nonrec t = t * Coord.t
+                
+  let empty =
+    empty, Coord.zero
+
+  let add_cytoplasm x (o, i) =
+    let c = Coord.Map.add i x o.cytoplasms in
+    { o with cytoplasms = c }, i
+
+  let add_nucleus pigment gaze (o, i) =
+    let x = Nucleus.make pigment gaze in
+    let n = Coord.Map.add i x o.nucleuses in
+    { o with nucleuses = n }, i
+
+  let set_cursor (o, i) =
+    set_cursor i o, i
+
+  let move_coord direction (o, i) =
+    o, Coord.move direction i
+
+  let product (o, _) =
+    o
+
+  end

@@ -32,3 +32,15 @@ val remove_clot    : t -> t
 val set_cursor     : Coord.t -> t -> t
 
 include IO.S with type t := t
+
+module Builder : sig
+  type tissue := t
+  type t
+     
+  val empty         : t
+  val add_cytoplasm : Pigment.t -> t -> t
+  val add_nucleus   : Pigment.t -> Side.t -> t -> t
+  val set_cursor    : t -> t
+  val move_coord    : Side.t -> t -> t
+  val product       : t -> tissue
+  end

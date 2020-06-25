@@ -31,8 +31,6 @@ val set_clot       : Coord.t -> t -> t
 val remove_clot    : t -> t
 val set_cursor     : Coord.t -> t -> t
 
-include IO.S with type t := t
-
 module Builder : sig
   type tissue := t
   type t

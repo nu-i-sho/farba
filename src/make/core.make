@@ -6,11 +6,6 @@ ocamlopt -for-pack Game.Core -c list.mli
 ocamlopt -for-pack Game.Core -c list.ml 
 ocamlopt -for-pack Game.Core -c map.mli
 ocamlopt -for-pack Game.Core -c map.ml
-ocamlopt -for-pack Game.Core -c seq.mli
-ocamlopt -for-pack Game.Core -c seq.ml
-ocamlopt -for-pack Game.Core -c IO.ml
-ocamlopt -for-pack Game.Core -c int.mli
-ocamlopt -for-pack Game.Core -c int.ml
 ocamlopt -for-pack Game.Core -c dots.mli
 ocamlopt -for-pack Game.Core -c dots.ml
 ocamlopt -for-pack Game.Core -c hand.ml
@@ -39,14 +34,11 @@ ocamlopt -for-pack Game.Core -c processor.ml
 ocamlopt -for-pack Game.Core -c OBSERV.ml
 ocamlopt -for-pack Game.Core -c subject.mli
 ocamlopt -for-pack Game.Core -c subject.ml
-ocamlopt -for-pack Game.Core -c program.mli
-ocamlopt -for-pack Game.Core -c program.ml
 
 ocamlopt -for-pack Game -pack -o core.cmx \
-list.cmx map.cmx seq.cmx IO.cmx int.cmx dots.cmx hand.cmx gene.cmx nature.cmx \
+list.cmx map.cmx dots.cmx hand.cmx gene.cmx nature.cmx \
 pigment.cmx side.cmx nucleus.cmx command.cmx tissue.cmx cursor.cmx energy.cmx \
-source.cmx statement.cmx tape.cmx processor.cmx OBSERV.cmx subject.cmx \
-program.cmx
+source.cmx statement.cmx tape.cmx processor.cmx OBSERV.cmx subject.cmx
 
 mv core.cmx ../../bin/core.cmx
 mv core.cmi ../../bin/core.cmi

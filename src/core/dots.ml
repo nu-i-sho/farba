@@ -30,6 +30,8 @@ let compare a b =
 let count = 6
 let min = O
 let max = OOOOOO
+let all =
+  [ O; OO; OOO; OOOO; OOOOO; OOOOOO ]
 
 let succ = function
   | O -> OO
@@ -47,31 +49,3 @@ let pred = function
   | OO -> O
   | O -> OOOOOO
 
-let all =
-  let rec gen x =
-    x :: ( if x <> max then
-             gen (succ x) else
-             []
-         ) in
-  gen min
-
-let char_binding =
-  let bind i x =
-    (i |> Int.succ
-       |> (+) (Char.code '0')
-       |> Char.chr
-    ), x in
-  List.mapi bind all
-         
-let load src =
-  match src () with
-  | Seq.Nil -> assert false
-  | Seq.Cons (c, next) -> 
-     List.assoc c char_binding,
-     next
-  
-let unload o =
-  let is_o (_, x) = x = o in
-  char_binding |> List.find is_o
-               |> fst
-               |> Seq.return

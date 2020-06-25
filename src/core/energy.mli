@@ -1,6 +1,5 @@
 module type STAGE = sig
   type t
-  include IO.S with type t := t
   val value : t -> Dots.t
   end
 

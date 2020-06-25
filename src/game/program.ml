@@ -1,38 +1,87 @@
-type t = Processor.t
-       
-let rec seq_of_input f () = 
-  match f () with
-  | '\000' -> Seq.Nil
-  | x      -> Seq.Cons (x, seq_of_input f)
-
-let seq_to_output f =
-  let out f =
-    match f () with
-    | Seq.Cons (x, f) -> x, f
-    | Seq.Nil         -> '\000', f in
-  f, out
-
-let load level =
-  let tissue, src =
-    level |> seq_of_input
-          |> Tissue.load in
-  let src = Seq.skip '.' src in
-  assert (src () =  Seq.Nil);
-  Processor.make tissue Source.empty
+type t =
+  { processor : Processor.t;
+     level_id : int;
+      session : string
+  }
   
-let restore backup =
-  let o, src =
-    backup |> seq_of_input
-           |> Processor.load in
-  assert (src () =  Seq.Nil);
-  o
+module Error = struct
+  module OpenNew = struct
+    type t =
+      | Level_is_missing
+      | Level_is_closed
+    end
+
+  module Restore = struct
+    type t =
+      | Backup_not_found
+      | Backup_is_corrupted
+    end
+       
+  module Save = struct
+    type t =
+      | Name_is_empty
+    end
+
+  module SaveAs = struct
+    type t =
+      | Name_is_empty
+      | File_exists
+    end
+  end
+       
+let open_new level_id =
+  try let level = Levels.get level_id Levels.std in
+      let p = Processor.make level.tissue Source.empty in
+      Result.Ok { processor = p;
+                   level_id = level.id;
+                    session = "" 
+                }
+      
+  with Invalid_argument _ ->
+      Result.Error Error.OpenNew.Level_is_missing
+
+let path level_id name
+  = Config.backups_dir
+  ^ Config.dir_separator
+  ^ (string_of_int level_id)
+  ^ Config.dir_separator
+  ^ name
+  ^ Config.backup_ext
+      
+let restore level_id name =
+  Result.bind
+    ( try Result.Ok (open_in (path level_id name))
+      with Not_found -> Result.Error Error.Restore.Backup_not_found
+    )
+    ( fun backup ->
+      try let p : Processor.t = Marshal.from_channel backup in
+          let () = close_in backup in
+          Result.Ok { processor = p;
+                       level_id;
+                        session = name
+                    }
+      with End_of_file | Failure _ ->
+          let () = close_in_noerr backup in
+          Result.Error Error.Restore.Backup_is_corrupted
+    )
 
 let save o =
-  o |> Processor.unload
-    |> seq_to_output
- 
-let () =
-  let () = Callback.register "load" load in
-  let () = Callback.register "restore" restore in
-  let () = Callback.register "save" save in
-  ()
+  if o.session = "" then
+    Result.Error Error.Save.Name_is_empty else
+    let file = open_out (path o.level_id o.session) in
+    let () = Marshal.to_channel file o.processor [] in
+    let () = close_out file in
+    Result.Ok o
+
+let save_force name o =
+  save { o with session = name }
+
+let save_as name o =
+  let path = path o.level_id name in
+  if Sys.file_exists path then
+    Result.Error Error.SaveAs.File_exists else
+    match save_force name o with
+    | Result.Error Error.Save.Name_is_empty -> 
+       Result.Error Error.SaveAs.Name_is_empty
+    | (Result.Ok _) as result ->
+       result 

@@ -1,4 +1,11 @@
-let o =
+type e =
+  {     id : int;
+    tissue : Tissue.t
+  }
+  
+type t = (unit -> Tissue.t) array
+
+let std =
   [| Level_001.build_tissue; 
      Level_002.build_tissue;
      Level_003.build_tissue;
@@ -10,5 +17,7 @@ let o =
      Level_009.build_tissue
   |]
 
-let build_tissue level =
-  o.(level) ()
+let get level o =
+  {     id = level;
+    tissue = o.(pred level) ()
+  }

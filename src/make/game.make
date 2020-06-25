@@ -17,11 +17,15 @@ level_009.ml \
 level_009.ml \
 levels.mli \
 levels.ml \
+config.mli \
+config.ml \
+program.mli \
+program.ml 
 
 ocamlopt -pack -o game.cmx \
 ../../bin/core.cmx level_001.cmx level_002.cmx level_003.cmx level_004.cmx \
 level_005.cmx level_006.cmx level_007.cmx level_008.cmx level_009.cmx \
-levels.cmx
+levels.cmx config.cmx program.cmx
 
 mv game.cmx ../../bin/game.cmx
 mv game.cmi ../../bin/game.cmi

@@ -4,7 +4,7 @@ module Error : sig
   module OpenNew : sig
     type t =
       private | Level_is_missing
-              | Level_is_closed
+              | Level_is_unavailable
     end
 
   module Restore : sig

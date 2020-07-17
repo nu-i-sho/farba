@@ -1,31 +1,34 @@
 #ifndef __PROGRAM_H__
 #define __PROGRAM_H__
 
-#include "caml/mlvalues.h"
+extern "C" {
+#include <caml/mlvalues.h>
+}
 
 class Program {
  public:
-  enum Status {
-    OK = 0,
-    EMPTY,
-    ERROR__OPEN_NEW__LEVEl_IS_MISSING,
-    ERROR__OPEN_NEW__LEVEL_IS_UNAVAILABLE,
-    ERROR__RESTORE__BACKUP_NOT_FOUND,
-    ERROR__RESTORE__BACKUP_IS_CORRUPTED,
-    ERROR__SAVE__NAME_IS_EMPTY,
-    ERROR__SAVE_AS__NAME_IS_EMPTY,
-    ERROR__SAVE_AS__FILE_EXISTS
-  };
-
+  enum Status { OK, ERROR };
   struct State {
-    enum Status status; 
+    enum Status status;
+    int error;
     value base;
   };
 
 private:
   State _state;
- public:  
+ public:
   class File {
+  public:
+    class Error {
+    public:
+      static const int LEVEL_IS_MISSING;
+      static const int LEVEL_IS_UNAILABLE;
+      static const int BACKUP_NOT_FOUND;
+      static const int BACKUP_IS_CORRUPTED;
+      static const int NAME_IS_EMPTY;
+      static const int PERMISSION_DENIED;
+      static const int FILE_ALREADY_EXIST;
+    };
   private:
     Program* _program;
     File(Program* program);

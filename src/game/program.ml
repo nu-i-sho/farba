@@ -3,31 +3,40 @@ type t =
      level_id : int;
       session : string
   }
-  
+
 module Error = struct
   module OpenNew = struct
-    type t =
-      | Level_is_missing
-      | Level_is_unavailable
+    type t = [ `LEVEL_IS_MISSING
+             | `LEVEL_IS_UNAILABLE
+             ]
     end
 
   module Restore = struct
-    type t =
-      | Backup_not_found
-      | Backup_is_corrupted
+    type t = [ `BACKUP_NOT_FOUND
+             | `BACKUP_IS_CORRUPTED
+             ]
     end
        
   module Save = struct
-    type t =
-      | Name_is_empty
+    type t = [ `NAME_IS_EMPTY
+             | `PERMISSION_DENIED
+             ]
+          
+    module As = struct
+      type nonrec t =
+        [ t
+        | `FILE_ALREADY_EXIST
+        ]
+      end
     end
-
-  module SaveAs = struct
-    type t =
-      | Name_is_empty
-      | File_exists
-    end
-  end
+       
+  type t =
+    [ OpenNew.t
+    | Restore.t
+    | Save.t
+    | Save.As.t
+    ]
+end
        
 let open_new level_id =
   try let level = Levels.get level_id Levels.std in
@@ -38,19 +47,25 @@ let open_new level_id =
                 }
       
   with Invalid_argument _ ->
-      Result.Error Error.OpenNew.Level_is_missing
+      Result.Error `LEVEL_IS_MISSING
 
-let path level_id name = Config.backups_dir
-                       ^ Config.dir_separator
-                       ^ (string_of_int level_id)
-                       ^ Config.dir_separator
-                       ^ name
-                       ^ Config.backup_ext
+let backup_dir_path level_id =
+  String.concat "" [ Config.backups_dir;
+                     Config.dir_separator;
+                     string_of_int level_id;
+                   ] 
+  
+let backup_file_path level_id name =
+  String.concat "" [ backup_dir_path level_id;   
+                     Config.dir_separator;
+                     name;
+                     Config.backup_ext;
+                   ] 
       
 let restore level_id name =
   Result.bind
-    ( try Result.Ok (open_in (path level_id name))
-      with Not_found -> Result.Error Error.Restore.Backup_not_found
+    ( try Result.Ok (open_in (backup_file_path level_id name))
+      with Not_found -> Result.Error `BACKUP_NOT_FOUND
     )
     ( fun backup ->
       try let p : Processor.t = Marshal.from_channel backup in
@@ -61,29 +76,35 @@ let restore level_id name =
                     }
       with End_of_file | Failure _ ->
           let () = close_in_noerr backup in
-          Result.Error Error.Restore.Backup_is_corrupted
+          Result.Error `BACKUP_IS_CORRUPTED
     )
 
 let save o =
-  if o.session = "" then
-    Result.Error Error.Save.Name_is_empty else
-    let file = open_out (path o.level_id o.session) in
-    let () = Marshal.to_channel file o.processor [] in
-    let () = close_out file in
-    Result.Ok o
+  try if o.session = "" then
+        Result.Error `NAME_IS_EMPTY else
+        let file = open_out (backup_file_path o.level_id o.session) in
+        let () = Marshal.to_channel file o.processor [] in
+        let () = close_out file in
+        Result.Ok o
+  with Unix.Unix_error (Unix.EACCES, _, _) ->
+    Result.Error `PERMISSION_DENIED
 
 let save_force name o =
   save { o with session = name }
 
+let create_dir_if_missing dir =
+  if not (Sys.file_exists dir) then
+    Unix.mkdir dir 0o640 else
+    ()
+  
 let save_as name o =
-  let path = path o.level_id name in
-  if Sys.file_exists path then
-    Result.Error Error.SaveAs.File_exists else
-    match save_force name o with
-    | (Result.Error Error.Save.Name_is_empty) -> 
-       Result.Error Error.SaveAs.Name_is_empty
-    | (Result.Ok _) as result ->
-       result 
+  try let () = create_dir_if_missing Config.backups_dir in
+      let () = create_dir_if_missing (backup_dir_path o.level_id) in
+      if Sys.file_exists (backup_file_path o.level_id name) then
+        Result.Error `FILE_ALREADY_EXIST else
+        save_force name o
+  with Unix.Unix_error (Unix.EACCES, _, _) ->
+    Result.Error `PERMISSION_DENIED 
 
 let () =
   let () = Callback.register "Program.open_new"   open_new   in

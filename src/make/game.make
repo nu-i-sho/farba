@@ -31,6 +31,10 @@ mv game.cmx ../../bin/game.cmx
 mv game.cmi ../../bin/game.cmi
 mv game.o ../../bin/game.o
 
+ocamlopt -output-obj -o game.o unix.cmxa ../../bin/game.cmx
+
+mv game.o ../../bin/game.o 
+
 rm ../../bin/core.cmx
 rm ../../bin/core.cmi
 rm ../../bin/core.o

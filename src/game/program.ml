@@ -11,32 +11,38 @@ module Error = struct
              ]
     end
 
+  module AccessFile = struct
+    type t = [ `PERMISSION_DENIED
+             ]
+    end
+       
   module Restore = struct
-    type t = [ `BACKUP_NOT_FOUND
+    type t = [  AccessFile.t
+             | `BACKUP_NOT_FOUND
              | `BACKUP_IS_CORRUPTED
              ]
     end
        
   module Save = struct
-    type t = [ `NAME_IS_EMPTY
-             | `PERMISSION_DENIED
+    type t = [  AccessFile.t
+             | `NAME_IS_EMPTY
              ]
-          
-    module As = struct
-      type nonrec t =
-        [ t
-        | `FILE_ALREADY_EXIST
-        ]
-      end
+    end
+
+  module SaveAs = struct
+    type t = [  Save.t
+             | `FILE_ALREADY_EXIST
+             ]
     end
        
   type t =
     [ OpenNew.t
     | Restore.t
+    | AccessFile.t
     | Save.t
-    | Save.As.t
+    | SaveAs.t
     ]
-end
+  end
        
 let open_new level_id =
   try let level = Levels.get level_id Levels.std in
@@ -61,33 +67,32 @@ let backup_file_path level_id name =
                      name;
                      Config.backup_ext;
                    ] 
-      
-let restore level_id name =
-  Result.bind
-    ( try Result.Ok (open_in (backup_file_path level_id name))
-      with Not_found -> Result.Error `BACKUP_NOT_FOUND
-    )
-    ( fun backup ->
-      try let p : Processor.t = Marshal.from_channel backup in
-          let () = close_in backup in
-          Result.Ok { processor = p;
-                       level_id;
+
+let restore level name =
+  try let backup = open_in (backup_file_path level name) in
+  try let state : Processor.t = Marshal.from_channel backup in
+      let () = close_in backup
+       in Result.Ok { processor = state;
+                       level_id = level;
                         session = name
                     }
-      with End_of_file | Failure _ ->
+  with | End_of_file | Failure _             ->
           let () = close_in_noerr backup in
           Result.Error `BACKUP_IS_CORRUPTED
-    )
+  with | Not_found                           ->
+          Result.Error `BACKUP_NOT_FOUND
+       | Unix.Unix_error (Unix.EACCES, _, _) ->
+          Result.Error `PERMISSION_DENIED
 
 let save o =
-  try if o.session = "" then
-        Result.Error `NAME_IS_EMPTY else
+  try if o.session <> "" then
         let file = open_out (backup_file_path o.level_id o.session) in
         let () = Marshal.to_channel file o.processor [] in
         let () = close_out file in
-        Result.Ok o
+        Result.Ok o else
+        Result.Error `NAME_IS_EMPTY
   with Unix.Unix_error (Unix.EACCES, _, _) ->
-    Result.Error `PERMISSION_DENIED
+        Result.Error `PERMISSION_DENIED
 
 let save_force name o =
   save { o with session = name }
@@ -104,7 +109,7 @@ let save_as name o =
         Result.Error `FILE_ALREADY_EXIST else
         save_force name o
   with Unix.Unix_error (Unix.EACCES, _, _) ->
-    Result.Error `PERMISSION_DENIED 
+        Result.Error `PERMISSION_DENIED 
 
 let () =
   let () = Callback.register "Program.open_new"   open_new   in

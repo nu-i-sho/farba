@@ -15,5 +15,7 @@ int main(int ac, char** av) {
   std::cout << "2";
   program.file().save_as("test");
   std::cout << "3";
+  program.file().restore(1, "test");
+  std::cout << "4";
   return 0;
 }

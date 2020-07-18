@@ -19,11 +19,6 @@ INIT_ERROR(NAME_IS_EMPTY);
 INIT_ERROR(PERMISSION_DENIED);
 INIT_ERROR(FILE_ALREADY_EXIST);
 
-#define CAML_FUNC(NAME) \
-  static const value* caml_func = NULL; \
-  if (caml_func == NULL) \
-    caml_func = caml_named_value(NAME)
-
 Program::State read_caml_state(value caml_state) {
   Program::State state;  
   switch (Tag_val(caml_state)) {
@@ -45,21 +40,25 @@ Program::File::File(Program* program) {
   _program = program;
 }
 
+#define CAML_FUNC(F, NAME) \
+  static const value* F = NULL; \
+  if (F == NULL) F = caml_named_value(NAME)
+
 void Program::File::open_new(int level) {
-  CAML_FUNC("Program.open_new");
+  CAML_FUNC(caml_open_new, "File.open_new");
   _program->_state = read_caml_state(
     caml_callback(
-      *caml_func,
+      *caml_open_new,
       Val_int(level)
     )
   );
 }
 
 void Program::File::restore(int level, const char* name) {
-  CAML_FUNC("Program.restore");
+  CAML_FUNC(caml_restore, "File.restore");
   _program->_state = read_caml_state(
     caml_callback2(
-      *caml_func,
+      *caml_restore,
       Val_int(level),
       caml_copy_string(name)
     )
@@ -67,20 +66,20 @@ void Program::File::restore(int level, const char* name) {
 }
 
 void Program::File::save() {
-  CAML_FUNC("Program.save");
+  CAML_FUNC(caml_save, "File.save");
   _program->_state = read_caml_state(
     caml_callback(
-      *caml_func,
+      *caml_save,
       _program->_state.base
     )
   );
 }
 
 void Program::File::save_as(const char* name) {
-  CAML_FUNC("Program.save_as");
+  CAML_FUNC(caml_save_as, "File.save_as");
   _program->_state = read_caml_state(
     caml_callback2(
-      *caml_func,
+      *caml_save_as,
       caml_copy_string(name),
       _program->_state.base
     )

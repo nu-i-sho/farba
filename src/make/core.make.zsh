@@ -32,54 +32,57 @@ src_files=(
     subject       mli ml
 )
 
-bins=()
+for_pack=()
 file=null
 for f in $src_files
 do
     if   [[ $f == "ml" || $f == "mli" ]]
     then $caml -for-pack $module -c $file.$f
     else file=$f
-	 bins+=$file.$x
+	 for_pack+=$file.$x
     fi
 done
 
-levels_module=Levels
-levels_package=${levels_module:l}
+mv_all_bins $bin
 
-echo "$levels_module build started"
+echo "Levels build started"
 
-cd $levels_package
+cd levels
 prev_bin=$bin
 bin="../$prev_bin"
 
-levels_bins=()
+levels_for_pack=()
+levels_code_lines=()
 for level in *
 do
     if   [[ ${level:e} == "ml" ]]
-    then $caml -I .. -for-pack $module.$levels_module -c $level
-	 levels_bins+=${leve:r}.$x
+    then $caml -I $bin -for-pack $module.TmpLevels -c $level
+	 levels_for_pack+=${level:r}.$x
+	 levels_code_lines+="    ${(C)level:r}.build_tissue;"
     fi
 done
 
-$caml -pack -for-pack $module -o $levels_package.$x $level_bins[@]
-mv_bins $levels_package $bin
-rm_tmp_bins
+mv_all_bins $bin
+$caml -I $bin -pack -for-pack $module -o tmpLevels.$x $levels_for_pack[@]
+mv_all_bins $bin
 
-bin=$prev_bin
-bins+=$bin/$levels_package.$x
 cd ..
+bin=$prev_bin
 
-echo "$levels_module build completed"
+./../make/inject.py "levels.ml" "levels" $levels_code_lines[@]
+$caml -I $bin -for-pack $module -c levels.mli levels.ml
+mv_all_bins $bin
 
-$caml -pack -o $package.$x $bins[@]
+for_pack+=tmpLevels.$x
+for_pack+=levels.$x
 
-rm_bins $levels_package $bin
-mv_bins $package $bin
-rm_tmp_bins
+echo "Levels build completed"
 
-$caml -output-obj -o $package.$o unix.cmxa $bin/$package.$x
+$caml -I $bin -pack -o $package.$x $for_pack[@]
+mv_all_bins $bin
 
-rm_bins $package $bin
-mv $package.$o $bin/$package.$o
+$caml -I $bin -output-obj -o $package.$o unix.cmxa $package.$x
+clear_bins $bin
+mv_all_bins $bin
 
 echo "$module build completed"

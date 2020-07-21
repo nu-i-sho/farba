@@ -30,6 +30,7 @@ src_files=(
     processor     mli ml
     OBSERV            ml
     subject       mli ml
+    config        mli ml
 )
 
 for_pack=()
@@ -63,7 +64,6 @@ do
 done
 
 mv_all_bins $bin
-
 $caml -I $bin -pack -for-pack $module -o stdLevels.$x $levels_for_pack[@]
 mv_all_bins $bin
 
@@ -79,11 +79,12 @@ for_pack+=levels.$x
 
 echo "Levels build completed"
 
+$caml -I $bin -for-pack $module -c root.mli root.ml
 $caml -I $bin -pack -o $package.$x $for_pack[@]
 mv_all_bins $bin
 
 $caml -I $bin -output-obj -o $package.$o unix.cmxa $package.$x
-#rm_all_bins $bin
+rm_all_bins $bin
 mv_all_bins $bin
 
 echo "$module build completed"

@@ -1,5 +1,3 @@
-include TmpLevels
-
 type e =
   {     id : int;
     tissue : Tissue.t
@@ -8,7 +6,7 @@ type e =
 type t = (unit -> Tissue.t) array
 
 let std =
-  [|
+  let open StdLevels in [|
 (* inject levels *)
     Level_001.build_tissue;
     Level_002.build_tissue;

@@ -56,14 +56,15 @@ levels_code_lines=()
 for level in *
 do
     if   [[ ${level:e} == "ml" ]]
-    then $caml -I $bin -for-pack $module.TmpLevels -c $level
+    then $caml -I $bin -for-pack $module.StdLevels -c $level
 	 levels_for_pack+=${level:r}.$x
 	 levels_code_lines+="    ${(C)level:r}.build_tissue;"
     fi
 done
 
 mv_all_bins $bin
-$caml -I $bin -pack -for-pack $module -o tmpLevels.$x $levels_for_pack[@]
+
+$caml -I $bin -pack -for-pack $module -o stdLevels.$x $levels_for_pack[@]
 mv_all_bins $bin
 
 cd ..
@@ -73,7 +74,7 @@ bin=$prev_bin
 $caml -I $bin -for-pack $module -c levels.mli levels.ml
 mv_all_bins $bin
 
-for_pack+=tmpLevels.$x
+for_pack+=stdLevels.$x
 for_pack+=levels.$x
 
 echo "Levels build completed"
@@ -82,7 +83,7 @@ $caml -I $bin -pack -o $package.$x $for_pack[@]
 mv_all_bins $bin
 
 $caml -I $bin -output-obj -o $package.$o unix.cmxa $package.$x
-clear_bins $bin
+#rm_all_bins $bin
 mv_all_bins $bin
 
 echo "$module build completed"

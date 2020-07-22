@@ -1,7 +1,12 @@
+#!/bin/zsh
+
 caml=ocamlopt
-x="cmx"
-i="cmi"
-o="o"
+cpp=(g++ -std=c++17)
+
+x=cmx
+i=cmi
+o=o
+clib=so
 
 mv_all_bins () { # $1 bin folder
     for f in *

@@ -1,4 +1,9 @@
+0 create bin folder (add to script?)
 1 ocaml + emacs + tuareg
 2 case sensitive volume for repo
 3 zsh for make files
 4 install python
+5 git config --global core.precomposeunicode true
+  git config --global core.quotePath false
+  for correct showing of unicode charactes by git in Mac OS X
+

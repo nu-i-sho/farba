@@ -8,7 +8,9 @@ i=cmi
 o=o
 clib=so
 
-mv_all_bins () { # $1 bin folder
+camlpath=$(ocamlopt -where)
+
+mv_all_caml_bins () { # $1 = bin folder
     for f in *
     do
 	if [[ ${f:e} == $x || ${f:e} == $i || ${f:e} == $o ]]
@@ -17,7 +19,18 @@ mv_all_bins () { # $1 bin folder
     done
 }
 
-rm_all_bins () { # $1 bin folder
+mv_caml_bins () {  # $1 = name, $2 = bin folder
+    files=($1.$i $1.$x $1.$o)
+    for file in $files
+    do
+	if [[ -f $file ]]
+	then
+	    mv $file $2/$file
+	fi
+    done
+}
+
+rm_all_caml_bins () { # $1 = bin folder
     jumpback=$(pwd)
     cd $1
     

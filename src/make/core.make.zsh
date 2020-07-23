@@ -44,7 +44,7 @@ do
     fi
 done
 
-mv_all_bins $bin
+mv_all_caml_bins $bin
 
 echo "Levels build started"
 
@@ -63,28 +63,32 @@ do
     fi
 done
 
-mv_all_bins $bin
+mv_all_caml_bins $bin
 $caml -I $bin -pack -for-pack $module -o stdLevels.$x $levels_for_pack[@]
-mv_all_bins $bin
+mv_all_caml_bins $bin
 
 cd ..
 bin=$prev_bin
 
 ./../make/inject.py "levels.ml" "levels" $levels_code_lines[@]
 $caml -I $bin -for-pack $module -c levels.mli levels.ml
-mv_all_bins $bin
+mv_all_caml_bins $bin
 
 for_pack+=stdLevels.$x
 for_pack+=levels.$x
 
 echo "Levels build completed"
 
-$caml -I $bin -for-pack $module -c root.mli root.ml
-$caml -I $bin -pack -o $package.$x $for_pack[@]
-mv_all_bins $bin
+$caml -I $bin -for-pack $module -c api.mli api.ml
+for_pack+=api.$x
 
-$caml -I $bin -output-obj -o $package.$o unix.cmxa $package.$x
-rm_all_bins $bin
-mv_all_bins $bin
+$caml -I $bin -pack -o $package.$x $for_pack[@]
+rm_all_caml_bins $bin
+mv_caml_bins $package $bin
+rm_all_caml_bins $(pwd)
+
+#$caml -I $bin -output-obj -o $package.$o unix.cmxa $package.$x
+#rm_all_bins $bin
+#mv_all_bins $bin
 
 echo "$module build completed"

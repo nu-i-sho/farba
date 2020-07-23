@@ -7,32 +7,32 @@ type t =
 module File = struct
   module Error = struct
     module OpenNew = struct
-      type t = [ `LEVEL_IS_MISSING
-               | `LEVEL_IS_UNAILABLE
+      type t = [ `Level_is_missing
+               | `Level_is_unavailable
                ]
       end
 
     module Access = struct
-      type t = [ `PERMISSION_DENIED
+      type t = [ `Permission_denied
                ]
       end
        
     module Restore = struct
       type t = [  Access.t
-               | `BACKUP_NOT_FOUND
-               | `BACKUP_IS_CORRUPTED
+               | `Backup_not_found
+               | `Backup_is_corrupted
                ]
       end
        
     module Save = struct
       type t = [  Access.t
-               | `NAME_IS_EMPTY
+               | `Name_is_empty
                ]
       end
 
     module SaveAs = struct
       type t = [  Save.t
-               | `FILE_ALREADY_EXIST
+               | `File_already_exists
                ]
       end
        
@@ -53,7 +53,7 @@ module File = struct
                       session = "" 
                   }  
     with Invalid_argument _ ->
-        Result.Error `LEVEL_IS_MISSING
+        Result.Error `Level_is_missing
 
   let backup_dir_path level =
     String.concat "" [ Config.backups_dir;
@@ -78,11 +78,11 @@ module File = struct
                      }
     with | End_of_file | Failure _             ->
             let () = close_in_noerr backup in
-            Result.Error `BACKUP_IS_CORRUPTED
+            Result.Error `Backup_is_corrupted
     with | Not_found                           ->
-            Result.Error `BACKUP_NOT_FOUND
+            Result.Error `Backup_not_found
          | Unix.Unix_error (Unix.EACCES, _, _) ->
-            Result.Error `PERMISSION_DENIED
+            Result.Error `Permission_denied
 
   let save o =
     try if o.session <> "" then
@@ -90,9 +90,9 @@ module File = struct
           let () = Marshal.to_channel file o.processor [] in
           let () = close_out file in
           Result.Ok o else
-          Result.Error `NAME_IS_EMPTY
+          Result.Error `Name_is_empty
     with Unix.Unix_error (Unix.EACCES, _, _) ->
-          Result.Error `PERMISSION_DENIED
+          Result.Error `Permission_denied
 
   let save_force name o =
     save { o with session = name }
@@ -106,10 +106,10 @@ module File = struct
     try let () = create_dir_if_missing Config.backups_dir in
         let () = create_dir_if_missing (backup_dir_path o.level_id) in
         if Sys.file_exists (backup_file_path o.level_id name) then
-          Result.Error `FILE_ALREADY_EXIST else
+          Result.Error `File_already_exists else
           save_force name o
     with Unix.Unix_error (Unix.EACCES, _, _) ->
-          Result.Error `PERMISSION_DENIED 
+          Result.Error `Permission_denied 
 
   end
 
@@ -119,13 +119,3 @@ module Debug = struct
     | Some p -> Some { o with processor = p }
     | None   -> None
   end
-              
-let () =
-  Callback.(
-    let () = register "File.open_new"   File.open_new   in
-    let () = register "File.restore"    File.restore    in
-    let () = register "File.save"       File.save       in
-    let () = register "File.save_as"    File.save_as    in
-    let () = register "File.save_force" File.save_force in
-    ()
-  )

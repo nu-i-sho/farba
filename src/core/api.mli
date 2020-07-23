@@ -3,32 +3,32 @@ type t
 module File : sig
   module Error : sig
     module OpenNew  : sig
-      type t = [ `LEVEL_IS_MISSING
-               | `LEVEL_IS_UNAILABLE
+      type t = [ `Level_is_missing
+               | `Level_is_unavailable
                ]
       end
 
     module Access : sig
-      type t = [ `PERMISSION_DENIED
+      type t = [ `Permission_denied
                ]
       end
          
     module Restore : sig
       type t = [  Access.t
-               | `BACKUP_NOT_FOUND
-               | `BACKUP_IS_CORRUPTED
+               | `Backup_not_found
+               | `Backup_is_corrupted
                ]
       end
        
     module Save : sig
       type t = [  Access.t
-               | `NAME_IS_EMPTY
+               | `Name_is_empty
                ]
       end
 
     module SaveAs : sig
       type t = [  Save.t
-               | `FILE_ALREADY_EXIST
+               | `File_already_exists
                ]
       end
        

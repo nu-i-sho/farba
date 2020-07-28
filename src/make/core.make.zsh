@@ -22,6 +22,7 @@ src_files=(
     nucleus       mli ml
     command           ml
     tissue        mli ml
+    CURSOR            ml
     cursor        mli ml
     energy        mli ml
     statement         ml
@@ -31,6 +32,7 @@ src_files=(
     OBSERV            ml
     subject       mli ml
     config        mli ml
+    oCursor       mli ml
 )
 
 for_pack=()

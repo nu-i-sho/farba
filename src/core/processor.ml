@@ -51,12 +51,12 @@ let back_step back o =
      let back = Stage.Back (Energy.unmark mark back) in
      Some { o with tape = o.tape |> Tape.Head.unmark
                                  |> Tape.Head.change_stage back
-       }
+          }
   | Link.Cell Statement.(Call (_, (Some wait))) ->
      let call = Stage.Call (Energy.return wait back) in
      Some { o with tape = o.tape |> Tape.Head.remove_wait
                                  |> Tape.Head.change_stage call
-       }
+          }
   | Link.Cell Statement.(Perform _ | Call _ | Declare _) ->
      Some o
   | Link.Start ->

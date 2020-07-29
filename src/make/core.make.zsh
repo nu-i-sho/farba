@@ -31,6 +31,7 @@ src_files=(
     OBSERV            ml
     PACK              ml
     PROCESSOR         ml
+    API               ml
     processor     mli ml
     subject       mli ml
     reObservable  mli ml
@@ -86,7 +87,9 @@ for_pack+=levels.$x
 echo "Levels build completed"
 
 $caml -I $bin -for-pack $module -c api.mli api.ml
+$caml -I $bin -for-pack $module -c oApi.mli oApi.ml
 for_pack+=api.$x
+for_pack+=oApi.$x
 
 $caml -I $bin -pack -o $package.$x $for_pack[@]
 rm_all_caml_bins $bin

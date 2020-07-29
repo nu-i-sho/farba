@@ -5,6 +5,16 @@ module Make (Processor : PROCESSOR.S) = struct
         session : string
     }
 
+  let make processor level_id session =
+    { processor;
+      level_id;
+      session
+    }
+
+  let processor o = o.processor
+  let level_id  o = o.level_id
+  let session   o = o.session
+    
   module File = struct
     module Error = struct
       module OpenNew = struct

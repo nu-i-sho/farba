@@ -28,4 +28,12 @@ module ABLE (* OBSERV.ABLE *) = struct
     val subscribe   : 'a observer -> 'a -> t -> 'a subscription * t
     val unsubscribe : 'a subscription -> t -> 'a * t
     end
+
+  module COPY (Observable : S) = struct
+    module type S = S
+      with type event = Observable.event
+       and type 'a observer = 'a Observable.observer
+       and type 'a subscription = 'a Observable.subscription
+       and module OBSERVER = Observable.OBSERVER
+    end
   end

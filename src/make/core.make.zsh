@@ -29,9 +29,11 @@ src_files=(
     source        mli ml
     tape          mli ml
     OBSERV            ml
+    PACK              ml
     PROCESSOR         ml
     processor     mli ml
     subject       mli ml
+    reObservable  mli ml
     oCursor       mli ml
     oProcessor    mli ml
     config        mli ml

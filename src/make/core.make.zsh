@@ -28,11 +28,13 @@ src_files=(
     statement         ml
     source        mli ml
     tape          mli ml
-    processor     mli ml
     OBSERV            ml
+    PROCESSOR         ml
+    processor     mli ml
     subject       mli ml
-    config        mli ml
     oCursor       mli ml
+    oProcessor    mli ml
+    config        mli ml
 )
 
 for_pack=()

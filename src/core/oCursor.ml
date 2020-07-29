@@ -48,8 +48,8 @@ let subscribe (type obs_t) ((module Obs) : obs_t observer) obs_init o =
   subscription, { o with subj }
                   
 let unsubscribe subscription o =
-  let state, subj = Subj.unsubscribe subscription o.subj in
-  state, { o with subj } 
+  let obs, subj = Subj.unsubscribe subscription o.subj in
+  obs, { o with subj } 
  
 let make tissue =
   { base = Base.make tissue;
@@ -109,15 +109,11 @@ let perform command o =
                     }
                     
                | Nature.Body ->
-                  let gaze = function
-                    | Some nucleus -> Nucleus.(nucleus.gaze)
-                    | None         -> assert false in
-                  
                   Moved_body {
                       event_data with
                       result = if source'.cursor_in then
-                                 ( if (gaze source .nucleus) = 
-                                      (gaze source'.nucleus) then
+                                 ( if (Option.get source .nucleus).gaze = 
+                                      (Option.get source'.nucleus).gaze then
                                      `Fail else
                                      `Rev_gaze
                                  ) else

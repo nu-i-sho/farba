@@ -1,50 +1,93 @@
 #ifndef __𝙰𝙿𝙸_HPP__
 #define __𝙰𝙿𝙸_HPP__
 
+#include "data/domain.hpp"
+#include "tissue_cell.hpp"
+#include "change.hpp"
+#include "nucleus_move.hpp"
+#include "𝚘𝚋𝚜𝚎𝚛𝚟𝚊𝚝𝚒𝚘𝚗.hpp"
+
 class 𝙰𝚙𝚒 {
  public:
   class 𝙵𝚒𝚕𝚎 {
    public:  
-    class 𝙴𝚛𝚛𝚘𝚛𝚜 {
+    class ResultOf {
      public:
-      virtual int Level_is_missing()     const = 0;
-      virtual int Level_is_unavailable() const = 0;
-      virtual int Backup_not_found()     const = 0;
-      virtual int Backup_is_corrupted()  const = 0;
-      virtual int Name_is_empty()        const = 0;
-      virtual int Permission_denied()    const = 0;
-      virtual int File_already_exists()  const = 0;
-      virtual int Nothing_to_save()      const = 0;
+      enum struct OpenNew {
+	OK,
+	Level_is_missing,
+	Level_is_unavailable
+      };
 
-      virtual ~𝙴𝚛𝚛𝚘𝚛𝚜();
+      enum struct Restore {
+	OK,
+	Permission_denied,
+	Backup_not_found,
+	Backup_is_corrupted,
+      };
+
+      enum struct Save {
+	OK,
+	Permission_denied,
+	Nothing_to_save,
+	Name_is_empty
+      };
+
+      enum struct SaveAs {
+        OK,
+	Permission_denied,
+	Name_is_empty,
+	Nothing_to_save,
+	File_already_exists,
+      };
+      
+     private:
+      ResultOf();
     };
 
     virtual ~𝙵𝚒𝚕𝚎();
-    𝙴𝚛𝚛𝚘𝚛𝚜* errors();
   
-    virtual int open_new(int level) = 0;
-    virtual int restore(int level, const char* name) = 0;
-    virtual int save() = 0;
-    virtual int save_as(const char* name) = 0;
-
-   protected:
-    𝙵𝚒𝚕𝚎();
-    virtual 𝙴𝚛𝚛𝚘𝚛𝚜* create_errors_node() = 0;
-
-   private:
-    𝙴𝚛𝚛𝚘𝚛𝚜* _errors;
+    virtual ResultOf::OpenNew open_new(int level) = 0;
+    virtual ResultOf::Restore restore(int level, const char* name) = 0;
+    virtual ResultOf::Save    save() = 0;
+    virtual ResultOf::SaveAs  save_as(const char* name) = 0;
   };
 
-  virtual ~𝙰𝚙𝚒();
+  class 𝙴𝚟𝚎𝚗𝚝𝚜𝙾𝚏 {
+   public:
+    class 𝙲𝚞𝚛𝚜𝚘𝚛 {
+     public:
+      struct Turned {
+        Hand direction;
+	Change<TissueCell> change;
+      };
+
+      enum struct MovedMindStatus { Success, Fail };
+      struct MovedMind : public NucleusMove<MovedMindStatus> { };
+
+      enum struct MovedBodyStatus { Success, Fail, Clotted, Rev_gaze };
+      struct MovedBody : public NucleusMove<MovedBodyStatus> { };
+
+      enum struct ReplicatedStatus { Success, Fail, Clotted, Self_clotted };
+      struct Replicated : public NucleusMove<ReplicatedStatus> {
+	Gene gene;
+      };
+
+      virtual 𝙾𝚋𝚜𝚎𝚛𝚟𝚊𝚋𝚕𝚎<Turned>*     turned()     = 0;
+      virtual 𝙾𝚋𝚜𝚎𝚛𝚟𝚊𝚋𝚕𝚎<MovedMind>*  moved_mind() = 0;
+      virtual 𝙾𝚋𝚜𝚎𝚛𝚟𝚊𝚋𝚕𝚎<MovedBody>*  moved_body() = 0;
+      virtual 𝙾𝚋𝚜𝚎𝚛𝚟𝚊𝚋𝚕𝚎<Replicated>* replicated() = 0;
+      virtual ~𝙲𝚞𝚛𝚜𝚘𝚛();
+    };
+
+    virtual 𝙲𝚞𝚛𝚜𝚘𝚛* cursor() = 0;
+    virtual ~𝙴𝚟𝚎𝚗𝚝𝚜𝙾𝚏();
+  };
+  
   virtual bool is_empty() const = 0;
-  𝙵𝚒𝚕𝚎* file();
-  
- protected:
-  𝙰𝚙𝚒();
-  virtual 𝙵𝚒𝚕𝚎* create_file_node() = 0;
-  
- private:
-  𝙵𝚒𝚕𝚎* _file;
+  virtual 𝙵𝚒𝚕𝚎* file() = 0;
+  virtual 𝙴𝚟𝚎𝚗𝚝𝚜𝙾𝚏* events_of() = 0;
+  virtual ~𝙰𝚙𝚒();
 };
 
 #endif

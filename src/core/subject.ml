@@ -20,7 +20,7 @@ module Make (Event : sig type t end) = struct
     ( module OBSERVER.S
         with type t = 'a
     )
-                  
+
   type 'a subscription =
     ( module OBSERVER.REGISTERED.S
         with type t = 'a

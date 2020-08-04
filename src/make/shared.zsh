@@ -30,7 +30,7 @@ mv_caml_bins () {  # $1 = name, $2 = bin folder
     done
 }
 
-rm_all_caml_bins () { # $1 = bin folder
+rm_all_caml_bins () { # $1 = in folder
     jumpback=$(pwd)
     cd $1
     
@@ -41,3 +41,12 @@ rm_all_caml_bins () { # $1 = bin folder
     cd $jumpback
 }
 
+rm_all_c_bins () { # $1 = in folder
+    jumpback=$(pwd)
+    cd $1
+    
+    find . -type f -iname \*.$o -delete
+    find . -type f -iname \*.$clib -delete
+
+    cd $jumpback
+}

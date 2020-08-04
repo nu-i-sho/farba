@@ -11,13 +11,13 @@ bin=../../bin
 $caml  -I $bin -output-obj -o api.$o \
        unix.cmxa core.$x api.ml
 
-#rm_all_caml_bins $bin
 mv api.$o $bin/api.$o
 rm_all_caml_bins $(pwd)
 
-$cpp -I $camlpath -L $camlpath -I ../𝚊𝚙𝚒 \
+$cpp -I $camlpath -L $camlpath -I .. \
      $bin/api.$o $bin/𝚊𝚙𝚒.$clib \
-     api.cpp -o $package.$clib -lunix -lasmrun
+     subject.cpp api.cpp \
+     -o $package.$clib -lunix -lasmrun
      
 mv $package.$clib $bin/$package.$clib
 

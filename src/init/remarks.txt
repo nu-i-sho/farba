@@ -1,5 +1,5 @@
 0 create bin folder (add to script?)
-1 ocaml + emacs + tuareg
+1 opam + ocaml + emacs + tuareg
 2 case sensitive volume for repo
 3 zsh for make files
 4 install python

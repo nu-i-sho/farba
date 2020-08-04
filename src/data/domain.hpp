@@ -1,6 +1,9 @@
 #ifndef __DOMAIN_HPP__
 #define __DOMAIN_HPP__
 
+#include <tuple>
+using namespace std;
+
 enum struct Side {
   Up,
   LeftUp,
@@ -26,9 +29,9 @@ enum struct Pigment {
   Gray
 };
 
-typedef std::tuple<int, int> TissueCoord
+typedef tuple<int, int> TissueCoord;
 
-struct Pigment {
+struct Nucleus {
   Pigment pigment;
   Side gaze;
 };

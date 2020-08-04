@@ -11,7 +11,7 @@ class 𝙾𝚋𝚜𝚎𝚛𝚟𝚎𝚛 {
 template <typename T_event>
 class 𝚂𝚞𝚋𝚜𝚌𝚛𝚒𝚙𝚝𝚒𝚘𝚗 {
  public:
-  virtual 𝙾𝚋𝚜𝚎𝚛𝚟𝚎𝚛<T_event*> cancel() = 0;
+  virtual 𝙾𝚋𝚜𝚎𝚛𝚟𝚎𝚛<T_event>* cancel() = 0;
   virtual ~𝚂𝚞𝚋𝚜𝚌𝚛𝚒𝚙𝚝𝚒𝚘𝚗();
 };
 

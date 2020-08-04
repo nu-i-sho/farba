@@ -1,40 +1,53 @@
-type event = 
-  | Turned of
-      { direction : Hand.t;
-           change : tissue_cell change;
-      }
-  | Moved_mind of [`Success | `Fail] move
-  | Moved_body of [`Success | `Fail | `Clotted | `Rev_gaze] move
-  | Replicated of
-      {      gene : Gene.t;
-        direction : Side.t;
-           change : (tissue_cell * tissue_cell) change;
-           result : [`Success | `Fail | `Clotted | `Self_clotted]
-      }
-
- and 'a change =
-  { before : 'a;
-     after : 'a
-  }
+module Event = struct
+  type 'a change =
+    { before : 'a;
+       after : 'a
+    }
     
- and tissue_cell =
-  {     coord : Tissue.Coord.t; 
-      nucleus : Nucleus.t option;
-    cytoplasm : Pigment.t option;
-      clotted : bool;
-    cursor_in : bool
-  }
+  type tissue_cell =
+    {     coord : Tissue.Coord.t; 
+        nucleus : Nucleus.t option;
+      cytoplasm : Pigment.t option;
+        clotted : bool;
+      cursor_in : bool
+    }
 
- and 'result move =
-  { direction :  Side.t;
-       change : (tissue_cell * tissue_cell) change;
-       result : 'result
-  }
+  type 'result move =
+    { direction :  Side.t;
+         change : (tissue_cell * tissue_cell) change;
+         result : 'result
+    }
+
+  type turned_msg =
+    { direction : Hand.t;
+         change : tissue_cell change;
+    }
+
+  type moved_mind_msg =
+    [`Success | `Fail] move
+
+  type moved_body_msg =
+    [`Success | `Fail | `Clotted | `Rev_gaze] move
+
+  type replicated_msg = 
+    {      gene : Gene.t;
+      direction : Side.t;
+         change : (tissue_cell * tissue_cell) change;
+         result : [`Success | `Fail | `Clotted | `Self_clotted]
+    }
+
+  type t = 
+    | Turned of turned_msg
+    | Moved_mind of moved_mind_msg
+    | Moved_body of moved_body_msg
+    | Replicated of replicated_msg
+  end
 
 module Base = Cursor
-module Subj = Subject.Make (struct type t = event end)
+module Subj = Subject.Make (struct type t = Event.t end)
 module OBSERVER = Subj.OBSERVER
-                
+
+type event = Event.t
 type 'a subscription = 'a Subj.subscription
 type 'a observer     = 'a Subj.observer
                
@@ -65,6 +78,7 @@ exception Clotted       = Base.Clotted
 exception Out_of_tissue = Base.Out_of_tissue 
 
 let perform command o =
+  let open Event in
   let cell i tissue =
     {     coord = i; 
         nucleus = Tissue.nucleus_opt i tissue;

@@ -3,7 +3,7 @@
 
 #include <list>
 #include <memory>
-#include "../𝚊𝚙𝚒/𝚘𝚋𝚜𝚎𝚛𝚟𝚊𝚝𝚒𝚘𝚗.hpp"
+#include "𝚊𝚙𝚒/𝚘𝚋𝚜𝚎𝚛𝚟𝚊𝚝𝚒𝚘𝚗.hpp"
 using namespace std;
 
 template <typename T_event>
@@ -23,15 +23,15 @@ class Subject final
     𝙾𝚋𝚜𝚎𝚛𝚟𝚎𝚛<T_event>* cancel() override;
     
    private:
-    Subject* _parent;
+    Subject<T_event>* _parent;
     bool _is_canceled;
-    list<𝙾𝚋𝚜𝚎𝚛𝚟𝚎𝚛<T_event>*>::iterator _pos;
-    Subscription(Subject* parent);
+    typename list<𝙾𝚋𝚜𝚎𝚛𝚟𝚎𝚛<T_event>*>::iterator _pos;
+    Subscription(Subject<T_event>* parent);
+    friend class Subject<T_event>;
   };
 
-  Subject* _self;
-  std::list<𝙾𝚋𝚜𝚎𝚛𝚟𝚎𝚛<T_event>*>* _observers;
-  friend class Subscription;
+  Subject<T_event>* _self;
+  list<𝙾𝚋𝚜𝚎𝚛𝚟𝚎𝚛<T_event>*>* _observers;
 };
 
 #endif

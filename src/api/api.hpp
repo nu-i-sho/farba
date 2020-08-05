@@ -26,7 +26,8 @@ class Api final : public 𝙰𝚙𝚒 {
     ResultOf::Restore restore(int level, const char* name) override;
     ResultOf::Save    save() override;
     ResultOf::SaveAs  save_as(const char* name) override;
-    
+
+    ~File() = default;
    private:
     Api* _api;
     File(Api* api);

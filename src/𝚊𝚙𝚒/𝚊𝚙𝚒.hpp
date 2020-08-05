@@ -42,15 +42,14 @@ class 𝙰𝚙𝚒 {
       };
       
      private:
-      ResultOf();
+      ResultOf() = default;
     };
 
-    virtual ~𝙵𝚒𝚕𝚎();
-  
     virtual ResultOf::OpenNew open_new(int level) = 0;
     virtual ResultOf::Restore restore(int level, const char* name) = 0;
     virtual ResultOf::Save    save() = 0;
     virtual ResultOf::SaveAs  save_as(const char* name) = 0;
+    virtual ~𝙵𝚒𝚕𝚎() = default;
   };
 
   class 𝙴𝚟𝚎𝚗𝚝𝚜𝙾𝚏 {
@@ -77,17 +76,17 @@ class 𝙰𝚙𝚒 {
       virtual 𝙾𝚋𝚜𝚎𝚛𝚟𝚊𝚋𝚕𝚎<MovedMind>*  moved_mind() = 0;
       virtual 𝙾𝚋𝚜𝚎𝚛𝚟𝚊𝚋𝚕𝚎<MovedBody>*  moved_body() = 0;
       virtual 𝙾𝚋𝚜𝚎𝚛𝚟𝚊𝚋𝚕𝚎<Replicated>* replicated() = 0;
-      virtual ~𝙲𝚞𝚛𝚜𝚘𝚛();
+      virtual ~𝙲𝚞𝚛𝚜𝚘𝚛() = default;
     };
 
     virtual 𝙲𝚞𝚛𝚜𝚘𝚛* cursor() = 0;
-    virtual ~𝙴𝚟𝚎𝚗𝚝𝚜𝙾𝚏();
+    virtual ~𝙴𝚟𝚎𝚗𝚝𝚜𝙾𝚏() = default;
   };
   
   virtual bool is_empty() const = 0;
   virtual 𝙵𝚒𝚕𝚎* file() = 0;
   virtual 𝙴𝚟𝚎𝚗𝚝𝚜𝙾𝚏* events_of() = 0;
-  virtual ~𝙰𝚙𝚒();
+  virtual ~𝙰𝚙𝚒() = default;
 };
 
 #endif

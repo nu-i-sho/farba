@@ -8,17 +8,21 @@ source ./shared.zsh
 cd ../$package
 bin=../../bin
 
-$caml  -I $bin -output-obj -o api.$o \
+$caml  -I $bin -output-obj -o CAMLapi.$o \
        unix.cmxa core.$x api.ml
 
-mv api.$o $bin/api.$o
+rm_all_caml_bins $bin
+mv CAMLapi.$o $bin/CAMLapi.$o
 rm_all_caml_bins $(pwd)
 
+$cpp -I .. -c subject.cpp 
+$cpp -I $camlpath -I .. -c api.cpp
 $cpp -I $camlpath -L $camlpath -I .. \
-     $bin/api.$o $bin/𝚊𝚙𝚒.$clib \
-     subject.cpp api.cpp \
-     -o $package.$clib -lunix -lasmrun
+     $bin/CAMLapi.$o subject.o api.o \
+     -o $package.$clib -lunix -lasmrun #-lm -ldl
      
 mv $package.$clib $bin/$package.$clib
+rm_all_c_bins $(pwd)
+rm $bin/CAMLapi.$o
 
 echo "$package build completed"

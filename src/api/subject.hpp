@@ -20,7 +20,7 @@ class Subject final
  private:
   class Subscription final : public 𝚂𝚞𝚋𝚜𝚌𝚛𝚒𝚙𝚝𝚒𝚘𝚗<T_event> {
    public:
-    𝙾𝚋𝚜𝚎𝚛𝚟𝚎𝚛<T_event>* cancel() override;
+    𝙾𝚋𝚜𝚎𝚛𝚟𝚎𝚛<T_event>* cancel();
     
    private:
     Subject<T_event>* _parent;

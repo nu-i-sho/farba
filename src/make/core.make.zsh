@@ -96,8 +96,4 @@ rm_all_caml_bins $bin
 mv_caml_bins $package $bin
 rm_all_caml_bins $(pwd)
 
-#$caml -I $bin -output-obj -o $package.$o unix.cmxa $package.$x
-#rm_all_bins $bin
-#mv_all_bins $bin
-
 echo "$module build completed"

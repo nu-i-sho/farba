@@ -38,7 +38,7 @@ let () =
     let () = register "File.save"       Api.File.save       in
     let () = register "File.save_as"    Api.File.save_as    in
     let () = register "File.save_force" Api.File.save_force in
-
+    
     let () = register "Events.Cursor.subscribe"
                        Events_of.Cursor.subscribe in
     let () = register "Events.Cursor.unsubscribe"

@@ -80,7 +80,7 @@ class Api final : public 𝙰𝚙𝚒 {
   File* _file;
   EventsOf* _events_of;
 
-  int extract_and_save_state(value caml_result);
+  int save_state(value caml_result);
   void subscribe_caml_cursor_events();
   void unsubscribe_caml_cursor_events();
 };

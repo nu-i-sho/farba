@@ -15,10 +15,12 @@ rm_all_caml_bins $bin
 mv CAMLapi.$o $bin/CAMLapi.$o
 rm_all_caml_bins $(pwd)
 
-$cpp -I .. -c subject.cpp 
+$cpp -I .. -c subject.cpp
+$cpp -I $camlpath -I .. -c caml.cpp
+$cpp -I $camlpath -I .. -c core.cpp
 $cpp -I $camlpath -I .. -c api.cpp
 $cpp -I $camlpath -L $camlpath -I .. \
-     $bin/CAMLapi.$o subject.o api.o \
+     $bin/CAMLapi.$o subject.o caml.o core.o api.o \
      -o $package.$clib -lunix -lasmrun #-lm -ldl
      
 mv $package.$clib $bin/$package.$clib

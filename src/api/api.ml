@@ -33,15 +33,15 @@ module Events_of = struct
                     
 let () =
   Callback.(
-    let () = register "File.open_new"   Api.File.open_new   in
-    let () = register "File.restore"    Api.File.restore    in
-    let () = register "File.save"       Api.File.save       in
-    let () = register "File.save_as"    Api.File.save_as    in
-    let () = register "File.save_force" Api.File.save_force in
+    let () = register "Core.Api.File.open_new"   Api.File.open_new   in
+    let () = register "Core.Api.File.restore"    Api.File.restore    in
+    let () = register "Core.Api.File.save"       Api.File.save       in
+    let () = register "Core.Api.File.save_as"    Api.File.save_as    in
+    let () = register "Core.Api.File.save_force" Api.File.save_force in
     
-    let () = register "Events.Cursor.subscribe"
+    let () = register "Core.Api.EventsOf.Cursor.subscribe"
                        Events_of.Cursor.subscribe in
-    let () = register "Events.Cursor.unsubscribe"
+    let () = register "Core.Api.EventsOf.Cursor.unsubscribe"
                        Events_of.Cursor.unsubscribe in
     ()
   )

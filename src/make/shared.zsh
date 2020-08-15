@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 
-cpp=(g++ -std=c++17)
+cpp=(g++ -std=c++17 -arch x86_64)
 caml=(ocamlopt -cc "$cpp")
 
 x=cmx

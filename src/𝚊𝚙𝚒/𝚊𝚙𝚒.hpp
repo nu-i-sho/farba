@@ -11,7 +11,7 @@ class 𝙰𝚙𝚒 {
  public:
   class 𝙵𝚒𝚕𝚎 {
    public:  
-    class ResultOf {
+    class StatusOf {
      public:
       enum struct OpenNew {
 	OK,
@@ -42,13 +42,13 @@ class 𝙰𝚙𝚒 {
       };
       
      private:
-      ResultOf() = default;
+      StatusOf() = default;
     };
 
-    virtual ResultOf::OpenNew open_new(int level) = 0;
-    virtual ResultOf::Restore restore(int level, const char* name) = 0;
-    virtual ResultOf::Save    save() = 0;
-    virtual ResultOf::SaveAs  save_as(const char* name) = 0;
+    virtual StatusOf::OpenNew open_new(int level) = 0;
+    virtual StatusOf::Restore restore(int level, const char* name) = 0;
+    virtual StatusOf::Save    save() = 0;
+    virtual StatusOf::SaveAs  save_as(const char* name) = 0;
     virtual ~𝙵𝚒𝚕𝚎() = default;
   };
 

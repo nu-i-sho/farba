@@ -13,11 +13,11 @@ extern "C" {
 
 using namespace std;
 using 𝙲𝚞𝚛𝚜𝚘𝚛 = 𝙰𝚙𝚒::𝙴𝚟𝚎𝚗𝚝𝚜𝙾𝚏::𝙲𝚞𝚛𝚜𝚘𝚛;
-using ResultOf = 𝙰𝚙𝚒::𝙵𝚒𝚕𝚎::ResultOf;
+using StatusOf = 𝙰𝚙𝚒::𝙵𝚒𝚕𝚎::StatusOf;
 using Result = Caml::Value::Result;
 
 Api::Api() {
-  _state = Val_unit;
+  _state = Caml::Value::unit;
   _file = nullptr;
   _events_of = nullptr;
 }
@@ -28,7 +28,7 @@ Api::~Api() {
 }
 
 bool Api::is_empty() const {
-  return !Is_block(_state);
+  return Caml::Value::is_block(_state);
 }
 
 Api::File* Api::file() {
@@ -49,44 +49,47 @@ void Api::subscribe_caml_cursor_events() {
   static const value* core_subscribe =
     Caml::function("Core.Api.EventsOf.Cursor.subscribe");
 
-  value subscription_and_state =
-    Caml::call(core_subscribe,
-      Caml::Value::of<Api*>(this),
-      _state
+  auto subscription_and_state =
+    Caml::Value::to<tuple<value, value>>(
+      Caml::call(core_subscribe,
+        Caml::Value::of<Api*>(this),
+        _state
+      )
     );
-    
-  value subscrioption = Caml::Value::field(subscription_and_state, 0);
-  value state         = Caml::Value::field(subscription_and_state, 1);
 
-  _cursor_events_subscription = subscrioption;
-  set_state(state);
+  _cursor_events_subscription =
+            get<0>(subscription_and_state);
+  set_state(get<1>(subscription_and_state));
 }
 
 void Api::unsubscribe_caml_cursor_events() {
   static const value* core_unsubscribe =
     Caml::function("Core.Api.EventsOf.Cursor.unsubscribe");
 					    
-  value observer_and_state =
-    Caml::call(core_unsubscribe,
-      _cursor_events_subscription,
-      _state
+  auto observer_and_state =
+    Caml::Value::to<tuple<value, value>>(
+      Caml::call(core_unsubscribe,
+        _cursor_events_subscription,
+        _state
+      )
     );
 
-  value state = Caml::Value::field(observer_and_state, 1);
-  set_state(state);
+  set_state(get<1>(
+    observer_and_state
+  ));
 }
 
 Api::File::File(Api* api) {
   _api = api;
 }
 
-ResultOf::OpenNew Api::File::open_new(int level) {
+StatusOf::OpenNew Api::File::open_new(int level) {
   if (!_api -> is_empty())
     _api -> unsubscribe_caml_cursor_events();
 
   static const value* core_open_new =
     Caml::function("Core.Api.File.open_new");
-  
+
   auto result =
     Caml::Value::to<Result>(
       Caml::call(core_open_new,
@@ -94,17 +97,16 @@ ResultOf::OpenNew Api::File::open_new(int level) {
       )
     );
 
-  auto status = ResultOf::OpenNew::OK;
-  if (result.is_ok) {
-    _api -> set_state(result.value);
-    _api -> subscribe_caml_cursor_events();
-  } else
-    status = Caml::Value::to<ResultOf::OpenNew>(result.value);
+  if (result.is_error())
+    return Caml::Value::to<StatusOf::OpenNew>(result.value);
 
-  return status;
+  _api -> set_state(result.value);
+  _api -> subscribe_caml_cursor_events();
+  
+  return StatusOf::OpenNew::OK; 
 }
 
-ResultOf::Restore Api::File::restore(int level, const char* name) {
+StatusOf::Restore Api::File::restore(int level, const char* name) {
   if (!_api -> is_empty())
     _api -> unsubscribe_caml_cursor_events();
 
@@ -118,20 +120,19 @@ ResultOf::Restore Api::File::restore(int level, const char* name) {
         Caml::Value::of<const char*>(name)
       )
     );
-  
-  auto status = ResultOf::Restore::OK;
-  if (result.is_ok) {
-    _api -> set_state(result.value);
-    _api -> subscribe_caml_cursor_events();
-  } else
-    status = Caml::Value::to<ResultOf::Restore>(result.value);
 
-  return status;
+  if (result.is_error())
+    return Caml::Value::to<StatusOf::Restore>(result.value);
+
+  _api -> set_state(result.value);
+  _api -> subscribe_caml_cursor_events();
+  
+  return StatusOf::Restore::OK;
 }
 
-ResultOf::Save Api::File::save() {
+StatusOf::Save Api::File::save() {
   if (_api -> is_empty())
-    return ResultOf::Save::Nothing_to_save;
+    return StatusOf::Save::Nothing_to_save;
 
   _api -> unsubscribe_caml_cursor_events();
 
@@ -142,21 +143,19 @@ ResultOf::Save Api::File::save() {
     Caml::Value::to<Result>(
       Caml::call(core_save, _api -> _state)
     );
-  
-  auto status = ResultOf::Save::OK;
-  if (result.is_ok) {
-    _api -> set_state(result.value);
-    _api -> subscribe_caml_cursor_events();
-  } else
-    status = Caml::Value::to<ResultOf::Save>(result.value);
 
+  if (result.is_error())
+    return Caml::Value::to<StatusOf::Save>(result.value);
+
+  _api -> set_state(result.value);
   _api -> subscribe_caml_cursor_events();
-  return status;
+
+  return StatusOf::Save::OK;
 }
 
-ResultOf::SaveAs Api::File::save_as(const char* name) {
+StatusOf::SaveAs Api::File::save_as(const char* name) {
   if (_api -> is_empty())
-    return ResultOf::SaveAs::Nothing_to_save;
+    return StatusOf::SaveAs::Nothing_to_save;
 
   _api -> unsubscribe_caml_cursor_events();
 
@@ -170,16 +169,14 @@ ResultOf::SaveAs Api::File::save_as(const char* name) {
         _api -> _state
       )
     );
-  
-  auto status = ResultOf::SaveAs::OK;
 
-  if (result.is_ok) {
-    _api -> set_state(result.value);
-    _api -> subscribe_caml_cursor_events();
-  } else
-    status = Caml::Value::to<ResultOf::SaveAs>(result.value);
+  if (result.is_error())
+    return Caml::Value::to<StatusOf::SaveAs>(result.value);
   
-  return status;
+  _api -> set_state(result.value);
+  _api -> subscribe_caml_cursor_events();
+
+  return StatusOf::SaveAs::OK;
 }
 
 extern "C" {

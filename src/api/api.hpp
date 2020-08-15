@@ -22,10 +22,10 @@ class Api final : public 𝙰𝚙𝚒 {
     friend class Api;
     
    public:
-    ResultOf::OpenNew open_new(int level) override;
-    ResultOf::Restore restore(int level, const char* name) override;
-    ResultOf::Save    save() override;
-    ResultOf::SaveAs  save_as(const char* name) override;
+    StatusOf::OpenNew open_new(int level) override;
+    StatusOf::Restore restore(int level, const char* name) override;
+    StatusOf::Save    save() override;
+    StatusOf::SaveAs  save_as(const char* name) override;
 
     ~File() = default;
    private:

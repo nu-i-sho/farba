@@ -18,7 +18,7 @@ extern "C" {
 
 using namespace std;
 using 𝙲𝚞𝚛𝚜𝚘𝚛 = 𝙰𝚙𝚒::𝙴𝚟𝚎𝚗𝚝𝚜𝙾𝚏::𝙲𝚞𝚛𝚜𝚘𝚛;
-using ResultOf = 𝙰𝚙𝚒::𝙵𝚒𝚕𝚎::ResultOf;
+using StatusOf = 𝙰𝚙𝚒::𝙵𝚒𝚕𝚎::StatusOf;
 
 namespace Caml {
   const value* function(const char* name) {
@@ -40,16 +40,22 @@ namespace Caml {
   namespace Value {
     struct Result {
       bool is_ok;
+      bool is_error() { return !is_ok; }
       value value;
     };
 
-    value field(value x, int i) {
-      return Field(x, i);
+    static const value unit = Val_unit;
+    
+    bool is_block(value x) {
+      return Is_block(x);
+    }
+
+    template<typename T> T to(value);
+    template<typename T> T field(value x, int i) {
+      return to<T>(Field(x, i));
     }
     
     template<typename T> struct CannotConvertTo { };
-    template<typename T> T to(value);
-    template<typename T> T field(value, int i);
     template<typename T> struct ConverterTo {
       static T convert(value x) {
 	if (is_enum<T>::value)
@@ -96,15 +102,15 @@ namespace Caml {
       }
     };
 
-    template<> struct ConverterTo<ResultOf::OpenNew> {
-      static ResultOf::OpenNew convert(value x) {
-	static const map<int, ResultOf::OpenNew> errors = {
+    template<> struct ConverterTo<StatusOf::OpenNew> {
+      static StatusOf::OpenNew convert(value x) {
+	static const map<int, StatusOf::OpenNew> errors = {
 							   
 	  { hash_of_polimorphic_variant("Level_is_missing"),
-            ResultOf::OpenNew::Level_is_missing
+            StatusOf::OpenNew::Level_is_missing
 	  },
 	  { hash_of_polimorphic_variant("Level_is_unavailable"),
-            ResultOf::OpenNew::Level_is_unavailable
+            StatusOf::OpenNew::Level_is_unavailable
 	  }
 	};
 
@@ -112,18 +118,18 @@ namespace Caml {
       }
     };
 
-    template<> struct ConverterTo<ResultOf::Restore> {
-      static ResultOf::Restore convert(value x) {
-	static const map<int, ResultOf::Restore> errors = {
+    template<> struct ConverterTo<StatusOf::Restore> {
+      static StatusOf::Restore convert(value x) {
+	static const map<int, StatusOf::Restore> errors = {
 
 	  { hash_of_polimorphic_variant("Permission_denied"),
-	    ResultOf::Restore::Permission_denied
+	    StatusOf::Restore::Permission_denied
 	  },
 	  { hash_of_polimorphic_variant("Backup_not_found"),
-	    ResultOf::Restore::Backup_not_found
+	    StatusOf::Restore::Backup_not_found
 	  },
 	  { hash_of_polimorphic_variant("Backup_is_corrupted"),
-	    ResultOf::Restore::Backup_is_corrupted
+	    StatusOf::Restore::Backup_is_corrupted
 	  }		 
 	};
 
@@ -131,15 +137,15 @@ namespace Caml {
       }
     };
 
-    template<> struct ConverterTo<ResultOf::Save> {
-      static ResultOf::Save convert(value x) {
-	static const map<int, ResultOf::Save> errors = {
+    template<> struct ConverterTo<StatusOf::Save> {
+      static StatusOf::Save convert(value x) {
+	static const map<int, StatusOf::Save> errors = {
 
 	  { hash_of_polimorphic_variant("Permission_denied"),
-            ResultOf::Save::Permission_denied
+            StatusOf::Save::Permission_denied
 	  },
-	  {  hash_of_polimorphic_variant("Name_is_empty"),
-	     ResultOf::Save::Name_is_empty
+	  { hash_of_polimorphic_variant("Name_is_empty"),
+	    StatusOf::Save::Name_is_empty
 	  }	
 	};
 
@@ -147,18 +153,18 @@ namespace Caml {
       }
     };
 
-    template<> struct ConverterTo<ResultOf::SaveAs> {
-      static ResultOf::SaveAs convert(value x) {
-	static const map<int, ResultOf::SaveAs> errors = {
+    template<> struct ConverterTo<StatusOf::SaveAs> {
+      static StatusOf::SaveAs convert(value x) {
+	static const map<int, StatusOf::SaveAs> errors = {
     
           { hash_of_polimorphic_variant("Permission_denied"),
-            ResultOf::SaveAs::Permission_denied
+            StatusOf::SaveAs::Permission_denied
 	  },
 	  { hash_of_polimorphic_variant("Name_is_empty"),
-            ResultOf::SaveAs::Name_is_empty
+            StatusOf::SaveAs::Name_is_empty
 	  },
 	  { hash_of_polimorphic_variant("File_already_exists"),
-            ResultOf::SaveAs::File_already_exists
+            StatusOf::SaveAs::File_already_exists
 	  } 
 	};
 
@@ -316,16 +322,9 @@ namespace Caml {
     template<typename T> T to(value x) {
       return ConverterTo<T>::convert(x);
     }
-
-    template<typename T> T field(value x, int i) {
-      return to<T>(Field(x, i));
-    }
     
-    template<typename T> struct CannotConvertFrom { };
     template<typename T> struct ConverterFrom {
-      static value convert(T) {
-	throw CannotConvertFrom<T>();
-      }
+      static value convert(T) = delete;
     };
 
     template<> struct ConverterFrom<int> {

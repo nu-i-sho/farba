@@ -1,7 +1,8 @@
-module Make (Cursor : CURSOR.S) : sig
-  include PROCESSOR.S
-
-  val make   : Cursor.t -> Tape.t -> t
-  val cursor : t -> Cursor.t
-  val tape   : t -> Tape.t
-  end
+type t
+   
+val make        : OTissue.Cursor.t -> Tape.t -> t
+val with_cursor : OTissue.Cursor.t -> t -> t
+val with_tape   : Tape.t -> t -> t
+val cursor      : t -> OTissue.Cursor.t
+val tape        : t -> Tape.t
+val step        : t -> t option 

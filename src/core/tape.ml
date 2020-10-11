@@ -13,7 +13,7 @@ module EMarkOpt = EnergyOpt.Make (Energy.Mark)
 
 module Cell = struct
   type t =
-    ( Command.t,
+    ( Tissue.Cursor.Command.t,
       Dots.t * EWaitOpt.t,
       Dots.t * EMarkOpt.t
     ) Statement.t

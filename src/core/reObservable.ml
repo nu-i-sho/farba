@@ -1,5 +1,5 @@
 module Make (Observable : OBSERV.ABLE.S)
-             (Container : PACK.MAKE (Observable).S) = struct
+             (Container : PACK.MAKE(Observable).S) = struct
 
   module OBSERVER = Observable.OBSERVER
 

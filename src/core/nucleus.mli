@@ -3,9 +3,9 @@ type t = private
            gaze : Side.t
          }
 
-val make      : Pigment.t -> Side.t -> t
-val is_cancer : t -> bool
-val turn      : Hand.t -> t -> t
-val rev_gaze  : t -> t
-val inject    : Pigment.t -> t -> t
-val replicate : Gene.t -> t -> t
+val make       : Pigment.t -> Side.t -> t
+val is_bastard : t -> bool
+val turn       : Hand.t -> t -> t
+val look_back  : t -> t
+val inject     : Pigment.t -> t -> t
+val replicate  : Gene.t -> t -> t

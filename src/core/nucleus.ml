@@ -8,17 +8,17 @@ let make pigment gaze =
     gaze
   }
     
-let is_cancer o = 
+let is_bastard o = 
     match o.pigment with
     | Pigment.(Blue | Gray) -> false
     | Pigment.(   White   ) -> true
 
-let turn dir o =
-  let gaze = Side.turn dir o.gaze in
+let turn hand o =
+  let gaze = Side.turn hand o.gaze in
   { o with gaze 
   }
 
-let rev_gaze o =
+let look_back o =
   let gaze = Side.rev o.gaze in
   { o with gaze 
   }
@@ -33,12 +33,11 @@ let inject cytoplasm o =
   }
 
 let replicate gene o =
-  let gaze = Side.rev o.gaze
-  and pigment = 
+  let child_pigment =
     ( match gene with
-      | Gene.Recessive -> Pigment.rev
-      | Gene.Dominant  -> Fun.id
-    ) o.pigment in
-  { pigment;
-    gaze
+      | Gene.Recessive -> o.pigment |> Pigment.recessive
+      | Gene.Dominant  -> o.pigment
+    ) in 
+  { (look_back o) with
+     pigment = child_pigment
   }

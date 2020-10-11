@@ -26,8 +26,7 @@ module Make (Event : sig type t end) = struct
         with type t = 'a
     ) 
     
-  let register (type a)
-         ((module Observer) : a observer) id state
+  let register (type a) ((module Observer) : a observer) id state
       : a subscription =
       ( module struct
           include Observer
@@ -38,49 +37,50 @@ module Make (Event : sig type t end) = struct
           end
       ) 
   
-    type e = Pack : 'a subscription -> e
-    type t = 
-      {   next_id : int;
-        observers : e list
-      } 
+  type e = Pack : 'a subscription -> e
+  type t = 
+    {   next_id : int;
+      observers : e list
+    } 
     
-    let empty = 
-      {   next_id = 0;
-        observers = []
-      }
+  let empty = 
+    {   next_id = 0;
+      observers = []
+    }
 
-    let subscribe (type a) (observer : a observer) state o =
-      let subscription = register observer o.next_id state in
-      subscription,
-      {   next_id = succ o.next_id;
-        observers = (Pack subscription) :: o.observers
-      }
+  let subscribe (type a) (observer : a observer) state o =
+    let subscription = register observer o.next_id state in
+    subscription,
+    {   next_id = succ o.next_id;
+      observers = (Pack subscription) :: o.observers
+    }
     
-    let unsubscribe (type a) ((module X) : a subscription) o = 
-      let rec unsubscribe: (e list) -> a * (e list) = function 
-        | (Pack (module H)) :: t when X.id = H.id ->
-            ( match X.Id with
-              | H.Id -> H.state, t
-              | _    -> raise Not_found
-            )
-        | h :: t ->
-            let state, t = unsubscribe t in
-            state, h :: t 
-        | [] -> raise Not_found in
-      let state, observers =
-        unsubscribe o.observers in
-      state, { o with observers }
+  let unsubscribe (type a) ((module X) : a subscription) o = 
+    let rec unsubscribe: (e list) -> a * (e list) = function 
+      | (Pack (module H)) :: t when X.id = H.id ->
+         ( match X.Id with
+           | H.Id -> H.state, t
+           | _    -> raise Not_found
+         )
+      | h :: t ->
+         let state, t = unsubscribe t in
+         state, h :: t 
+      | [] -> raise Not_found in
+    let state, observers =
+      unsubscribe o.observers in
+    state, { o with observers }
   
-    let send event o = 
-      let rec send = function
-        | (Pack (module H)) :: t ->
-            (Pack (module struct
-                     include H
-                     let state = H.send event H.state
-                     end)
-            ) :: (send t)
-        | [] -> [] in
-      { o with 
-        observers = send o.observers
-      }
+  let send event o = 
+    let rec send = function
+      | (Pack (module H)) :: t ->
+          (Pack (module struct
+                   include H
+                   let state = H.send event H.state
+                   end)
+          ) :: (send t)
+      | [] -> [] in
+    { o with 
+      observers = send o.observers
+    }
+    
   end 

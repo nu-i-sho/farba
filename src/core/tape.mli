@@ -1,6 +1,6 @@
 module Cell : sig
   type t =
-    ( Command.t,
+    ( Tissue.Cursor.Command.t,
       Dots.t * Energy.Wait.t option,
       Dots.t * Energy.Mark.t option
     ) Statement.t

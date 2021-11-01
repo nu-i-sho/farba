@@ -9,9 +9,9 @@ let make pigment gaze =
   }
     
 let is_bastard o = 
-    match o.pigment with
-    | Pigment.(Blue | Gray) -> false
-    | Pigment.(   White   ) -> true
+  match o.pigment with
+  | Pigment.(Blue | Gray) -> false
+  | Pigment.(   White   ) -> true
 
 let turn hand o =
   let gaze = Side.turn hand o.gaze in

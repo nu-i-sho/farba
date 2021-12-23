@@ -13,13 +13,15 @@ let is_bastard o =
   | Pigment.(Blue | Gray) -> false
   | Pigment.(   White   ) -> true
 
+let turn_left = turn Hand.Left
+let turn_right = turn Hand.Right
 let turn hand o =
   let gaze = Side.turn hand o.gaze in
   { o with gaze 
   }
 
 let look_back o =
-  let gaze = Side.rev o.gaze in
+  let gaze = Side.oposite o.gaze in
   { o with gaze 
   }
   
@@ -33,11 +35,9 @@ let inject cytoplasm o =
   }
 
 let replicate gene o =
-  let child_pigment =
-    ( match gene with
-      | Gene.Recessive -> o.pigment |> Pigment.recessive
-      | Gene.Dominant  -> o.pigment
-    ) in 
   { (look_back o) with
-     pigment = child_pigment
+     pigment = ( match gene with
+                 | Gene.Recessive -> o.pigment |> Pigment.oposite
+                 | Gene.Dominant  -> o.pigment
+               )
   }

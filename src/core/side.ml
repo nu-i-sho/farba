@@ -4,21 +4,24 @@ type t   = | Up
            | Down
            | LeftDown
            | RightDown
-let rev  = 
+
+let oposite  = 
   function | Up         -> Down
            | LeftUp     -> RightDown
            | RightUp    -> LeftDown
            | Down       -> Up
            | LeftDown   -> RightUp
            | RightDown  -> LeftUp
-let succ =
+
+let turn_left =
   function | Up         -> RightUp
            | RightUp    -> RightDown
 	   | RightDown  -> Down
 	   | Down       -> LeftDown
 	   | LeftDown   -> LeftUp
 	   | LeftUp     -> Up                        
-let pred = 
+
+let turn_right = 
   function | Up         -> LeftUp
 	   | LeftUp     -> LeftDown
 	   | LeftDown   -> Down
@@ -33,7 +36,7 @@ let compare a b =
   let to_int x = 
     let rec to_int x acc =
       if x = Up then acc else
-        to_int (succ x) (Int.succ acc) in
+        to_int (turn_left x) (succ acc) in
     to_int x 0 in
   (to_int a) -
   (to_int b)

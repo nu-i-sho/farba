@@ -5,7 +5,7 @@ type t   = | Up
            | LeftDown
            | RightDown
 
-let oposite  = 
+let opposite  = 
   function | Up         -> Down
            | LeftUp     -> RightDown
            | RightUp    -> LeftDown

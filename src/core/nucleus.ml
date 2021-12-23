@@ -21,7 +21,7 @@ let turn hand o =
   }
 
 let look_back o =
-  let gaze = Side.oposite o.gaze in
+  let gaze = Side.opposite o.gaze in
   { o with gaze 
   }
   
@@ -37,7 +37,7 @@ let inject cytoplasm o =
 let replicate gene o =
   { (look_back o) with
      pigment = ( match gene with
-                 | Gene.Recessive -> o.pigment |> Pigment.oposite
+                 | Gene.Recessive -> o.pigment |> Pigment.opposite
                  | Gene.Dominant  -> o.pigment
                )
   }

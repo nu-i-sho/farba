@@ -6,7 +6,7 @@ type t =
   | LeftDown
   | RightDown
     
-val oposite    : t -> t
+val opposite   : t -> t
 val turn_right : t -> t
 val turn_left  : t -> t
 val turn       : Hand.t -> t -> t

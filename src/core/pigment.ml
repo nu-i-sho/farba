@@ -1,6 +1,6 @@
 type t = White | Blue | Gray
                       
-let recessive = function
+let opposite = function
   | White -> White
   | Blue  -> Gray
   | Gray  -> Blue

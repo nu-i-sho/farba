@@ -1,11 +1,11 @@
 type t = Tissue.t
 
-let cytoplasm     = Tissue.cytoplasm
-let cytoplasm_opt = Tissue.cytoplasm_opt
-let nucleus       = Tissue.nucleus
-let nucleus_opt   = Tissue.nucleus_opt
-let cursor        = Tissue.cursor
-let clot          = Tissue.clot
+let cytoplasm  = Tissue.cytoplasm
+let cytoplasm' = Tissue.cytoplasm'
+let nucleus    = Tissue.nucleus
+let nucleus'   = Tissue.nucleus'
+let cursor     = Tissue.cursor
+let clot       = Tissue.clot
        
 module Coord = Tissue.Coord
 
@@ -18,54 +18,56 @@ module Constructor = struct
       | Clot_was_set of Coord.t
     end
 
-  module Base = Tissue.Constructor
-  module Subj = Subject.Make (Event)
-  module OBSERVER = Subj.OBSERVER
-  module Command = Base.Command
+  module OO = Tissue.Constructor
+  module Command = OO.Command
+  module Subject = Subject.Make (Event)
+  module OBSERVER = Subject.OBSERVER
 
   type event = Event.t
-  type 'a subscription = 'a Subj.subscription
-  type 'a observer     = 'a Subj.observer
+  type 'a subscription = 'a Subject.subscription
+  type 'a observer     = 'a Subject.observer
              
   type t =
-    { base : Base.t;
-      subj : Subj.t
+    { subj : Subj.t;
+        oo : OO.t
     }
 
   let subscribe (type obs_t) ((module Obs) : obs_t observer) obs_init o =
-    let subscription, subj = Subj.subscribe (module Obs) obs_init o.subj in
+    let subscription, subj = Subject.subscribe (module Obs) obs_init o.subj in
     subscription, { o with subj }
 
   let unsubscribe subscription o =
-    let obs, subj = Subj.unsubscribe subscription o.subj in
+    let obs, subj = Subject.unsubscribe subscription o.subj in
     obs, { o with subj }
 
   let empty =
-  { base = Base.empty;
-    subj = Subj.empty
+  { subj = Subj.empty
+      oo = OO.empty;
   }
 
   let perform command o =
-    let base = o.base |> Base.perform command 
-    and i    = o.base |> Base.product
-                      |> Tissue.cursor in
-    let event =
-      match command with
-      | Command.Move side       -> None
-      | Command.Add_cytoplasm x -> Some (Event.Cytoplasm_was_added (x, i))
-      | Command.Add_nucleus   x -> Some (Event.Nucleus_was_added (x, i))
-      | Command.Set_cursor      -> Some (Event.Cursor_was_set i)
-      | Command.Set_clot        -> Some (Event.Clot_was_set i) in
+    let oo' = o.oo |> OO.perform command 
+    and i   =  oo' |> OO.product
+                   |> Tissue.cursor in
+    let event = 
+      Command.(               Event.( 
+        match command with
+        | Move side       -> None
+        | Add_cytoplasm x -> Some (Cytoplasm_was_added (x, i))
+        | Add_nucleus   x -> Some (Nucleus_was_added (x, i))
+        | Set_cursor      -> Some (Cursor_was_set i)
+        | Set_clot        -> Some (Clot_was_set i) 
+      )) in
     let subj =
       match event with
-      | Some x -> o.subj |> Subj.send x
+      | Some x -> o.subj |> Subject.send x
       | None   -> o.subj in
-    { base;
-      subj
+    { subj;
+      oo = oo'
     }
 
   let product o =
-    Base.product o.base
+    OO.product o.oo
     
   end
 
@@ -78,13 +80,13 @@ module Destructor = struct
       | Clot_was_removed of Coord.t
     end
         
-  module Base = Tissue.Destructor
-  module Subj = Subject.Make (Event)
-  module OBSERVER = Subj.OBSERVER
+  module O = Tissue.Destructor
+  module Subject = Subject.Make (Event)
+  module OBSERVER = Subject.OBSERVER
 
   type event = Event.t
-  type 'a subscription = 'a Subj.subscription
-  type 'a observer     = 'a Subj.observer
+  type 'a subscription = 'a Subject.subscription
+  type 'a observer     = 'a Subject.observer
 
   type cell =
     { cytoplasm : Pigment.t option;
@@ -94,18 +96,18 @@ module Destructor = struct
     }
                        
   type t =
-    {  base : Base.t;
-       subj : Subj.t;
+    {  subj : Subject.t;
       coord : Coord.t;
         acc : cell;
+          o : O.t;
     }
 
   let subscribe (type obs_t) ((module Obs) : obs_t observer) obs_init o =
-    let subscription, subj = Subj.subscribe (module Obs) obs_init o.subj in
+    let subscription, subj = Subject.subscribe (module Obs) obs_init o.subj in
     subscription, { o with subj }
 
   let unsubscribe subscription o =
-    let obs, subj = Subj.unsubscribe subscription o.subj in
+    let obs, subj = Subject.unsubscribe subscription o.subj in
     obs, { o with subj }
 
   let empty_cell =
@@ -116,19 +118,19 @@ module Destructor = struct
      }
     
   let make tissue =
-    { coord = Coord.zero;
-       base = Base.make tissue;
-       subj = Subj.empty;
-        acc = empty_cell
+    {  subj = Subject.empty; 
+      coord = Coord.zero;
+        acc = empty_cell;
+          o = O.make tissue
     }
 
-  let next o =
+  let destroy_next o =
     let i = o.coord in
     let produce o =
       let send_if condition event o =
         if condition then
           let event = Lazy.force event in
-          let subj  = Subj.send event o.subj in
+          let subj  = Subject.send event o.subj in
           { o with subj } else
             o in
       
@@ -149,29 +151,30 @@ module Destructor = struct
         ) with acc = empty_cell
       } in
       
-    let command, base = Base.next o.base in
-    let o = { o with base } in
-    let o = match command with
-            | None                                       -> produce o      
-            | Some (Constructor.Command.Add_cytoplasm c) ->
-               let acc = { o.acc with cytoplasm = Some c }
-                      in { o with acc }
-            | Some (Constructor.Command.Add_nucleus n)   ->
-               let acc = { o.acc with nucleus = Some n }
-                      in { o with acc }
-            | Some (Constructor.Command.Set_cursor)      ->
-               let acc = { o.acc with is_cursor = true }
-                      in { o with acc }
-            | Some (Constructor.Command.Set_clot)        ->
-               let acc = { o.acc with is_clot = true }
-                      in { o with acc }
+    let command, oo' = o.oo |> OO.destroy_next  in
+    let o'  = { o with oo = oo' } in
+    let o'' = let open Constructor.Command in
+              match command with
+              | None                   -> produce o'      
+              | Some (Add_cytoplasm c) ->
+                  let acc = { o'.acc with cytoplasm = Some c }
+                         in { o' with acc }
+              | Some (Add_nucleus n)   ->
+                  let acc = { o'.acc with nucleus = Some n }
+                         in { o' with acc }
+              | Some (Set_cursor)      ->
+                  let acc = { o'.acc with is_cursor = true }
+                         in { o' with acc }
+              | Some (Set_clot)        ->
+                  let acc = { o'.acc with is_clot = true }
+                         in { o' with acc }
 
-            | Some (Constructor.Command.Move side)       ->
-                         { (produce o) with
-                           coord = Coord.move side i
-                         } in
+              | Some (Move side)       ->
+                            { (produce o') with
+                              coord = Coord.move side i
+                            } in
     command,
-    o
+    o''
     
   end
                    
@@ -221,39 +224,39 @@ module Cursor = struct
       | Replicated of replicated_msg
     end
 
-  module Base = Tissue.Cursor
-  module Subj = Subject.Make (Event)
+  module OO = Tissue.Cursor
+  module Command = OO.Command
+  module Subject = Subject.Make (Event)
   module OBSERVER = Subj.OBSERVER
-  module Command = Base.Command
-                  
+  
   type event = Event.t
-  type 'a subscription = 'a Subj.subscription
-  type 'a observer     = 'a Subj.observer
+  type 'a subscription = 'a Subject.subscription
+  type 'a observer     = 'a Subject.observer
                
   type t =
-    { base : Base.t;
-      subj : Subj.t;
+    { subj : Subject.t;
+        oo : OO.t;
     }
 
   let subscribe (type obs_t) ((module Obs) : obs_t observer) obs_init o =
-    let subscription, subj = Subj.subscribe (module Obs) obs_init o.subj in
+    let subscription, subj = Subject.subscribe (module Obs) obs_init o.subj in
     subscription, { o with subj }
                   
   let unsubscribe subscription o =
-    let obs, subj = Subj.unsubscribe subscription o.subj in
+    let obs, subj = Subject.unsubscribe subscription o.subj in
     obs, { o with subj } 
  
   let make tissue =
-    { base = Base.make tissue;
-      subj = Subj.empty
+    { subj = Subject.empty;
+        oo = OO.make tissue
     }
   
-  let tissue           o = o.base |> Base.tissue  
-  let is_out_of_tissue o = o.base |> Base.is_out_of_tissue
-  let is_clotted       o = o.base |> Base.is_clotted
+  let tissue           o = o.oo |> OO.tissue  
+  let is_out_of_tissue o = o.oo |> OO.is_out_of_tissue
+  let is_clotted       o = o.oo |> OO.is_clotted
 
-  exception Clotted       = Base.Clotted
-  exception Out_of_tissue = Base.Out_of_tissue 
+  exception Clotted       = OO.Clotted
+  exception Out_of_tissue = OO.Out_of_tissue 
 
   let perform command o =
     let open Event in
@@ -269,73 +272,80 @@ module Cursor = struct
       cell i tissue,
       cell j tissue in
     
-    let base, event =
-      let i = Tissue.cursor (tissue o) in
+    let o', event =
+      let tissue = tissue o in
+      let i = Tissue.cursor tissue in
+      
       match command with
       | Command.Turn hand ->
-         let before = cell i (tissue o)
-         and base   = Base.perform command o.base in
-         let after  = cell i (Base.tissue base) in
-         base, Turned { direction = hand;
-                           change = { before; after }
-                      }
+         let before  = cell i tissue  
+         and oo'     = OO.perform command o.oo in
+         let tissue' = OO.tissue oo' in
+         let after   = cell i tissue' in
+         
+         { o with oo = oo'
+         }, Turned { direction = hand; 
+                        change = { before; after }
+                    }
              
       | Command.Move nature ->
-         let dir = (Tissue.nucleus i (tissue o)).gaze in
-         let ((source, _) as before) = cells i dir (tissue o)
-         and base = Base.perform command o.base in
-         let ((source', target') as after) =
-           cells i dir (Base.tissue base) in
-         let event_data = { direction = dir;
+         let direction                     = (Tissue.nucleus i tissue).gaze in
+         let ((source, _) as before)       = cells i direction tissue
+         and oo'                           = OO.perform command o.oo in
+         let tissue'                       = OO.tissue oo' in
+         let ((source', target') as after) = cells i direction tissue' in
+         let event_data = { direction;
                                change = { before; after };
                                result = `Success
                           } in
        
-         base, ( match nature with
-                 | Nature.Mind ->
-                    Moved_mind {
-                        event_data with
-                        result = if target'.cursor_in then
-                                   `Success else
-                                   `Fail
-                    }
+         { o with oo = oo'
+         }, ( match nature with
+              | Nature.Mind ->
+                  Moved_mind { event_data with
+                    result = if target'.cursor_in then
+                               `Success else
+                               `Fail
+                  }
                     
-                 | Nature.Body ->
-                    Moved_body {
-                        event_data with
-                        result = if source'.cursor_in then
-                                   ( if (Option.get source .nucleus).gaze = 
-                                        (Option.get source'.nucleus).gaze then
-                                       `Fail else
-                                       `Rev_gaze
-                                   ) else
-                                   ( if target'.clotted then
-                                       `Clotted else
-                                       `Success
-                                   )
+               | Nature.Body ->
+                   Moved_body { event_data with
+                     result = if source'.cursor_in then
+                                ( if (Option.get source .nucleus).gaze = 
+                                     (Option.get source'.nucleus).gaze then
+                                    `Fail else
+                                    `Rev_gaze
+                                ) else
+                                ( if target'.clotted then
+                                    `Clotted else
+                                    `Success
+                                )
                       }
                )
        
       | Command.Replicate gene ->
-         let dir    = (Tissue.nucleus i (tissue o)).gaze in
-         let before = cells i dir (tissue o)
-         and base   = Base.perform command o.base in
-         let ((source', target') as after) =
-           cells i dir (Base.tissue base) in
-         base, Replicated { 
-                        gene;
-                   direction = dir;
-                      change = { before; after };
-                      result = if source'.clotted   then
-                                 `Self_clotted      else
-                               if target'.clotted   then
-                                 `Clotted           else
-                               if source'.cursor_in then
-                                 `Fail              else
-                                 `Success                  
-                 } in
-    { base;
-      subj = Subj.send event o.subj
+         let direction                     = (Tissue.nucleus i tissue).gaze in
+         let before                        = cells i direction tissue o
+         and oo'                           = OO.perform command o.oo in
+         let tissue'                       = OO.tissue oo' in
+         let ((source', target') as after) = cells i direction tissue' in
+         
+         { o with oo = oo'
+         }, Replicated { 
+                   gene;
+              direction = dir;
+                 change = { before; after };
+                 result = if source'.clotted   then
+                            `Self_clotted      else
+                          if target'.clotted   then
+                            `Clotted           else
+                          if source'.cursor_in then
+                            `Fail              else
+                            `Success                  
+         } in
+         
+    { o' with 
+      subj = Subject.send event o.subj 
     }
     
   end

@@ -80,7 +80,7 @@ module Destructor = struct
       | Clot_was_removed of Coord.t
     end
         
-  module O = Tissue.Destructor
+  module OO = Tissue.Destructor
   module Subject = Subject.Make (Event)
   module OBSERVER = Subject.OBSERVER
 
@@ -99,7 +99,7 @@ module Destructor = struct
     {  subj : Subject.t;
       coord : Coord.t;
         acc : cell;
-          o : O.t;
+         oo : OO.t;
     }
 
   let subscribe (type obs_t) ((module Obs) : obs_t observer) obs_init o =
@@ -121,7 +121,7 @@ module Destructor = struct
     {  subj = Subject.empty; 
       coord = Coord.zero;
         acc = empty_cell;
-          o = O.make tissue
+         oo = OO.make tissue
     }
 
   let destroy_next o =

@@ -333,7 +333,7 @@ module Cursor = struct
          { o with oo = oo'
          }, Replicated { 
                    gene;
-              direction = dir;
+              direction;
                  change = { before; after };
                  result = if source'.clotted   then
                             `Self_clotted      else

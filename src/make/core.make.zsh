@@ -40,6 +40,7 @@ src_files=(
     hand      ml
     gene      ml
     command   ml
+    dots      ml
 )
 
 for_pack=()

@@ -41,6 +41,7 @@ src_files=(
     gene      ml
     command   ml
     dots      ml
+    direction ml
 )
 
 for_pack=()

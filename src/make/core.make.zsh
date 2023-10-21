@@ -37,11 +37,13 @@ cd ../$package
 bin=../../bin
 
 src_files=(
-    hand      ml
-    gene      ml
-    command   ml
-    dots      ml
-    direction ml
+    hand           ml
+    gene           ml
+    command        ml
+    SEQUENTIAL     ml
+    dots       mli ml
+    direction      ml
+    energy     mli ml
 )
 
 for_pack=()

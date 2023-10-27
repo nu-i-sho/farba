@@ -44,6 +44,7 @@ src_files=(
     dots       mli ml
     direction      ml
     energy     mli ml
+    tape       mli ml
 )
 
 for_pack=()

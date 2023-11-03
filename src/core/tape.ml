@@ -62,7 +62,8 @@ module Make = functor (Num : SEQUENTIAL.T) -> struct
 
     let command o = o.command
     let tape    o = o.tape
-    let succ    o =
+
+    let succ o =
       let open Direction in
       let open Statement in
       let with_command  x tape = Ok { command = Some x; tape }
@@ -246,8 +247,8 @@ module Make = functor (Num : SEQUENTIAL.T) -> struct
                          })
 
     let start tape =
-       succ { tape; command = None }
-  end
+      succ { tape; command = None }
+    end
 
   module Step = struct
     type nonrec 'cmd t =
@@ -260,20 +261,20 @@ module Make = functor (Num : SEQUENTIAL.T) -> struct
     let tiks_count o = o.ticks_count
     let tape       o = o.tape
 
-    let rec up_to_next_command i tick_result =   
+    let rec up_to_command i tick_result =   
       match tick_result with
       | Error _ as e -> e
       | Ok         x ->
          match Tick.command x with
-         | None      -> up_to_next_command (Int.succ i) (Tick.succ x)
+         | None      -> up_to_command (Int.succ i) (Tick.succ x)
          | Some cmd  -> Ok {     command = cmd; 
                              ticks_count = i;
                                     tape = Tick.tape x
                            }            
 
-    let start  tape = up_to_next_command 1 (Tick.start   tape)
-    let adjust tick = up_to_next_command 1 (Ok tick)
-    let succ      o = up_to_next_command 1 (Tick.start o.tape)
+    let start  tape = up_to_command 1 (Tick.start   tape)
+    let adjust tick = up_to_command 1 (Ok tick)
+    let succ      o = up_to_command 1 (Tick.start o.tape)
     let tick      o = Tick.start o.tape
     end
             

@@ -77,48 +77,48 @@ module Make = functor (Num : SEQUENTIAL.T) -> struct
       match o.tape with
       | Empty -> Error Nothing_to_do_with_empty_program
       
-      | Middle  { prev = ps :: pss;
-                  curr = cs, (Move (( Find (_, Back, _)
-                                    | Return (_, Back)
-                                    | Close _) as e));
-                  next = nss
-                } -> middle { prev = pss;
-                              curr = ps, (Apply e);
-                              next = cs :: nss
+      | Middle ({ prev = p :: prev;
+                  curr = c, (Move (( Find (_, Back, _)
+                                   | Return (_, Back)
+                                   | Close _) as e))
+                } as o)
+                  -> middle { prev;
+                              curr = p, (Apply e);
+                              next = c :: o.next
                             }
-      | Middle  { prev = [];
-                  curr = cs, (Move (( Find (_, Back, _)
-                                    | Return (_, Back)
-                                    | Close _) as e));
-                  next = nss
-                } ->   left { curr = Apply e;
-                              next = cs, nss
+      | Middle ({ prev = [];
+                  curr = c, (Move (( Find (_, Back, _)
+                                   | Return (_, Back)
+                                   | Close _) as e))
+                } as o)
+                  ->   left { curr = Apply e;
+                              next = c, o.next
                             }
            
-      | Middle  { prev = pss;
-                  curr = cs, (Move e);
-                  next = ns :: nss
-                } -> middle { prev = cs :: pss;
-                              curr = ns, (Apply e);
-                              next = nss
+      | Middle ({ curr = c, (Move e);
+                  next = n :: next
+                } as o)
+                  -> middle { prev = c :: o.prev;
+                              curr = n, (Apply e);
+                              next;
                             }
-      | Middle  { prev = pss;
-                  curr = cs, (Move e);
+      | Middle ({ curr = c, (Move e);
                   next = []
-                } ->  right { prev = cs, pss;
+                } as o)
+                  ->  right { prev = c, o.prev;
                               curr = Apply e;
                             }
 
       | Left    { curr = Move e;
-                  next = ns, nss
+                  next = n, next
                 } -> middle { prev = [];
-                              curr = ns, (Apply e);
-                              next = nss
+                              curr = n, (Apply e);
+                              next
                             }
-      | Right   { prev = ps, pss;
+      | Right   { prev = p, prev;
                   curr = Move e
-                } -> middle { prev = pss;
-                              curr = ps, (Apply e);
+                } -> middle { prev;
+                              curr = p, (Apply e);
                               next = []
                             }
 
@@ -133,10 +133,10 @@ module Make = functor (Num : SEQUENTIAL.T) -> struct
                               curr = (Execute (proc, (ew :: ews))), 
                                      (Move (Find (ef, Forward, proc)))
                             }
-      | Middle ({ curr = ((Declare _) as cs), (Apply (Call e)) } as o)
+      | Middle ({ curr = ((Declare _) as c), (Apply (Call e)) } as o)
                   -> let ec = Energy.close e in
                      middle { o with
-                              curr = cs, (Move (Close ec))
+                              curr = c, (Move (Close ec))
                             }
       | Right  ({ curr = Apply (Call e) } as o)
                   -> let ec = Energy.close e in
@@ -160,21 +160,21 @@ module Make = functor (Num : SEQUENTIAL.T) -> struct
                               curr = Move (Find (e, Back, proc))
                             }
 
-      | Middle ({ curr = ((Declare (proc, (oe :: oes))) as cs), 
+      | Middle ({ curr = ((Declare (proc, (oe :: oes))) as c), 
                          (Apply (Close e)) 
                 } as o)
                   -> middle { o with
                               curr = match Energy.return oe e with
-                                     | None    -> cs, (Move (Close e))
+                                     | None    -> c, (Move (Close e))
                                      | Some er -> (Declare (proc, oes)), 
                                                   (Move (Return (er, Back)))
                             }
-      | Middle ({ curr = ((Execute (proc, (ew :: ews))) as cs), 
+      | Middle ({ curr = ((Execute (proc, (ew :: ews))) as c), 
                   (Apply ((Return (e, _)) as er)) 
                 } as o)
                   -> middle { o with
                               curr = match Energy.done' ew e with
-                                     | None    -> cs, (Move er)
+                                     | None    -> c, (Move er)
                                      | Some ec -> (Execute (proc, ews)),
                                                   (Move (Call ec))
                             }
@@ -183,9 +183,9 @@ module Make = functor (Num : SEQUENTIAL.T) -> struct
                               curr = Move (Return (e, Forward)) 
                             }
 
-      | Middle ({ curr = cs, (Apply e) } as o)
+      | Middle ({ curr = c, (Apply e) } as o)
                   -> middle { o with
-                              curr = cs, (Move e)
+                              curr = c, (Move e)
                             }
       | Left   ({ curr = Apply e } as o)
                   ->   left { o with

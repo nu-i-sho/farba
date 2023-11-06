@@ -46,6 +46,7 @@ src_files=(
     energy     mli ml
     statement      ml
     tape       mli ml
+    side           ml
 )
 
 for_pack=()

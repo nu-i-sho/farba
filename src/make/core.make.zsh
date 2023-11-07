@@ -47,6 +47,7 @@ src_files=(
     statement      ml
     tape       mli ml
     side           ml
+    hexMap     mli ml
 )
 
 for_pack=()

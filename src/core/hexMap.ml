@@ -7,29 +7,24 @@ module Coord = struct
     match  compare y1 y2 with
     | 0 -> compare x1 x2
     | n -> n
-           
+          
   let move side (x, y) =
     let dx, dy =
-      match x mod 2, side with
+      match (y mod 2 = 0), side with
         
-      | 0, Side.Up        ->  0, -1  
-      | 0, Side.LeftUp    -> -1, -1
-      | 0, Side.RightUp   -> +1, -1
-      | 0, Side.Down      ->  0, +1
-      | 0, Side.LeftDown  -> -1,  0
-      | 0, Side.RightDown -> +1,  0
+      |     _, Side.Up        ->  0, -1
+      |     _, Side.Down      ->  0, +1
+  
+      |  true, Side.LeftUp    -> -1, -1
+      |  true, Side.RightUp   -> +1, -1
+      |  true, Side.LeftDown  -> -1,  0
+      |  true, Side.RightDown -> +1,  0
                            
-      | 1, Side.Up        ->  0, -1
-      | 1, Side.LeftUp    -> -1,  0
-      | 1, Side.RightUp   -> +1,  0
-      | 1, Side.Down      ->  0, +1 
-      | 1, Side.LeftDown  -> -1, +1
-      | 1, Side.RightDown -> +1, +1
-
-      | _ -> failwith (
-               "'x mod 2' can't be "  ^
-               "anything except 0 or 1"
-             ) in
+      | false, Side.LeftUp    -> -1,  0
+      | false, Side.RightUp   -> +1,  0
+      | false, Side.LeftDown  -> -1, +1
+      | false, Side.RightDown -> +1, +1 in
+                                        
     x + dx,
     y + dy
            

@@ -3,14 +3,14 @@ module Coord = struct
 
   let zero = 0, 0
 
-  let compare (x1, y1) (x2, y2) =
-    match  compare y1 y2 with
-    | 0 -> compare x1 x2
-    | n -> n
+  let compare (i1, j1) (i2, j2) =
+    match  compare i1 i2 with
+    | 0 -> compare j1 j2
+    | x -> x
           
-  let move side (x, y) =
-    let dx, dy =
-      match (y mod 2 = 0), side with
+  let move side (i, j) =
+    let di, dj =
+      match (j mod 2 = 0), side with
         
       |     _, Side.Up        ->  0, -1
       |     _, Side.Down      ->  0, +1
@@ -24,10 +24,14 @@ module Coord = struct
       | false, Side.RightUp   -> +1,  0
       | false, Side.LeftDown  -> -1, +1
       | false, Side.RightDown -> +1, +1 in
-                                        
-    x + dx,
-    y + dy
-           
+    
+    i + di,
+    j + dj
+
+  let to_2D eR iR (i, j) = 
+    iR * (i * 2 + 1),
+    eR * ((j + (i mod 2)) * 2 + abs ((i mod 2) - 1))
+    
   end
 
 include Map.Make(Coord)

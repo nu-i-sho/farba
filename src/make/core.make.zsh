@@ -48,6 +48,7 @@ src_files=(
     tape       mli ml
     side           ml
     hexMap     mli ml
+    tissue         ml
 )
 
 for_pack=()

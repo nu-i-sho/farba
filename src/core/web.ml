@@ -49,36 +49,36 @@ module Map = struct
   let resolved f o = { o with resolved = f o.resolved }
 end
                    
-let find_opt get_leyer i o =
+let find_opt get_layer i o =
   match        o |> Get.problems
-                 |> get_leyer
+                 |> get_layer
                  |> HexMap.find_opt i with
   | None    -> o |> Get.resolved
-                 |> get_leyer
+                 |> get_layer
                  |> HexMap.find_opt i
   | x       -> x
 
-let find get_leyer i o =
+let find get_layer i o =
   match        o |> Get.problems
-                 |> get_leyer
+                 |> get_layer
                  |> HexMap.find_opt i with
   | None    -> o |> Get.resolved
-                 |> get_leyer
+                 |> get_layer
                  |> HexMap.find i
   | Some x  -> x                  
 
-let add map_leyer i x o =
+let add map_layer i x o =
   { resolved = o |> Get.resolved
-                 |> map_leyer (HexMap.remove i);
+                 |> map_layer (HexMap.remove i);
     problems = o |> Get.problems
-                 |> map_leyer (HexMap.add i x)
+                 |> map_layer (HexMap.add i x)
   }
 
-let remove map_leyer i o =
+let remove map_layer i o =
   { resolved = o |> Get.resolved
-                 |> map_leyer (HexMap.remove i);
+                 |> map_layer (HexMap.remove i);
     problems = o |> Get.problems
-                 |> map_leyer (HexMap.remove i)
+                 |> map_layer (HexMap.remove i)
   }
   
 let cytoplasm_opt i o = find_opt Area.Get.cytoplasms i o

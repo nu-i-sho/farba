@@ -48,7 +48,7 @@ src_files=(
     tape       mli ml
     side           ml
     hexMap     mli ml
-    tissue         ml
+    web        mli ml
 )
 
 for_pack=()

@@ -23,6 +23,6 @@ val remove_virus     : Coord.t -> ('c, 'n, 'v) t -> ('c, 'n, 'v) t
 val viruses          : ('v -> bool) -> ('c, 'n, 'v) t -> (Coord.t * 'v) list
 
 val resolve          : Coord.t -> ('c, 'n, 'v) t -> ('c, 'n, 'v) t
-val dissolve         : Coord.t -> ('c, 'n, 'v) t -> ('c, 'n, 'v) t
+val problemize       : Coord.t -> ('c, 'n, 'v) t -> ('c, 'n, 'v) t
                  
 val is_resolved      : ('c, 'n, 'v) t -> bool

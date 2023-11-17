@@ -124,8 +124,8 @@ let replace map_source map_target i o =
           | None   -> o in
       o
  
-let resolve  i o = replace Map.problems Map.resolved i o
-let dissolve i o = replace Map.resolved Map.problems i o
+let resolve    i o = replace Map.problems Map.resolved i o
+let problemize i o = replace Map.resolved Map.problems i o
                  
 let is_resolved o =
   o |> Get.problems

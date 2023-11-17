@@ -97,6 +97,18 @@ let remove_cytoplasm i o = remove Area.Map.cytoplasms i o
 let remove_nucleus   i o = remove Area.Map.nuclei     i o 
 let remove_virus     i o = remove Area.Map.viruses    i o
 
+let viruses predicate o =
+  let viruses x =
+    let predicate _ = predicate in
+     x |> Area.Get.viruses
+       |> HexMap.filter predicate
+       |> HexMap.bindings in
+  List.append
+    (o |> Get.resolved
+       |> viruses)
+    (o |> Get.problems
+       |> viruses)
+                         
 let replace map_source map_target i o =
   let o = match cytoplasm_opt i o with
           | Some x -> o |> map_source (Area.Map.cytoplasms (HexMap.remove i))

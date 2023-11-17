@@ -48,7 +48,7 @@ src_files=(
     tape       mli ml
     side           ml
     hexMap     mli ml
-    web        mli ml
+    canvas     mli ml
 )
 
 for_pack=()

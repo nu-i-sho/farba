@@ -1,3 +1,3 @@
 type t =
   | Dominant
-  | Right
+  | Recessive

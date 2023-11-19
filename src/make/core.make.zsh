@@ -46,9 +46,12 @@ src_files=(
     energy     mli ml
     statement      ml
     tape       mli ml
-    side           ml
+    side       mli ml
     hexCoord   mli ml
     canvas     mli ml
+    cytoplasm      ml
+    consistence    ml
+    nucleus    mli ml
 )
 
 for_pack=()

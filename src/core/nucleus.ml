@@ -9,13 +9,19 @@ module Alive = struct
     | `HealthyB gaze -> `HealthyB (f gaze)
     | `HealthyG gaze -> `HealthyG (f gaze)
     | `Bastard  gaze -> `Bastard  (f gaze)  
+  end
 
+module Dead = struct
+  type t = [ `Clot of Consistence.t ]
   end
 
 type t =
   [ Alive.t
-  | `Clot of Consistence.t
+  | Dead.t
   ]
+
+let of_alive x = (x : Alive.t :> t)
+let of_dead  x = (x : Dead.t  :> t)
 
 let look_back = Alive.map  Side.opposite
 let turn hand = Alive.map (Side.turn hand) 
@@ -70,10 +76,10 @@ let replicate gene from_cytoplasm o =
 module MergeResult = struct
   type t =
     | NucleiDissolved
-    | CytoplasmClosed of [ `Closed ]
+    | CytoplasmClosed of Cytoplasm.Dead.t
     | NucleiMerged    of [ `HealthyB of Side.t
                          | `HealthyG of Side.t
-                         | `Clot     of Consistence.t
+                         | Dead.t
                          ]
   end
 
@@ -88,8 +94,8 @@ let merge o1 o2 =
   | (`Bastard  b), (`HealthyB _)    -> NucleiMerged (`HealthyB b)
   | (`HealthyG _), (`Bastard  b)
   | (`Bastard  b), (`HealthyG _)    -> NucleiMerged (`HealthyG b)
-  | (`HealthyB _), (`Clot cons )
-  | (`HealthyG _), (`Clot cons )    -> NucleiMerged (`Clot (Cons.succ cons))
-  | (`Bastard  _), (`Clot cons )    -> NucleiMerged (`Clot  cons)
+  | (`HealthyB _), (`Clot     c)
+  | (`HealthyG _), (`Clot     c)    -> NucleiMerged (`Clot (c |> Cons.succ))
+  | (`Bastard  _), (`Clot     c)    -> NucleiMerged (`Clot  c)
   | (`HealthyB _ | `HealthyG  _),
-    (`HealthyG _ | `HealthyB  _)    -> NucleiMerged (`Clot  Cons.origin)
+    (`HealthyG _ | `HealthyB  _)    -> NucleiMerged (`Clot Cons.origin)

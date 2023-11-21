@@ -6,8 +6,16 @@ module Alive = struct
     ]
   end
 
+module Dead = struct
+  type t =
+    [ `Closed
+    ]
+  end
+
 type t =
   [ Alive.t
-  | `Closed
+  | Dead.t
   ]
 
+let of_alive x = (x : Alive.t :> t)
+let of_dead  x = (x : Dead.t  :> t)

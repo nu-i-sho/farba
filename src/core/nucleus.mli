@@ -6,9 +6,15 @@ module Alive : sig
     ]
   end
 
+module Dead : sig
+  type t =
+    [ `Clot of Consistence.t
+    ]
+  end
+
 type t =
   [ Alive.t
-  | `Clot of Consistence.t
+  | Dead.t
   ]
 
 module ExtractionResult : sig
@@ -32,13 +38,16 @@ module ReplicationResult : sig
 module MergeResult : sig
   type t = private
     | NucleiDissolved
-    | CytoplasmClosed of [ `Closed ]
+    | CytoplasmClosed of Cytoplasm.Dead.t
     | NucleiMerged    of [ `HealthyB of Side.t
                          | `HealthyG of Side.t
-                         | `Clot     of Consistence.t
+                         | Dead.t
                          ]
   end
 
+val of_alive  : Alive.t -> t
+val of_dead   : Dead.t -> t
+  
 val look_back : Alive.t -> Alive.t
 val turn      : Hand.t -> Alive.t -> Alive.t
 val extract   : Cytoplasm.Alive.t -> Alive.t -> ExtractionResult.t

@@ -23,6 +23,21 @@ type t =
 let of_alive x = (x : Alive.t :> t)
 let of_dead  x = (x : Dead.t  :> t)
 
+let to_alive_opt = function
+  | ((`HealthyB _) as x)
+  | ((`HealthyG _) as x)
+  | ((`Bastard  _) as x) -> Some x
+  |   `Clot     _        -> None
+
+let to_dead_opt = function
+  |   `HealthyB _
+  |   `HealthyG _
+  |   `Bastard  _    -> None
+  | ((`Clot _) as x) -> Some x
+
+let is_alive x = Option.is_some (to_alive_opt x) 
+let is_dead  x = Option.is_some (to_dead_opt x)
+
 let look_back = Alive.map  Side.opposite
 let turn hand = Alive.map (Side.turn hand) 
 

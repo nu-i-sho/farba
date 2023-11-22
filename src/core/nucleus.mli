@@ -1,21 +1,22 @@
-module Alive : sig
-  type t =
-    [ `HealthyB of Side.t
-    | `HealthyG of Side.t
-    | `Bastard  of Side.t
-    ]
-  end
+type alive_t :=
+  [ `HealthyB of Side.t
+  | `HealthyG of Side.t
+  | `Bastard  of Side.t
+  ]
 
-module Dead : sig
-  type t =
-    [ `Clot of Consistence.t
-    ]
-  end
+type dead_t := 
+  [ `Clot of Consistence.t
+  ]
 
 type t =
-  [ Alive.t
-  | Dead.t
+  [ alive_t
+  | dead_t
   ]
+
+include DEADLY.T
+   with type t := t
+    and type Alive.t = alive_t
+    and type Dead.t = dead_t
 
 module ExtractionResult : sig
   type t = private
@@ -44,9 +45,6 @@ module MergeResult : sig
                          | Dead.t
                          ]
   end
-
-val of_alive  : Alive.t -> t
-val of_dead   : Dead.t -> t
   
 val look_back : Alive.t -> Alive.t
 val turn      : Hand.t -> Alive.t -> Alive.t

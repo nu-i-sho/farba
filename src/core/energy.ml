@@ -21,4 +21,4 @@ module Make = functor (Num : SEQUENTIAL.T) -> struct
     if x = y then
       Some x else
       None
-end
+  end

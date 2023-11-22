@@ -22,8 +22,8 @@ let viruses_coords v o =
             |> HexMap.bindings
             |> List.map coord
 
-let is_resolved o =
-  HexSet.is_empty o.unresolved
+let has_viruses o = Option.is_some (HexMap.choose_opt o.viruses)
+let is_resolved o = HexSet.is_empty o.unresolved
 
 module Alive = struct
    let cytoplasm_opt i o = Option.bind (cytoplasm_opt i o) Cytoplasm.to_alive_opt             
@@ -39,8 +39,16 @@ module Dead = struct
    let nucleus       i o = Option.get  (nucleus_opt i o)
    end
 
-let add_cytoplasm  i x o = { o with cytoplasm = HexMap.add  i x o.cytoplasm }
-let add_nucleus    i x o = { o with nuclei    = HexMap.add  i x o.nuclei    }
+let add_cytoplasm i x o =
+  { o with
+    cytoplasm = HexMap.add i (x :> Cytoplasm.t) o.cytoplasm
+  }
+
+let add_nucleus i x o =
+  { o with
+    nuclei = HexMap.add i (x :> Nucleus.t) o.nuclei
+  }
+                           
 let add_virus      i x o = { o with viruses   = HexMap.add  i x o.viruses   }
 let remove_cytoplasm i o = { o with cytoplasm = HexMap.remove i o.cytoplasm }
 let remove_nucleus   i o = { o with nuclei    = HexMap.remove i o.nuclei    }
@@ -79,6 +87,7 @@ module ReadOnly = struct
         let viruses_coords v o = o |> get |> Original.viruses_coords v
         let virus_opt      i o = o |> get |> Original.virus_opt i
         let virus          i o = o |> get |> Original.virus i
+        let has_viruses      o = o |> get |> Original.has_viruses
         let is_resolved      o = o |> get |> Original.is_resolved
 
         module Alive = CoverSub(struct

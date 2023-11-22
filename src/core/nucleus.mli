@@ -1,54 +1,62 @@
-type alive_t :=
-  [ `HealthyB of Side.t
-  | `HealthyG of Side.t
-  | `Bastard  of Side.t
-  ]
+module Alive : sig
+  type t =
+    [ `HealthyB of Side.t
+    | `HealthyG of Side.t
+    | `Bastard  of Side.t
+    ]
 
-type dead_t := 
-  [ `Clot of Consistence.t
-  ]
+  type alive_t := t
+    
+  module Extraction : sig 
+    type +'a t = private
+      | Extracted of ([< alive_t ] as 'a)
+      | Retracted of ([< alive_t ] as 'a)
+    end
 
+  module Injection : sig
+    type +'a t = private
+      | Injected  of ([< alive_t ] as 'a)
+      | Rejected  of ([< alive_t ] as 'a)
+    end
+
+  module Replication : sig
+    type +'a t = private
+      | ReplicatedOut of ([< alive_t ] as 'a)
+      | ReplicatedIn  of ([< alive_t ] as 'a) 
+    end
+
+  val gaze      : [< t ] -> Side.t
+  val look_back : [< t ] -> t
+  val turn      : Hand.t -> [< t ] -> t
+  val extract   : [< Cytoplasm.Alive.t ] -> [< t ] -> t Extraction.t
+  val inject    : [< Cytoplasm.t ] -> [< t ] -> t Injection.t
+  val replicate : Gene.t -> [< Cytoplasm.Alive.t ] -> [< t ] -> t Replication.t
+  end
+
+module Dead : sig 
+  type t =
+    [ `Clot of Consistence.t
+    ]
+end
+  
 type t =
-  [ alive_t
-  | dead_t
+  [ Alive.t
+  | Dead.t
   ]
 
 include DEADLY.T
-   with type t := t
-    and type Alive.t = alive_t
-    and type Dead.t = dead_t
+  with type t := t
+   and module Alive := Alive 
+   and module Dead  := Dead
 
-module ExtractionResult : sig
-  type t = private
-    | Extracted of Alive.t
-    | Retracted of Alive.t
-  end
-
-module InjectionResult : sig
-  type t = private
-    | Injected of Alive.t
-    | Rejected of Alive.t
-  end
-
-module ReplicationResult : sig
-  type t = private
-    | ReplicatedOut of Alive.t
-    | ReplicatedIn  of Alive.t 
-  end
-
-module MergeResult : sig
+module Merge : sig
   type t = private
     | NucleiDissolved
     | CytoplasmClosed of Cytoplasm.Dead.t
+    | NucleiClotted   of Dead.t
     | NucleiMerged    of [ `HealthyB of Side.t
                          | `HealthyG of Side.t
-                         | Dead.t
                          ]
   end
-  
-val look_back : Alive.t -> Alive.t
-val turn      : Hand.t -> Alive.t -> Alive.t
-val extract   : Cytoplasm.Alive.t -> Alive.t -> ExtractionResult.t
-val inject    : Cytoplasm.t -> Alive.t -> InjectionResult.t
-val replicate : Gene.t -> Cytoplasm.Alive.t -> Alive.t -> ReplicationResult.t
-val merge     : Alive.t -> t -> MergeResult.t
+
+val merge : [< Alive.t] -> [< t] -> Merge.t

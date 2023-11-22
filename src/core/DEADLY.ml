@@ -1,8 +1,8 @@
 module type T = sig
   type t
 
-  module Alive : sig type t end
-  module Dead  : sig type t end
+  module Alive : T.T
+  module Dead  : T.T
 
   val is_alive     : t -> bool
   val is_dead      : t -> bool

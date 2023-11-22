@@ -38,15 +38,16 @@ module READ_ONLY = struct
     val viruses_coords : Virus.t -> t -> HexCoord.t list 
     val virus_opt      : HexCoord.t -> t -> Virus.t option
     val virus          : HexCoord.t -> t -> Virus.t
-    val is_resolved    : t -> bool      
+    val has_viruses    : t -> bool
+    val is_resolved    : t -> bool
     end
   end
            
 module type T = sig
   include READ_ONLY.T
 
-  val add_cytoplasm    : HexCoord.t -> Cytoplasm.t -> t -> t
-  val add_nucleus      : HexCoord.t -> Nucleus.t -> t -> t
+  val add_cytoplasm    : HexCoord.t -> [< Cytoplasm.t ] -> t -> t
+  val add_nucleus      : HexCoord.t -> [< Nucleus.t ] -> t -> t
   val add_virus        : HexCoord.t -> Virus.t -> t -> t
   val remove_cytoplasm : HexCoord.t -> t -> t
   val remove_nucleus   : HexCoord.t -> t -> t

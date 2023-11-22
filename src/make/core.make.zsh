@@ -37,6 +37,7 @@ cd ../$package
 bin=../../bin
 
 src_files=(
+    T               ml
     hand            ml
     gene            ml
     command         ml
@@ -56,6 +57,7 @@ src_files=(
     TISSUE          ml
     tissue      mli ml
     transTissue mli ml
+    commander   mli ml
 )
 
 for_pack=()

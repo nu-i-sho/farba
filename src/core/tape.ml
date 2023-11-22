@@ -56,7 +56,7 @@ module Make = functor (Num : SEQUENTIAL.T) -> struct
                      (h |> internalize),
                      (t |> List.map internalize)
             }
-                           
+              
   module Tick = struct
     type nonrec 'cmd t =
       { command : 'cmd option;

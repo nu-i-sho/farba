@@ -37,18 +37,25 @@ cd ../$package
 bin=../../bin
 
 src_files=(
-    hand           ml
-    gene           ml
-    command        ml
-    SEQUENTIAL     ml
-    dots       mli ml
-    direction      ml
-    energy     mli ml
-    statement      ml
-    tape       mli ml
-    side           ml
-    hexCoord   mli ml
-    canvas     mli ml
+    hand            ml
+    gene            ml
+    command         ml
+    SEQUENTIAL      ml
+    dots        mli ml
+    direction       ml
+    energy      mli ml
+    statement       ml
+    tape        mli ml
+    side        mli ml
+    hexCoord    mli ml
+    DEADLY          ml
+    cytoplasm   mli ml
+    consistence     ml
+    nucleus     mli ml
+    virus           ml
+    TISSUE          ml
+    tissue      mli ml
+    transTissue mli ml
 )
 
 for_pack=()
